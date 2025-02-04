@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.logo {
+  height: auto;
+  text-align: start;
+}
+
+.app {
+  padding: 2em;
+}
+
+header {
+  margin: 2em 0;
+}
+
+ol {
+  list-style-position: inside;
+  margin-left: 2em;
+}
