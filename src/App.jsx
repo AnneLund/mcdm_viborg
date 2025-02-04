@@ -10,7 +10,7 @@ function App() {
 
       <ol>
         <li>
-          <a href='/assets/cinestar_materialer.zip' download>
+          <a href='/assets/dgs_materialer.zip' download>
             Hent alle materialer som en zip fil (inkl. hovedopgave)
           </a>
         </li>
