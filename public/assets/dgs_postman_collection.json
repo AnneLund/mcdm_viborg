@@ -1,0 +1,1163 @@
+{
+	"info": {
+		"_postman_id": "fa37c48f-76f4-46eb-b92b-8d0f7e221d1c",
+		"name": "MCD - Den Glade Skorpe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38584738",
+		"_collection_link": "https://mcdmviborg.postman.co/workspace/webmcdm.dk---Server-Projects~f1ca1e4d-4cb3-49f6-9664-7a010d498024/collection/17346811-fa37c48f-76f4-46eb-b92b-8d0f7e221d1c?action=share&source=collection_link&creator=38584738"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Get Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/users",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Add User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Postman",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "postman",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "postman@mediacollege.dk",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "role",
+											"value": "guest",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/user",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "6714ea59ecbe572ee4e02d64",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Postman Pat",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "postman@mediacollege.dk",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "1234",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "role",
+											"value": "guest",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/user",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{server_path}}/user/6714ea59ecbe572ee4e02d64",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"user",
+										"6714ea59ecbe572ee4e02d64"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/user/6714e865f507d149d229aec6",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"user",
+										"6714e865f507d149d229aec6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "SignIn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"admin@mediacollege.dk\",\r\n    \"password\" : \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_path}}/auth/signin",
+							"host": [
+								"{{server_path}}"
+							],
+							"path": [
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token Check",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server_path}}/auth/token",
+							"host": [
+								"{{server_path}}"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dishes",
+			"item": [
+				{
+					"name": "Dish",
+					"item": [
+						{
+							"name": "Post Dish",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Postman Special",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "price",
+											"value": "{\"normal\":95, \"family\": 145}",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "Kylling,Salat,Tomat,Dressing,Chili,Jalapenos",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "Durum Ruller",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/dish",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"dish"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Dish",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "670ba4c5cf5acfaf2931a07b",
+											"type": "text"
+										},
+										{
+											"key": "title",
+											"value": "Durum Dynamite 22 God Dagsss",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/MCDM_Arsenalet/One Day Viborg/materialer/Willbeck.jpg",
+											"disabled": true
+										},
+										{
+											"key": "price",
+											"value": "{\"normal\":95, \"family\": 145}",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "Kylling,Salat,Tomat,Dressing,Chili,Jalapenos",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "Durum Ruller",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/dish",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"dish"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Dish By ID",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/dish/6714eb851b9e2d8cd21617b6",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"dish",
+										"6714eb851b9e2d8cd21617b6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Dish By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/dish/670b9e974f73bcd30884a236",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"dish",
+										"670b9e974f73bcd30884a236"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Dishes",
+					"item": [
+						{
+							"name": "Get All Dishes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/dishes",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"dishes"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Messages",
+					"item": [
+						{
+							"name": "Get All Messages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/messages",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Message",
+					"item": [
+						{
+							"name": "Post Message",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Postman Name 1266\",\r\n    \"subject\":\"Postman Subject\", \r\n    \"description\":\"Postman description\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_path}}/message",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"message"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Message",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/message/670b9fc24f73bcd30884a269",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"message",
+										"670b9fc24f73bcd30884a269"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Message",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "6757f6ee2652975831d3914f",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Et andet navn",
+											"type": "text"
+										},
+										{
+											"key": "subject",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/message",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"message"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Orders",
+					"item": [
+						{
+							"name": "Get All Orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/orders",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Post Order",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"dishes\" : [\r\n        {\r\n            \"dish\" : \"6702967b6f6a59b8bf7be554\",\r\n            \"amount\" : 1,\r\n            \"size\" : \"normal\",\r\n            \"extraIngredients\" : [\"Kylling\", \"Ansjoser\"]\r\n        },\r\n        {\r\n            \"dish\" : \"6702967b6f6a59b8bf7be557\",\r\n            \"amount\" : 1,\r\n            \"size\" : \"family\",\r\n            \"extraIngredients\" : [\"Kylling\", \"Ansjoser\"]\r\n        }\r\n    ],\r\n    \"comment\" : \"Postman Besked\",\r\n    \"totalPrice\" : 222\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_path}}/order",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Order",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"id\" : \"6714f09d1b9e2d8cd21617ec\",\r\n   \"shipped\" : true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_path}}/order",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"order"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Order By ID",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/order/6714f09d1b9e2d8cd21617ec",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"order",
+										"6714f09d1b9e2d8cd21617ec"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingredients",
+			"item": [
+				{
+					"name": "Ingredients",
+					"item": [
+						{
+							"name": "Get Ingredients",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/ingredients",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"ingredients"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Ingredient",
+					"item": [
+						{
+							"name": "Post / Create Ingredient",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Postmans Secret",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "You do not want to know",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/ingredient",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"ingredient"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Put / Update Ingredient",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "6714ee5e1b9e2d8cd21617c1",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Postmans Secret New Recipe",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Posmane Description",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "category",
+											"value": "Postman Category",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/ingredient",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"ingredient"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Ingredient By ID",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/ingredient/6714ee5e1b9e2d8cd21617c1",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"ingredient",
+										"6714ee5e1b9e2d8cd21617c1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "Employees",
+					"item": [
+						{
+							"name": "Get Employees",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/employees",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"employees"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Employee",
+					"item": [
+						{
+							"name": "Post / Create Employee",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Postman",
+											"type": "text"
+										},
+										{
+											"key": "position",
+											"value": "Web & Sales",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/employee",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"employee"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Employee By ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Postman Name",
+											"type": "text"
+										},
+										{
+											"key": "position",
+											"value": "Posmane Køkkenchef",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/MCDM_Arsenalet/One Day Viborg/materialer/34-anders-christensen.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/employee/6714eeec1b9e2d8cd21617cd",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"employee",
+										"6714eeec1b9e2d8cd21617cd"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Employee",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "6714eeec1b9e2d8cd21617cd",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Sir. Postman ",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "position",
+											"value": "Head of Web & Sales",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/employee",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"employee"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Employee",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/employee/6714eeec1b9e2d8cd21617cd",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"employee",
+										"6714eeec1b9e2d8cd21617cd"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Categories",
+					"item": [
+						{
+							"name": "Get Categories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_path}}/categories",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Category",
+					"item": [
+						{
+							"name": "Create Category",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Postman Category",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/category",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Category",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "id",
+											"value": "6714f00e1b9e2d8cd21617dd",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Postman Category Update",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{server_path}}/category",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Category By ID",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{server_path}}/category/6714f00e1b9e2d8cd21617dd",
+									"host": [
+										"{{server_path}}"
+									],
+									"path": [
+										"category",
+										"6714f00e1b9e2d8cd21617dd"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

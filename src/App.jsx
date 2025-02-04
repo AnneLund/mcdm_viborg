@@ -5,27 +5,25 @@ function App() {
     <article className='app'>
       <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
       <header>
-        <h1>Opgave Legekrogen</h1>
+        <h1>Opgave: Den Glade Skorpe</h1>
       </header>
 
       <ol>
         <li>
-          <a href='/assets/legekrogen_materialer.zip' download>
+          <a href='/assets/cinestar_materialer.zip' download>
             Hent alle materialer som en zip fil (inkl. hovedopgave)
           </a>
         </li>
         <li>
           <a
-            href='https://www.figma.com/design/QRXvgpGryPImTWgx8gSx6F/Legekrogen?node-id=0-1&node-type=canvas&t=CYYiE187pdcDVkXU-0'
+            href='https://www.figma.com/design/yzjuDfwFzngz8EySrOXSf6/Den-Glade-Skorpe?node-id=0-1&t=Ptf1mkvakzT0DTO5-1'
             target='_blank'>
             Åbn Figma-designet
           </a>
         </li>
         <li>
-          <a
-            href='https://documenter.getpostman.com/view/17346811/2s93RNzFRN'
-            target='_blank'>
-            Postman API dokumentation
+          <a href='./assets/dgs_postman_collection.json' target='_blank'>
+            Postman API
           </a>
         </li>
       </ol>

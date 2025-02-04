@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "title": "Legekrogen",
+      "zip": "/assets/legekrogen_materialer.zip",
+      "figma": "https://www.figma.com/design/QRXvgpGryPImTWgx8gSx6F/Legekrogen?node-id=0-1&node-type=canvas&t=CYYiE187pdcDVkXU-0",
+      "postman": "https://documenter.getpostman.com/view/17346811/2s93RNzFRN"
+    },
+    {
+      "title": "Projekt 2",
+      "zip": "/assets/projekt2_materialer.zip",
+      "figma": "https://www.figma.com/file/someotherid/Projekt2",
+      "postman": "https://documenter.getpostman.com/view/someotherid"
+    }
+  ]
+}
