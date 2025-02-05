@@ -1,15 +1,27 @@
 {
   "projects": [
     {
+      "id": 1,
       "title": "Legekrogen",
+      "projectName": "Legekrogen",
       "zip": "/assets/legekrogen_materialer.zip",
       "figma": "https://www.figma.com/design/QRXvgpGryPImTWgx8gSx6F/Legekrogen?node-id=0-1&node-type=canvas&t=CYYiE187pdcDVkXU-0",
       "postman": "https://documenter.getpostman.com/view/17346811/2s93RNzFRN"
     },
     {
-      "title": "Projekt 2",
-      "zip": "/assets/projekt2_materialer.zip",
-      "figma": "https://www.figma.com/file/someotherid/Projekt2",
+      "id": 2,
+      "title": "Den Glade Skorpe",
+      "projectName": "DGS",
+      "zip": "/assets/zips/dgs_materialer.zip",
+      "figma": "https://www.figma.com/design/yzjuDfwFzngz8EySrOXSf6/Den-Glade-Skorpe?node-id=0-1&t=Ptf1mkvakzT0DTO5-1",
+      "postman": "https://documenter.getpostman.com/view/someotherid"
+    },
+    {
+      "id": 3,
+      "title": "Cinestar",
+      "projectName": "Cinestar",
+      "zip": "/assets/zips/cinestar_materialer.zip",
+      "figma": "https://www.figma.com/design/aQbaOdQIJGJpy2Zg96s2Bh/Cinestar?node-id=0-1&t=WelIDl6l5I82QGAv-1",
       "postman": "https://documenter.getpostman.com/view/someotherid"
     }
   ]
