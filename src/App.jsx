@@ -1,7 +1,7 @@
 import { useRoutes } from "react-router-dom";
 import "./App.css";
-import Project from "./components/project/Project";
 import Home from "./pages/Home";
+import Project from "./components/project/Project";
 
 function App() {
   const routes = useRoutes([
@@ -10,7 +10,7 @@ function App() {
       element: <Home />,
       children: [
         {
-          path: "/:projectId",
+          path: ":projectId",
           element: <Project />,
         },
       ],
