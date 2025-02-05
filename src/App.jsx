@@ -21,11 +21,11 @@ function App() {
             Åbn Figma-designet
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href='./assets/dgs_postman_collection.json' target='_blank'>
             Postman API
           </a>
-        </li>
+        </li> */}
       </ol>
     </article>
   );
