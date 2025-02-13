@@ -16,11 +16,15 @@ const Navigation = () => {
     }
   };
 
+  const visibleProjects = projects.filter(
+    (project) => project.isVisible === true
+  );
+
   return (
     <NavContainer>
       <Select onChange={handleSelectChange} value={selectedProject}>
         <option value=''>Vælg en opgave</option>
-        {projects.map((project) => (
+        {visibleProjects.map((project) => (
           <option key={project.id} value={project.id}>
             {project.upcomingExam ? "Kommende eksamen" : project.title}
           </option>
