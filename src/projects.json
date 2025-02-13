@@ -35,6 +35,15 @@
       "figma": "https://www.figma.com/design/eUh7SlGlxN4EJ9e5nYeOe9/Glamping?node-id=0-1&t=sHB0jpm9w3bmejzT-1",
       "server": "/assets/servers/mcd_web_glamping_server.zip",
       "upcomingExam": false
+    },
+    {
+      "id": "5",
+      "title": "Gowala Farms",
+      "projectName": "Gowala",
+      "zip": "/assets/materials/gowala_materialer.zip",
+      "figma": "https://www.figma.com/design/sQUyEWg9LUfKO8PfUtYTvQ/Gowala-Farm?node-id=0-1&t=GrURFWWtoX9cqFBS-1",
+      "server": "/assets/servers/mcd_web_gowala_server.zip",
+      "upcomingExam": false
     }
   ]
 }
