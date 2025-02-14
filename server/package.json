@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "setup-db": "node -r dotenv/config ./lib/db/mcd/mcd.js"
+    "setup-db": "node -r dotenv/config ./lib/db/mcd/mcd.js",
+    "build": "echo 'No build step needed for backend'"
   },
   "keywords": [],
   "dependencies": {
