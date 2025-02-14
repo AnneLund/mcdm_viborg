@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "mcd-viborg-om232.ondigitalocean.app",
+        target: "https://mcd-viborg-om232.ondigitalocean.app",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
