@@ -36,7 +36,6 @@ const Navigation = () => {
 
 export default Navigation;
 
-// 🎨 Styled Components for flot styling
 const NavContainer = styled.nav`
   display: flex;
   justify-content: center;
