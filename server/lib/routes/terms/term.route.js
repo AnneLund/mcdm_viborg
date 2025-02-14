@@ -19,7 +19,7 @@ const isValidObjectId = (id) => {
 };
 
 // POST TERM
-termRouter.post("/term", auth, async (req, res) => {
+termRouter.post("/", auth, async (req, res) => {
   try {
     const { term, definition } = req.body;
 
@@ -55,7 +55,7 @@ termRouter.post("/term", auth, async (req, res) => {
 });
 
 // PUT TERM
-termRouter.put("/term", auth, async (req, res) => {
+termRouter.put("/", auth, async (req, res) => {
   try {
     const { id, term, definition } = req.body;
 
@@ -93,7 +93,7 @@ termRouter.put("/term", auth, async (req, res) => {
 });
 
 // DELETE TERM
-termRouter.delete("/term/:id", auth, async (req, res) => {
+termRouter.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -129,7 +129,7 @@ termRouter.delete("/term/:id", auth, async (req, res) => {
 });
 
 // GET TERM BY ID
-termRouter.get("/term/:id", async (req, res) => {
+termRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 

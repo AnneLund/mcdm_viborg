@@ -4,7 +4,7 @@ import { getTerms } from "../../handlers/terms/terms.handler.js";
 const termsRouter = express.Router();
 
 // Get terms
-termsRouter.get("/terms", async (req, res) => {
+termsRouter.get("/", async (req, res) => {
   try {
     const data = await getTerms();
 
