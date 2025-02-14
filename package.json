@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:frontend": "cd client && npm install && npm start",
-    "start:backend": "cd server && npm install && npm start",
-    "build": "npm run build:frontend",
-    "build:frontend": "cd client && npm install --include=dev && npm run build",
-    "build:backend": "cd server && npm install && npm run setup:db"
+    "start": "node server.js",
+    "start:client": "serve -s client/dist",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "npm --prefix client run build",
+    "build:server": "npm --prefix server run build"
   },
   "keywords": [],
   "author": "",
