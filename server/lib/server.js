@@ -31,7 +31,7 @@ const io = new Server(httpServer, {
 });
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-const clientDistPath = path.join(__dirname, "../client/dist");
+const clientDistPath = path.join(__dirname, "../../client/dist");
 
 // Middleware
 app.use(
