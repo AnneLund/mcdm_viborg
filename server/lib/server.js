@@ -76,13 +76,13 @@ app.use("/api/terms", termsRouter);
 app.use("/api/term", termRouter);
 
 // Håndter SPA-routing
-app.get("*", (req, res) => {
-  if (req.accepts("html")) {
-    res.status(404).sendFile(path.resolve(clientDistPath, "index.html"));
-  } else {
-    res.status(404).json({ message: "Ruten blev ikke fundet" });
-  }
-});
+// app.get("*", (req, res) => {
+//   if (req.accepts("html")) {
+//     res.status(404).sendFile(path.resolve(clientDistPath, "index.html"));
+//   } else {
+//     res.status(404).json({ message: "Ruten blev ikke fundet" });
+//   }
+// });
 
 // Middleware for 404 fejl (rute ikke fundet)
 app.use((req, res, next) => {
@@ -98,6 +98,10 @@ app.use((err, req, res, next) => {
 app.use((req, res, next) => {
   req.io = io;
   next();
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(clientDistPath, "index.html"));
 });
 
 // Start server
