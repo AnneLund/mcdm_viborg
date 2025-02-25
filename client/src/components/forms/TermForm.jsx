@@ -80,7 +80,6 @@ const TermForm = ({ isEditMode }) => {
           type='text'
           value={definition}
           onChange={(e) => setDefinition(e.target.value)}
-          required
         />
       </div>
 

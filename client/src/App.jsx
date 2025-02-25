@@ -21,7 +21,6 @@ function App() {
       element: <Login />,
     },
     {
-      // Alle andre ruter beskyttes som children under en parent-route
       element: (
         <ProtectedRoute isAllowed={signedIn}>
           <Home />

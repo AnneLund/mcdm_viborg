@@ -8,7 +8,7 @@ const Select = styled.select`
   padding: 0.5rem 1rem;
   border-radius: 5px;
   border: none;
-  background: #357e82dc;
+  background: #2c3e50;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
@@ -40,11 +40,18 @@ const Projects = () => {
     <article className='projects'>
       <Select onChange={handleSelectChange} value={selectedProject}>
         <option value=''>Vælg en opgave</option>
-        {visibleProjects.map((project) => (
-          <option key={project.id} value={project.id}>
-            {project.title}
-          </option>
-        ))}
+        {visibleProjects > 0 ? (
+          <>
+            {" "}
+            {visibleProjects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.title}
+              </option>
+            ))}
+          </>
+        ) : (
+          <option value=''>Ingen opgaver lige nu..</option>
+        )}
       </Select>
     </article>
   );

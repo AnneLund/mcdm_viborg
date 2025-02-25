@@ -138,7 +138,11 @@ const Register = () => {
               <strong>{term.term}</strong>
               {openTerm === term._id && (
                 <Definition>
-                  {term.definition}{" "}
+                  {term.definition ? (
+                    <p>{term.definition}</p>
+                  ) : (
+                    <p>Ingen beskrivelse endnu..</p>
+                  )}
                   <div className='buttons'>
                     <ActionButton
                       buttonText='Slet'
