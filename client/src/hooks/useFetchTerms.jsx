@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
+import { apiUrl } from "../apiUrl";
 
 const useFetchTerms = () => {
   const [terms, setTerms] = useState([]);
@@ -12,7 +13,7 @@ const useFetchTerms = () => {
     setError(null);
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3042/api/terms");
+      const response = await fetch(`${apiUrl}/api/terms`);
       const data = await response.json();
       setTerms(data.data);
     } catch (error) {
@@ -30,7 +31,7 @@ const useFetchTerms = () => {
 
   const createTerm = async (termData) => {
     try {
-      const response = await fetch("http://localhost:3042/api/term", {
+      const response = await fetch(`${apiUrl}/api/term`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Fortæller serveren, at vi sender JSON
@@ -54,7 +55,7 @@ const useFetchTerms = () => {
   // OPDATER TERM
   const updateTerm = async (termData) => {
     try {
-      const response = await fetch("http://localhost:3042/api/term", {
+      const response = await fetch(`${apiUrl}/api/term`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +78,7 @@ const useFetchTerms = () => {
 
   // SLET TERM
   const deleteTerm = async (params) => {
-    await fetch(`http://localhost:3042/api/term/${params}`, {
+    await fetch(`${apiUrl}/api/term/${params}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -96,7 +97,7 @@ const useFetchTerms = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3042/api/term/${id}`);
+      const response = await fetch(`${apiUrl}/api/term/${id}`);
 
       if (!response.ok) {
         const errorText = await response.text();
