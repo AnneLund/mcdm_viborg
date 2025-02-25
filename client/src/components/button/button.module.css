@@ -1,0 +1,41 @@
+.greenButton {
+  width: 100px;
+  background: green;
+  border: none;
+  position: relative;
+  margin: 10px auto;
+  cursor: pointer;
+
+  h4 {
+    font-size: 15px;
+    color: white;
+  }
+}
+
+.redButton {
+  width: 100px;
+  background: #df4747;
+  border: none;
+  position: relative;
+  margin: 10px auto;
+  cursor: pointer;
+
+  h4 {
+    font-size: 15px;
+    color: white;
+  }
+}
+
+.orangeButton {
+  width: 100px;
+  background: rgb(255, 191, 71);
+  border: none;
+  position: relative;
+  margin: 10px auto;
+  cursor: pointer;
+
+  h4 {
+    font-size: 15px;
+    color: white;
+  }
+}

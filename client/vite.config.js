@@ -20,4 +20,8 @@ export default defineConfig({
   define: {
     "process.env": import.meta.env,
   },
+  rules: {
+    "react/prop-types": "off",
+    "no-unused-vars": "warn",
+  },
 });

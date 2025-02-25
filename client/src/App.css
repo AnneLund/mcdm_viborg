@@ -25,3 +25,15 @@ ol {
   list-style-position: inside;
   margin-left: 2em;
 }
+
+h1 {
+  color: rgb(50, 50, 50);
+  font-size: 30px;
+  margin: 20px 0;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

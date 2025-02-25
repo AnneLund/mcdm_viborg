@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { projects } from "../../projects.json";
-import Form from "../Form";
 import styled from "styled-components";
+import { useAuthContext } from "../../context/useAuthContext";
+import Login from "../login/Login";
 
 const ResourceList = styled.ol`
   list-style: none;
@@ -42,78 +42,23 @@ const ResourceLink = styled.a`
 `;
 
 const Project = () => {
-  const { projectId } = useParams();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const project = projects?.find((p) => p.id === projectId);
-  const requiresAuth = project.upcomingExam === true;
+  const { id } = useParams();
+  const { token } = useAuthContext();
 
-  const hashPassword = async (password) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hash))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  };
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      setIsAuthenticated(false);
-      setIsLoading(true);
-
-      const savedAuth = localStorage.getItem(`auth_${projectId}`);
-      const correctHash = await hashPassword(
-        import.meta.env[`VITE_${projectId.toUpperCase()}_PASSWORD`]
-      );
-
-      if (savedAuth === correctHash) {
-        setIsAuthenticated(true);
-      }
-
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, [projectId, requiresAuth]);
+  const project = projects?.find((p) => p.id === id);
 
   if (!project) {
     return <h2>Projekt ikke fundet</h2>;
   }
 
-  const handleLogin = async (inputPassword) => {
-    const PASSWORDS = {
-      1: import.meta.env.VITE_LEGEKROGEN_PASSWORD,
-      3: import.meta.env.VITE_CINESTAR_PASSWORD,
-    };
-
-    const hashedInput = await hashPassword(inputPassword);
-    const hashedCorrect = await hashPassword(PASSWORDS[projectId]);
-
-    if (hashedInput === hashedCorrect) {
-      localStorage.setItem(`auth_${projectId}`, hashedInput);
-      setIsAuthenticated(true);
-    } else {
-      alert("Forkert kode! Prøv igen.");
-    }
-  };
-
-  if (isLoading) {
-    return <h2>Henter opgaven...</h2>;
-  }
-
   return (
     <article>
       <header>
-        <h1>
-          {requiresAuth && !isAuthenticated
-            ? "Kommende eksamensopgave"
-            : `Opgave: ${project.title}`}
-        </h1>
+        <h1>{project.title}</h1>
       </header>
 
-      {requiresAuth && !isAuthenticated ? (
-        <Form onLogin={handleLogin} />
+      {!token ? (
+        <Login />
       ) : (
         <ResourceList>
           <ResourceItem>

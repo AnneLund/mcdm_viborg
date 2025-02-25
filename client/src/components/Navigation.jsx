@@ -1,35 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { projects } from "../projects.json";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { useState } from "react";
 
 const Navigation = () => {
-  const navigate = useNavigate();
-  const [selectedProject, setSelectedProject] = useState("");
-
-  const handleSelectChange = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedProject(selectedValue);
-
-    if (selectedValue) {
-      navigate(`/${selectedValue}`);
-    }
-  };
-
-  const visibleProjects = projects.filter(
-    (project) => project.isVisible === true
-  );
-
   return (
     <NavContainer>
-      <Select onChange={handleSelectChange} value={selectedProject}>
-        <option value=''>Vælg en opgave</option>
-        {visibleProjects.map((project) => (
-          <option key={project.id} value={project.id}>
-            {project.upcomingExam ? "Kommende eksamen" : project.title}
-          </option>
-        ))}
-      </Select>
+      <NavLink to='/projects'>Opgaver</NavLink>
+      <NavLink to='/register'>Stikordsregister</NavLink>
     </NavContainer>
   );
 };
@@ -39,28 +15,17 @@ export default Navigation;
 const NavContainer = styled.nav`
   display: flex;
   justify-content: center;
+  gap: 20px;
   padding: 1rem;
   background: linear-gradient(135deg, #2c3e50, #4ca1af);
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-`;
 
-const Select = styled.select`
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  border: none;
-  background: white;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
+  a {
+    color: white;
 
-  &:hover {
-    background: #f0f0f0;
-  }
-
-  &:focus {
-    outline: none;
-    border: 2px solid #4ca1af;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
