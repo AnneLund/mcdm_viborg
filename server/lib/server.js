@@ -15,6 +15,8 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import termsRouter from "./routes/terms/terms.route.js";
 import termRouter from "./routes/terms/term.route.js";
+import faqRouter from "./routes/faqs/faq.route.js";
+import faqsRouter from "./routes/faqs/faqs.route.js";
 
 // Opsætning af Express
 const app = express();
@@ -74,6 +76,8 @@ app.use("/api/users", usersRouter);
 app.use("/api/user", userRouter);
 app.use("/api/terms", termsRouter);
 app.use("/api/term", termRouter);
+app.use("/api/faq", faqRouter);
+app.use("/api/faqs", faqsRouter);
 
 // Håndter SPA-routing
 app.get("*", (req, res) => {

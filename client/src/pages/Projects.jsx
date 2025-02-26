@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { projects } from "../projects.json";
 import styled from "styled-components";
 import { useState } from "react";
-import SmallProjects from "./SmallProjects";
 
 const Select = styled.select`
   font-size: 1rem;
@@ -39,7 +38,7 @@ const Projects = () => {
 
   return (
     <article className='projects'>
-      <section>
+      <div>
         <h2>Projekter</h2>
         <p>Vælg et projekt for at se opgaver og materialer.</p>
         <Select onChange={handleSelectChange} value={selectedProject}>
@@ -56,9 +55,7 @@ const Projects = () => {
             <option value=''>Ingen opgaver lige nu..</option>
           )}
         </Select>
-      </section>
-
-      <SmallProjects />
+      </div>
     </article>
   );
 };

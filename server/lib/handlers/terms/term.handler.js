@@ -1,7 +1,7 @@
 import dbConnect from "../../db/dbConnect.js";
 import termModel from "../../db/models/term.model.mjs";
 
-// ADD BLOG
+// ADD TERM
 export const addTerm = async (body) => {
   try {
     await dbConnect();
@@ -29,7 +29,7 @@ export const addTerm = async (body) => {
   }
 };
 
-// UPDATE BLOG
+// UPDATE TERM
 export const updateTerm = async (body) => {
   try {
     await dbConnect();
@@ -62,7 +62,7 @@ export const updateTerm = async (body) => {
   }
 };
 
-// DELETE BLOG
+// DELETE TERM
 export const deleteTerm = async (id) => {
   try {
     await dbConnect();
@@ -94,7 +94,7 @@ export const deleteTerm = async (id) => {
   }
 };
 
-// GET BLOG BY ID
+// GET TERM BY ID
 export const getTermById = async (id) => {
   try {
     await dbConnect();

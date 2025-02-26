@@ -8,6 +8,11 @@ import Register from "./pages/register/Register";
 import TermForm from "./components/forms/TermForm";
 import Login from "./components/login/Login";
 import { useAuthContext } from "./context/useAuthContext";
+import SmallProjects from "./pages/SmallProjects";
+import Faqs from "./pages/Faqs";
+import FaqForm from "./components/forms/FaqForm";
+import Exam from "./pages/Exam";
+import ExamProject from "./pages/ExamProject";
 
 function App() {
   const { signedIn } = useAuthContext();
@@ -29,6 +34,10 @@ function App() {
           element: <Project />,
         },
         {
+          path: "smallprojects",
+          element: <SmallProjects />,
+        },
+        {
           path: "register",
           element: <Register />,
           children: [
@@ -41,6 +50,28 @@ function App() {
               element: <TermForm isEditMode={true} />,
             },
           ],
+        },
+        {
+          path: "faqs",
+          element: <Faqs />,
+          children: [
+            {
+              path: "add",
+              element: <FaqForm />,
+            },
+            {
+              path: "edit/:id",
+              element: <FaqForm isEditMode={true} />,
+            },
+          ],
+        },
+        {
+          path: "exam",
+          element: <Exam />,
+        },
+        {
+          path: "examproject",
+          element: <ExamProject />,
         },
       ],
     },

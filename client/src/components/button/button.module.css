@@ -1,10 +1,12 @@
 .greenButton {
-  width: 100px;
-  background: green;
+  padding: 0.5rem 1rem;
   border: none;
-  position: relative;
-  margin: 10px auto;
+  background-color: #217022;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  padding: 5px;
 
   h4 {
     font-size: 15px;
@@ -15,10 +17,11 @@
 .redButton {
   width: 100px;
   background: #df4747;
-  border: none;
-  position: relative;
-  margin: 10px auto;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  padding: 5px;
 
   h4 {
     font-size: 15px;
@@ -29,10 +32,11 @@
 .orangeButton {
   width: 100px;
   background: rgb(255, 191, 71);
-  border: none;
-  position: relative;
-  margin: 10px auto;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  padding: 5px;
 
   h4 {
     font-size: 15px;
