@@ -29,6 +29,46 @@ const ExamProject = () => {
             disse ikke pushes til github
           </li>
         </ul>
+
+        <h2>Rapport</h2>
+
+        <ul>
+          <p>
+            Du skal udarbejde en projektrapport sammen med opgaveløsningen.
+            Projektrapporten skal som minimum indeholde følgende:
+          </p>
+          <li>Vurdering af din egen indsats og gennemførelse af prøven</li>
+          <li>
+            Argumentation for de valg du har truffet under løsningen af opgaven
+          </li>
+          <li>
+            Redegørelse for oprindelsen af de forskellige kodeelementer i prøven
+          </li>
+          <li>Beskrivelse af eventuelle særlige punkter til bedømmelse</li>
+          <li>
+            Angivelse af url adresser, brugernavne og passwords der er
+            nødvendige for at lærer og censor kan se opgaven.
+          </li>
+
+          <p>
+            Hvis du bruger et agilt projektstyringsværktøj (SCRUM, Trello eller
+            lign.) kan du med fordel indsætte et link til dit projekt i
+            rapporten.
+          </p>
+          <p>Vi vil meget gerne se en daglig planlægning og eksekvering.</p>
+          <p>På forsiden af rapporten skal fremgå:</p>
+          <li>Opgavens navn samt dit navn og holdnummer (navn – WebHXXX-X)</li>
+          <li>Brugernavn/adgangskoder</li>
+          <p>
+            Omfanget af rapporten skal være på maksimum fem A4-sider eksklusive
+            bilag.
+          </p>
+          <p>
+            Projektrapporten afleveres enten som en pdf-fil og navngives med dit
+            navn plus rapport. Eksempel: jens_jensen_rapport.pdf. Eller som en
+            Mark Down (.md) fil jens_jensen_rapport.md.
+          </p>
+        </ul>
       </div>
     </article>
   );
