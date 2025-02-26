@@ -8,6 +8,13 @@ const SmallProjects = () => {
             Swiper
           </a>
         </li>
+        <li>
+          <a
+            href='/assets/materials/smallprojects/breadcrumbs_opgave.pdf'
+            download>
+            BreadCrumbs
+          </a>
+        </li>
       </ul>
     </article>
   );
