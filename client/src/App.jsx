@@ -14,13 +14,6 @@ function App() {
   const routes = useRoutes([
     {
       path: "/",
-      element: <Home />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
       element: (
         <ProtectedRoute isAllowed={signedIn}>
           <Home />
@@ -50,6 +43,10 @@ function App() {
           ],
         },
       ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
   ]);
 

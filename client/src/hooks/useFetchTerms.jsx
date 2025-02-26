@@ -13,7 +13,7 @@ const useFetchTerms = () => {
     setError(null);
     setIsLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/terms`);
+      const response = await fetch(`${apiUrl}/terms`);
       const data = await response.json();
       setTerms(data.data);
     } catch (error) {
@@ -31,7 +31,7 @@ const useFetchTerms = () => {
 
   const createTerm = async (termData) => {
     try {
-      const response = await fetch(`${apiUrl}/api/term`, {
+      const response = await fetch(`${apiUrl}/term`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Fortæller serveren, at vi sender JSON
@@ -55,7 +55,7 @@ const useFetchTerms = () => {
   // OPDATER TERM
   const updateTerm = async (termData) => {
     try {
-      const response = await fetch(`${apiUrl}/api/term`, {
+      const response = await fetch(`${apiUrl}/term`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const useFetchTerms = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${apiUrl}/api/term/${id}`);
+      const response = await fetch(`${apiUrl}/term/${id}`);
 
       if (!response.ok) {
         const errorText = await response.text();

@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
         !location.pathname.includes("login")
       ) {
         if (auth.token !== undefined) {
-          let response = await fetch(`${apiUrl}/api/auth/token`, {
+          let response = await fetch(`${apiUrl}/auth/token`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${auth.token}`,
@@ -60,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
 
   // Funktion til at logge brugeren ind
   const signIn = async (email, password) => {
-    let response = await fetch(`${apiUrl}/api/auth/signin`, {
+    let response = await fetch(`${apiUrl}/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
