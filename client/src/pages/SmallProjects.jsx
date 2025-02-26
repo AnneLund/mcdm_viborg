@@ -7,7 +7,8 @@ const SmallProjects = () => {
           <a
             href='../../public/assets/materials/smallprojects/SwiperOpgave.pdf'
             target='_blank'
-            rel='noopener noreferrer'>
+            rel='noopener noreferrer'
+            download>
             Swiper
           </a>
         </li>
