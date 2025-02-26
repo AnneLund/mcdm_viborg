@@ -2,6 +2,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { createContext, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
+import { apiUrl } from "../apiUrl";
 
 // Opretter en AuthContext, der bruges til at dele autentificeringsdata globalt
 export const AuthContext = createContext();
@@ -21,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
         !location.pathname.includes("login")
       ) {
         if (auth.token !== undefined) {
-          let response = await fetch("http://localhost:3042/api/auth/token", {
+          let response = await fetch(`${apiUrl}/api/auth/token`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${auth.token}`,
@@ -59,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
 
   // Funktion til at logge brugeren ind
   const signIn = async (email, password) => {
-    let response = await fetch("http://localhost:3042/api/auth/signin", {
+    let response = await fetch(`${apiUrl}/api/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
