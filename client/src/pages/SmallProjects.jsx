@@ -4,11 +4,7 @@ const SmallProjects = () => {
       <h1>Opgaver</h1>
       <ul>
         <li>
-          <a
-            href='../../public/assets/materials/smallprojects/SwiperOpgave.pdf'
-            target='_blank'
-            rel='noopener noreferrer'
-            download>
+          <a href='/assets/materials/smallprojects/SwiperOpgave.pdf' download>
             Swiper
           </a>
         </li>
