@@ -33,16 +33,19 @@ const Exam = () => {
         <ul>
           <h3>Under eksamen</h3>
           <li>
+            Du har ca. 25 minutters eksamenstid, hvorefter du skal forlade
+            lokalet, mens eksaminator og censor voterer.
+          </li>
+          <li>
             Under eksaminationen skal du præsentere din opgaveløsning. Derudover
             skal du kunne redegøre for enkeltelementer af løsningen - Dette kan
             være spørgsmål omkring koder, valg af metodikker,
-            navigationselementer, databaselayout eller lignende. Udover
-            projektopgaven kan øvrige emner, der relaterer sig til uddannelsens
-            fagområde indgå i eksaminationen.
+            navigationselementer, databaselayout eller lignende.
           </li>
+
           <li>
-            Du har ca. 25 minutters eksamenstid, hvorefter du skal forlade
-            lokalet, mens eksaminator og censor voterer.
+            Udover projektopgaven kan øvrige emner, der relaterer sig til
+            uddannelsens fagområde indgå i eksaminationen.
           </li>
         </ul>
 
