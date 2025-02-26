@@ -34,6 +34,7 @@ h1 {
 
 .projects {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 70%;
+  margin: 0 auto;
+  justify-content: space-between;
 }

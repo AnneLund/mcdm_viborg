@@ -2,19 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { projects } from "../projects.json";
 import styled from "styled-components";
 import { useState } from "react";
+import SmallProjects from "./SmallProjects";
 
 const Select = styled.select`
   font-size: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0 10px;
   border-radius: 5px;
   border: none;
   background: #2c3e50;
+  height: 50px;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
-  width: 200px;
-  margin: 20px auto;
   color: white;
+  margin: 10px 0;
 `;
 
 const Projects = () => {
@@ -38,21 +39,26 @@ const Projects = () => {
 
   return (
     <article className='projects'>
-      <Select onChange={handleSelectChange} value={selectedProject}>
-        <option value=''>Vælg en opgave</option>
-        {visibleProjects > 0 ? (
-          <>
-            {" "}
-            {visibleProjects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.title}
-              </option>
-            ))}
-          </>
-        ) : (
-          <option value=''>Ingen opgaver lige nu..</option>
-        )}
-      </Select>
+      <section>
+        <h2>Projekter</h2>
+        <p>Vælg et projekt for at se opgaver og materialer.</p>
+        <Select onChange={handleSelectChange} value={selectedProject}>
+          <option value=''>Vælg et projekt</option>
+          {visibleProjects > 0 ? (
+            <>
+              {visibleProjects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.title}
+                </option>
+              ))}
+            </>
+          ) : (
+            <option value=''>Ingen opgaver lige nu..</option>
+          )}
+        </Select>
+      </section>
+
+      <SmallProjects />
     </article>
   );
 };
