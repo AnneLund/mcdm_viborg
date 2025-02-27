@@ -68,6 +68,30 @@ const ExamProject = () => {
             navn plus rapport. Eksempel: jens_jensen_rapport.pdf. Eller som en
             Mark Down (.md) fil jens_jensen_rapport.md.
           </p>
+          <li>
+            <a
+              href='/assets/materials/smallprojects/rapport_example.pdf'
+              download>
+              Eksempel på en rapport
+            </a>
+          </li>
+        </ul>
+        <h2>Projektstyring</h2>
+        <ul>
+          <li>
+            <a
+              href='/assets/materials/smallprojects/github_projects.pdf'
+              download>
+              Introduktion til Github som projektstyringsværktøj
+            </a>
+          </li>
+          <li>
+            <a
+              href='/assets/materials/smallprojects/trello_projects.pdf'
+              download>
+              Introduktion til Trello som projektstyringsværktøj
+            </a>
+          </li>
         </ul>
       </div>
     </article>
