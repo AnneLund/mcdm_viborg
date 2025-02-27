@@ -340,17 +340,15 @@ See https://s-c.sh/2BAXzed for more info.`),window[Gf]+=1);const aA=()=>{const[i
   }
 `,uo=Ge(xE)`
   color: white;
-  width: 50%;
-  margin: 0 auto;
   font-size: 18px;
   text-decoration: none;
   font-weight: 500;
-  padding: 8px 12px;
   transition: all 0.3s ease-in-out;
 
   &.active {
     font-weight: bold;
-    border-bottom: 2px solid white;
+    /* border-bottom: 2px solid white; */
+    text-decoration: underline 3px;
   }
 
   @media (max-width: 768px) {
@@ -565,8 +563,8 @@ See https://s-c.sh/2BAXzed for more info.`),window[Gf]+=1);const aA=()=>{const[i
   list-style: none;
   padding: 0;
 `,aO=Ge.li`
-  background: ${i=>i.$isToday?"#ffeb3b95":"#fff"};
-  border-left: 5px solid ${i=>i.$isToday?"#ff9900":"#007bff"};
+  background: ${i=>i.$isToday?"#4ca2af3e":"#fff"};
+  border-left: 5px solid ${i=>i.$isToday?"#60cadb":"#2c3e50"};
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 5px;

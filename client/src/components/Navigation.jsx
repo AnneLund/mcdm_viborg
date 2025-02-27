@@ -137,17 +137,15 @@ const NavContainer = styled.div`
 
 const StyledNavLink = styled(NavLink)`
   color: white;
-  width: 50%;
-  margin: 0 auto;
   font-size: 18px;
   text-decoration: none;
   font-weight: 500;
-  padding: 8px 12px;
   transition: all 0.3s ease-in-out;
 
   &.active {
     font-weight: bold;
-    border-bottom: 2px solid white;
+    /* border-bottom: 2px solid white; */
+    text-decoration: underline 3px;
   }
 
   @media (max-width: 768px) {

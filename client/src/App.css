@@ -112,7 +112,7 @@ h2 {
 
 @media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr; /* Enkel kolonne layout */
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 }

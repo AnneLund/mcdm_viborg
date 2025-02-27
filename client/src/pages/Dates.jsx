@@ -27,8 +27,8 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  background: ${(props) => (props.$isToday ? "#ffeb3b95" : "#fff")};
-  border-left: 5px solid ${(props) => (props.$isToday ? "#ff9900" : "#007bff")};
+  background: ${(props) => (props.$isToday ? "#4ca2af3e" : "#fff")};
+  border-left: 5px solid ${(props) => (props.$isToday ? "#60cadb" : "#2c3e50")};
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 5px;
