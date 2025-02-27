@@ -46,6 +46,7 @@ h2 {
   text-align: center;
 
   ul {
+    margin: 0 20px;
     p {
       margin: 10px 0;
     }

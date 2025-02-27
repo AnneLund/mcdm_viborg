@@ -78,12 +78,13 @@ const BurgerMenu = styled.div`
   flex-direction: column;
   cursor: pointer;
   z-index: 10;
+  margin-left: auto;
 
   span {
     background: white;
     height: 4px;
     width: 30px;
-    margin: 5px 0;
+    margin: 3px 0;
     border-radius: 3px;
     transition: all 0.3s ease;
   }
@@ -120,15 +121,13 @@ const NavContainer = styled.div`
     flex-direction: column;
     background: linear-gradient(135deg, #2c3e50, #4ca1af);
     position: absolute;
-    top: 100%;
+    top: 85%;
     left: 0;
     width: 100%;
     text-align: center;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     padding: 10px 0;
     overflow: hidden;
-
-    /* ✅ Bruger transiente props ($menuOpen), så det ikke sendes til DOM */
     height: ${({ $menuOpen }) => ($menuOpen ? "auto" : "0")};
     opacity: ${({ $menuOpen }) => ($menuOpen ? "1" : "0")};
     visibility: ${({ $menuOpen }) => ($menuOpen ? "visible" : "hidden")};
@@ -137,16 +136,13 @@ const NavContainer = styled.div`
 
 const StyledNavLink = styled(NavLink)`
   color: white;
+  width: 50%;
+  margin: 0 auto;
   font-size: 18px;
   text-decoration: none;
   font-weight: 500;
   padding: 8px 12px;
   transition: all 0.3s ease-in-out;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    text-decoration: none;
-  }
 
   &.active {
     font-weight: bold;

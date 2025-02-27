@@ -159,6 +159,7 @@ const List = styled.ul`
 const ListItem = styled.li`
   background: #e9ecef;
   padding: 10px;
+  color: #333;
   margin-bottom: 5px;
   border-radius: 5px;
 `;
