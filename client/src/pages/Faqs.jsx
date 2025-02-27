@@ -7,7 +7,7 @@ import { useState } from "react";
 const Button = styled.button`
   padding: 0.5rem 1rem;
   border: none;
-  background-color: #217022;
+  background-color: #2c3e50;
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
