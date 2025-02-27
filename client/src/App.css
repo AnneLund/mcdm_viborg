@@ -39,7 +39,8 @@ h2 {
 .projects,
 .smallprojects,
 .faq,
-.examproject {
+.examproject,
+.dates {
   display: flex;
   justify-content: center;
   text-align: center;

@@ -3,9 +3,37 @@
     {
       "id": 1,
       "event": "Udlevering af prøve eksamens-opgave",
-      "date": "2022-01-01",
+      "date": "2025-03-17",
       "time": "14:00",
-      "description": "New Year's Day"
+      "description": ""
+    },
+    {
+      "id": 2,
+      "event": "Udlevering af prøve eksamens-opgave",
+      "date": "2025-03-03",
+      "time": "08:45",
+      "description": ""
+    },
+    {
+      "id": 3,
+      "event": "Aflevering af prøve eksamens-opgave",
+      "date": "2025-03-07",
+      "time": "14:00",
+      "description": ""
+    },
+    {
+      "id": 4,
+      "event": "Fremlæggelser hele dagen",
+      "date": "2025-03-10",
+      "time": "09:00",
+      "description": "Præcise tidspunkter kommer senere.."
+    },
+    {
+      "id": 5,
+      "event": "Fremlæggelser hele dagen",
+      "date": "2025-03-11",
+      "time": "09:00",
+      "description": "Præcise tidspunkter kommer senere.."
     }
   ]
 }

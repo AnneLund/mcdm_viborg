@@ -13,6 +13,7 @@ import Faqs from "./pages/Faqs";
 import FaqForm from "./components/forms/FaqForm";
 import Exam from "./pages/Exam";
 import ExamProject from "./pages/ExamProject";
+import Dates from "./pages/Dates";
 
 function App() {
   const { signedIn } = useAuthContext();
@@ -72,6 +73,10 @@ function App() {
         {
           path: "examproject",
           element: <ExamProject />,
+        },
+        {
+          path: "dates",
+          element: <Dates />,
         },
       ],
     },
