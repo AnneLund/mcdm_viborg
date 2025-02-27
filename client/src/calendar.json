@@ -4,36 +4,53 @@
       "id": 1,
       "event": "Udlevering af prøve eksamens-opgave",
       "date": "2025-03-17",
-      "time": "14:00",
-      "description": ""
+      "time": "kl. 09:00",
+      "description": "I skal møde fysisk ind på skolen."
     },
     {
       "id": 2,
       "event": "Udlevering af prøve eksamens-opgave",
       "date": "2025-03-03",
-      "time": "08:45",
-      "description": ""
+      "time": "kl. 09:00",
+      "description": "I skal møde fysisk ind på skolen."
     },
     {
       "id": 3,
       "event": "Aflevering af prøve eksamens-opgave",
       "date": "2025-03-07",
-      "time": "14:00",
-      "description": ""
+      "time": "kl. 14:00"
     },
     {
       "id": 4,
       "event": "Fremlæggelser hele dagen",
       "date": "2025-03-10",
-      "time": "09:00",
+      "time": "kl. 09:00",
       "description": "Præcise tidspunkter kommer senere.."
     },
     {
       "id": 5,
       "event": "Fremlæggelser hele dagen",
       "date": "2025-03-11",
-      "time": "09:00",
+      "time": "kl. 09:00",
       "description": "Præcise tidspunkter kommer senere.."
+    },
+    {
+      "id": 6,
+      "event": "Projektarbejde",
+      "date": "2025-03-04",
+      "description": "I arbejder hjemmefra"
+    },
+    {
+      "id": 7,
+      "event": "Projektarbejde",
+      "date": "2025-03-05",
+      "description": "I arbejder hjemmefra"
+    },
+    {
+      "id": 8,
+      "event": "Projektarbejde",
+      "date": "2025-03-06",
+      "description": "I arbejder hjemmefra"
     }
   ]
 }
