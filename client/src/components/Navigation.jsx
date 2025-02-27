@@ -116,6 +116,7 @@ const NavContainer = styled.div`
   gap: 25px;
   width: 100%;
   transition: all 0.3s ease-in-out;
+  border-radius: 0 0 10px 10px;
 
   @media (max-width: 768px) {
     flex-direction: column;

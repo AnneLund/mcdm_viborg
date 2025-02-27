@@ -46,8 +46,13 @@ const ExamProject = () => {
           rapporten.
         </Paragraph>
         <Paragraph>
+          Du kan også tage et dagligt screenshot og vedhæfte dette som bilag til
+          rapporten.
+        </Paragraph>
+        <Paragraph>
           Vi vil meget gerne se en daglig planlægning og eksekvering.
         </Paragraph>
+
         <h4>Projektrapporten skal som minimum indeholde følgende:</h4>
         <List>
           <ListItem>
@@ -97,26 +102,23 @@ const ExamProject = () => {
 
       <Section>
         <Title>Projektstyring</Title>
+        <h4>Forslag til projektstyringsværktøjer</h4>
         <List>
-          <ListItem>
-            <DownloadLink
-              href='/assets/materials/smallprojects/github_projects.pdf'
-              download>
-              Introduktion til Github som projektstyringsværktøj
-            </DownloadLink>
-          </ListItem>
-          <ListItem>
-            <DownloadLink
-              href='/assets/materials/smallprojects/trello_projects.pdf'
-              download>
-              Introduktion til Trello som projektstyringsværktøj
-            </DownloadLink>
-          </ListItem>
-          <ListItem>
-            <ExternalLink href='https://tree.taiga.io/' target='_blank'>
-              Taiga
-            </ExternalLink>
-          </ListItem>
+          <DownloadLink
+            href='/assets/materials/smallprojects/github_projects.pdf'
+            download>
+            Introduktion til Github som projektstyringsværktøj
+          </DownloadLink>
+
+          <DownloadLink
+            href='/assets/materials/smallprojects/trello_projects.pdf'
+            download>
+            Introduktion til Trello som projektstyringsværktøj
+          </DownloadLink>
+
+          <ExternalLink href='https://tree.taiga.io/' target='_blank'>
+            Taiga
+          </ExternalLink>
         </List>
       </Section>
     </Container>
@@ -154,6 +156,8 @@ const Title = styled.h2`
 const List = styled.ul`
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ListItem = styled.li`
@@ -165,32 +169,35 @@ const ListItem = styled.li`
 `;
 
 const Paragraph = styled.p`
-  margin-bottom: 10px;
+  margin: 20px 0;
   color: #333;
   line-height: 1.5;
 `;
 
 const DownloadLink = styled.a`
-  display: inline-block;
-  padding: 8px 12px;
+  padding: 10px;
   background: #217022;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;
   transition: background 0.3s ease;
-  margin-top: 10px;
+  margin: 5px 0;
 
   &:hover {
-    background: #40d242;
+    background: #447645;
   }
 `;
 
 const ExternalLink = styled.a`
-  color: #007bff;
+  padding: 10px;
+  background: #217022;
+  color: #fff;
   text-decoration: none;
-  font-weight: bold;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+  margin: 5px 0;
 
   &:hover {
-    text-decoration: underline;
+    background: #447645;
   }
 `;
