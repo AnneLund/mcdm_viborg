@@ -78,12 +78,14 @@ const useFetchTerms = () => {
 
   // SLET TERM
   const deleteTerm = async (params) => {
-    await fetch(`${apiUrl}/term/${params}`, {
+    const response = await fetch(`${apiUrl}/term/${params}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    await response.json();
 
     /* Filter all the terms without the matching ID. */
     const filteredArray = terms.filter((act) => act._id !== params);
