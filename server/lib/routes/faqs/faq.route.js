@@ -21,9 +21,7 @@ const isValidObjectId = (id) => {
 // POST TERM
 faqRouter.post("/", auth, async (req, res) => {
   try {
-    console.log("Indkommende data:", req.body); // Debug log
-
-    const { question, answer } = req.body;
+    const { question, answer, link } = req.body;
 
     if (!question) {
       return res.status(400).send({
@@ -33,11 +31,9 @@ faqRouter.post("/", auth, async (req, res) => {
       });
     }
 
-    const model = { question, answer };
+    const model = { question, answer, link };
 
     const result = await addFaq(model);
-
-    console.log("Database svar:", result);
 
     if (!result || result.status !== "ok") {
       return res.status(500).send({
@@ -61,7 +57,7 @@ faqRouter.post("/", auth, async (req, res) => {
 // PUT TERM
 faqRouter.put("/", auth, async (req, res) => {
   try {
-    const { id, question, answer } = req.body;
+    const { id, question, answer, link } = req.body;
 
     if (!id) {
       return res.status(400).send({
@@ -73,7 +69,7 @@ faqRouter.put("/", auth, async (req, res) => {
 
     if (!isValidObjectId(id)) return;
 
-    const model = { id, question, answer };
+    const model = { id, question, answer, link };
 
     const result = await updateFaq(model);
 

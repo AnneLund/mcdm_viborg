@@ -4,6 +4,7 @@ mongoose.set("runValidators", true);
 const faqScheme = new Schema({
   question: { type: String, required: true },
   answer: { type: String },
+  link: { type: String },
   created: { type: Date, default: new Date() },
 });
 

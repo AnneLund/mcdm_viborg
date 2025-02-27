@@ -1,0 +1,11 @@
+{
+  "dates": [
+    {
+      "id": 1,
+      "event": "Udlevering af prøve eksamens-opgave",
+      "date": "2022-01-01",
+      "time": "14:00",
+      "description": "New Year's Day"
+    }
+  ]
+}

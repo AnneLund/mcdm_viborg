@@ -8,6 +8,7 @@ import { useAuthContext } from "../../context/useAuthContext";
 const FaqForm = ({ isEditMode }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [link, setLink] = useState("");
   const { refetch } = useOutletContext();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -24,6 +25,7 @@ const FaqForm = ({ isEditMode }) => {
           if (response) {
             setQuestion(response.question);
             setAnswer(response.answer);
+            setLink(response.link);
             formRef.current?.scrollIntoView({ behavior: "smooth" });
           }
         } catch (error) {
@@ -39,7 +41,7 @@ const FaqForm = ({ isEditMode }) => {
   const handleSubmitFaq = async (event) => {
     event.preventDefault();
 
-    const faqData = { question, answer };
+    const faqData = { question, answer, link };
 
     try {
       let response;
@@ -48,9 +50,6 @@ const FaqForm = ({ isEditMode }) => {
       } else {
         response = await createFaq(faqData);
       }
-
-      console.log("FAQ oprettet, forsøger at refetche...");
-      console.log(response);
       if (response) {
         await refetch();
         navigate("/faqs");
@@ -74,15 +73,26 @@ const FaqForm = ({ isEditMode }) => {
         />
       </div>
       {user.role === "admin" && (
-        <div>
-          <input
-            id='answer'
-            type='text'
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            placeholder='Dit svar'
-          />
-        </div>
+        <>
+          <div>
+            <input
+              id='answer'
+              type='text'
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              placeholder='Dit svar'
+            />
+          </div>
+          <div>
+            <input
+              id='link'
+              type='text'
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder='Evt link'
+            />
+          </div>
+        </>
       )}
 
       <Button

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ActionButton from "../button/ActionButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
 
 const Question = styled.li`
@@ -45,12 +45,13 @@ const Faq = ({ faq, openFaq, toggleFaq, deleteFaq }) => {
 
   return (
     <Question onClick={() => toggleFaq(faq._id)}>
-      {/* Tilføj onClick her */}
       <strong>{faq?.question}</strong>
 
       {openFaq === faq._id && (
         <Answer>
           {faq.answer ? <p>{faq.answer}</p> : <p>Ingen besvarelse endnu..</p>}
+
+          {faq.link && <Link to={faq.link}>Se mere her</Link>}
         </Answer>
       )}
 

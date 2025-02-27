@@ -1,4 +1,18 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 const Exam = () => {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [hash]);
+
   return (
     <article className='exam'>
       <h2>Eksamen</h2>
@@ -61,6 +75,40 @@ const Exam = () => {
             skriftlig klage over karakteren eller formen ved eksamen eller
             karakterens afgivelse.
           </li>
+        </ul>
+
+        <ul>
+          <h3>Råd og fif&apos;s til en god eksamen</h3>
+          <li>Hils på både underviser og censor ved ankomst</li>
+          <p></p>
+          <li>
+            Start med at præsentere dit program (fx: &apos;Jeg vil starte med et
+            5 minutters oplæg om custom-hooks i React. Her vil jeg fortrække, at
+            I venter med at stille spørgsmål til jeg er færdig. Derefter vil jeg
+            fortælle om rating-funktionen som jeg under &apos;fremhævelse af
+            punkter til bedømmelse&apos; i min rapport har lagt op til. Jeg vil
+            derudover gerne komme ind på, hvordan jeg funktionelt har opbygget
+            min backoffice.&apos;)
+          </li>
+          <li>
+            Brug ikke tid på at vise siden frem - vi har set den under skuetiden
+          </li>
+          <li>
+            Hvis du bliver stillet et spørgsmål, som du ikke kan huske svaret
+            på, så sig fx: &apos;Det vil jeg gerne lige vende tilbage til. Først
+            vil jeg lige fortælle om....&apos;
+          </li>
+        </ul>
+
+        <ul id='extratime'>
+          <h3>Ekstra tid til eksamensprojektet</h3>
+
+          <p>
+            Hvis du er ordblind eller har en psykisk diagnose, kan du anmode om
+            mere tid til selve eksamensprojektet.
+          </p>
+          <br />
+          <p>Skriv til din underviser hvis du ønsker dette.</p>
         </ul>
       </div>
     </article>
