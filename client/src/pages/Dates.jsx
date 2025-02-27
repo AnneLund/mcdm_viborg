@@ -27,8 +27,8 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  background: ${(props) => (props.$isToday ? "#ffeb3b" : "#fff")};
-  border-left: 5px solid ${(props) => (props.$isToday ? "#ff9800" : "#007bff")};
+  background: ${(props) => (props.$isToday ? "#ffeb3b95" : "#fff")};
+  border-left: 5px solid ${(props) => (props.$isToday ? "#ff9900" : "#007bff")};
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -48,13 +48,15 @@ const Description = styled.p`
 
 const Dates = () => {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const sortedDates = useMemo(() => {
     return dates
-      .map((date) => ({
-        ...date,
-        dateObj: new Date(date.date),
-      }))
+      .map((date) => {
+        const dateObj = new Date(date.date);
+        dateObj.setHours(0, 0, 0, 0);
+        return { ...date, dateObj };
+      })
       .filter((date) => date.dateObj >= today)
       .sort((a, b) => a.dateObj - b.dateObj);
   }, [dates]);
@@ -65,19 +67,22 @@ const Dates = () => {
       <List>
         {sortedDates.length > 0 ? (
           sortedDates.map((date, index) => {
-            const formattedDate = date.dateObj.toLocaleDateString("da-DK", {
-              weekday: "long",
-              day: "2-digit",
-              month: "long",
-              year: "numeric",
-            });
+            const isToday = date.dateObj.getTime() === today.getTime();
+            const formattedDate = isToday
+              ? "I dag"
+              : capitalizeFirstLetter(
+                  date.dateObj.toLocaleDateString("da-DK", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })
+                );
 
             return (
-              <ListItem
-                key={index}
-                $isToday={date.dateObj.toDateString() === today.toDateString()}>
+              <ListItem key={index} $isToday={isToday}>
                 <EventTitle>
-                  {capitalizeFirstLetter(formattedDate)} {date.time}
+                  {formattedDate} {date.time}
                 </EventTitle>
                 {date.event}
                 <Description>{date.description}</Description>
