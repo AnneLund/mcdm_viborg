@@ -51,6 +51,10 @@ const Exam = () => {
             lokalet, mens eksaminator og censor voterer.
           </li>
           <li>
+            De første 5 minutter skal du holde et oplæg om et valgfrit emne, der
+            relaterer til din opgave.
+          </li>
+          <li>
             Under eksaminationen skal du præsentere din opgaveløsning. Derudover
             skal du kunne redegøre for enkeltelementer af løsningen - Dette kan
             være spørgsmål omkring koder, valg af metodikker,
