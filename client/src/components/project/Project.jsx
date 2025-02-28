@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { projects } from "../../projects.json";
 import styled from "styled-components";
 import { useAuthContext } from "../../context/useAuthContext";
 import Login from "../login/Login";
+import useFetchProjects from "../../hooks/useFetchProjects";
+import Loading from "../Loading/Loading";
 
 const ResourceList = styled.ol`
   list-style: none;
@@ -44,8 +45,13 @@ const ResourceLink = styled.a`
 const Project = () => {
   const { id } = useParams();
   const { token } = useAuthContext();
+  const { projects, isLoading } = useFetchProjects();
 
-  const project = projects?.find((p) => p.id === id);
+  const project = projects?.find((p) => p._id === id);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!project) {
     return <h2>Projekt ikke fundet</h2>;
@@ -62,7 +68,7 @@ const Project = () => {
       ) : (
         <ResourceList>
           <ResourceItem>
-            <ResourceLink href={project.zip} download>
+            <ResourceLink href={project.materialsZip} download>
               📁 Hent alle materialer (inkl. hovedopgave)
             </ResourceLink>
           </ResourceItem>
@@ -75,7 +81,7 @@ const Project = () => {
             </ResourceLink>
           </ResourceItem>
           <ResourceItem>
-            <ResourceLink href={project.server} download>
+            <ResourceLink href={project.serverZip} download>
               🌍 Hent serveren
             </ResourceLink>
           </ResourceItem>

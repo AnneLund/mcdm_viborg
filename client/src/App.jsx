@@ -14,6 +14,7 @@ import FaqForm from "./components/forms/FaqForm";
 import Exam from "./pages/Exam";
 import ExamProject from "./pages/ExamProject";
 import Dates from "./pages/Dates";
+import ProjectForm from "./components/forms/ProjectForm";
 
 function App() {
   const { signedIn } = useAuthContext();
@@ -29,6 +30,16 @@ function App() {
         {
           path: "projects",
           element: <Projects />,
+          children: [
+            {
+              path: "add",
+              element: <ProjectForm />,
+            },
+            {
+              path: "edit/:id",
+              element: <ProjectForm isEditMode={true} />,
+            },
+          ],
         },
         {
           path: "projects/:id",

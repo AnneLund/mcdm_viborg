@@ -1,45 +1,56 @@
 .greenButton {
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #217022;
+  width: 100px;
+  background: rgba(0, 97, 0, 0.66);
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 10px;
+  margin: 10px auto;
   padding: 5px;
 
   h4 {
     font-size: 15px;
     color: white;
+  }
+
+  &:hover {
+    background: rgb(0, 97, 0);
   }
 }
 
 .redButton {
   width: 100px;
-  background: #df4747;
+  background: #df4747a1;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 10px;
+  margin: 10px auto;
   padding: 5px;
 
   h4 {
     font-size: 15px;
     color: white;
   }
+
+  &:hover {
+    background: #df4747;
+  }
 }
 
 .orangeButton {
   width: 100px;
-  background: rgb(255, 191, 71);
+  background: #6d94ba;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 10px;
+  margin: 10px auto;
   padding: 5px;
 
   h4 {
     font-size: 15px;
     color: white;
+  }
+
+  &:hover {
+    background: #6fb7ff;
   }
 }

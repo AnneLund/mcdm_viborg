@@ -19,6 +19,7 @@ import faqRouter from "./routes/faqs/faq.route.js";
 import faqsRouter from "./routes/faqs/faqs.route.js";
 import projectRouter from "./routes/projects/project.route.js";
 import projectsRouter from "./routes/projects/projects.route.js";
+import fileRouter from "./routes/files/files.js";
 
 // Opsætning af Express
 const app = express();
@@ -82,6 +83,7 @@ app.use("/api/faq", faqRouter);
 app.use("/api/faqs", faqsRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/projects", projectsRouter);
+app.use("/api/upload", fileRouter);
 
 // Håndter SPA-routing
 app.get("*", (req, res) => {

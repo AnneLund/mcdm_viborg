@@ -3,9 +3,9 @@ mongoose.set("runValidators", true);
 
 const projectScheme = new Schema({
   title: { type: String, required: true },
-  zip: { type: String, required: false },
+  materialsZip: { type: String, required: false },
   figma: { type: String, required: false },
-  server: { type: String, required: false },
+  serverZip: { type: String, required: false },
   isVisible: { type: Boolean, default: false },
   created: { type: Date, default: new Date() },
 });

@@ -1,36 +1,35 @@
-import express from 'express';
-import { signInWithToken } from '../../handlers/auth.handler.js';
-import multer from 'multer';
+import express from "express";
+import multer from "multer";
+import { signInWithToken } from "../../handlers/auth.handler.js";
+
 const authTokenRouter = express.Router();
+const upload = multer(); // Tilføjet multer for at sikre ingen fejl
 
-// Multer Setup for storage.
-const employeeStorage = multer.diskStorage({
+authTokenRouter.post("/auth/token", upload.single("file"), async (req, res) => {
+  try {
+    const { token } = req.body;
 
-    destination: function (req, file, cb) {
-        cb(null, 'public/employees')
-    },
-    filename: function (req, file, cb) {
-        console.log('FILE', file, req.body)
-        
-        let newFileName = getNewUID() + '.' + mime.extension(file.mimetype)
-        let ext = mime.extension(file.mimetype)
-        cb(null, newFileName);
+    if (!token) {
+      return res.status(400).json({
+        status: "error",
+        message: "Token er påkrævet.",
+      });
     }
-});
 
-const upload = multer({ storage: employeeStorage });
-// Get
-authTokenRouter.post("/auth/token", upload.single('file'), async (req, res) => {
-  
-    const result = await signInWithToken(req.body.token);
-   
+    const result = await signInWithToken(token);
 
-    return res.status(200).send(
-        { ...result }
-    );
+    if (result.status === "error") {
+      return res.status(401).json(result);
+    }
 
-
-    
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Fejl ved token-login:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Serverfejl ved token-login. Prøv igen senere.",
+    });
+  }
 });
 
 export default authTokenRouter;

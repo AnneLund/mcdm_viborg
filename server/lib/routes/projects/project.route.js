@@ -7,6 +7,8 @@ import {
 } from "../../handlers/projects/project.handler.js";
 import auth from "../../middleware/auth.middleware.js";
 import mongoose from "mongoose";
+import multer from "multer";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const projectRouter = express.Router();
 
@@ -18,79 +20,154 @@ const isValidObjectId = (id) => {
   return true;
 };
 
+const s3Client = new S3Client({
+  endpoint: "https://nyc3.digitaloceanspaces.com",
+  region: "nyc3",
+  credentials: {
+    accessKeyId: process.env.DO_ACCESS_KEY,
+    secretAccessKey: process.env.DO_SECRET_KEY,
+  },
+});
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+const uploadFileToS3 = async (file, folder) => {
+  if (!file) return null; // Hvis ingen fil er valgt, returnér null
+
+  const fileName = `${Date.now()}-${file.originalname}`; // Unikt filnavn
+  const filePath = `${folder}/${fileName}`;
+
+  const params = {
+    Bucket: "keeperzone",
+    Key: filePath,
+    Body: file.buffer,
+    ACL: "public-read",
+    ContentType: file.mimetype,
+  };
+
+  try {
+    await s3Client.send(new PutObjectCommand(params));
+    return `https://keeperzone.nyc3.cdn.digitaloceanspaces.com/${filePath}`;
+  } catch (error) {
+    console.error("Fejl ved upload til S3:", error);
+    return null; // Hvis upload fejler, returnér null
+  }
+};
+
 // POST PROJECT
-projectRouter.post("/", auth, async (req, res) => {
-  try {
-    const { title, zip, figma, server, isVisible } = req.body;
+projectRouter.post(
+  "/",
+  upload.fields([
+    { name: "materialsZip", maxCount: 1 },
+    { name: "serverZip", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { title, figma, isVisible } = req.body;
+      const materialsZipFile = req.files["materialsZip"]?.[0] || null;
+      const serverZipFile = req.files["serverZip"]?.[0] || null;
 
-    if (!title) {
-      return res.status(400).send({
+      if (!title) {
+        return res.status(400).json({
+          status: "error",
+          message: "Please provide all required fields",
+        });
+      }
+
+      // Upload filerne til S3
+      const materialsZipUrl = await uploadFileToS3(
+        materialsZipFile,
+        "mediacollege"
+      );
+      const serverZipUrl = await uploadFileToS3(serverZipFile, "mediacollege");
+
+      // Gem kun URL'erne, ikke selve filbufferen!
+      const projectData = {
+        title,
+        figma,
+        isVisible: isVisible === "true", // Konverter fra string til boolean
+        materialsZip: materialsZipUrl, // Gem URL'en, ikke Base64
+        serverZip: serverZipUrl, // Gem URL'en, ikke Base64
+      };
+
+      const result = await createProject(projectData);
+
+      if (!result || result.status !== "ok") {
+        return res.status(500).json({
+          status: "error",
+          message: result.message || "Failed to add project",
+        });
+      }
+
+      return res.status(201).json({ status: "ok", data: result });
+    } catch (error) {
+      console.error("Error adding project:", error);
+      return res.status(500).json({
         status: "error",
-        message: "Please provide all required fields",
-        data: [],
+        message: "Internal server error",
+        error: error.message,
       });
     }
-
-    const model = { title, zip, figma, server, isVisible };
-
-    const result = await createProject(model);
-
-    if (!result || result.status !== "ok") {
-      return res.status(500).send({
-        status: "error",
-        message: result.message || "Failed to add project",
-        data: [],
-      });
-    }
-
-    return res.status(201).send({ ...result });
-  } catch (error) {
-    console.error("Error adding project:", error);
-    return res.status(500).send({
-      status: "error",
-      message: "Internal server error",
-      error: error.message,
-    });
   }
-});
+);
 
-// PUT PROJECT
-projectRouter.put("/", auth, async (req, res) => {
-  try {
-    const { id, title, zip, figma, server, isVisible } = req.body;
+// Opdater eksisterende projekt
+projectRouter.put(
+  "/:id",
+  auth,
+  upload.fields([
+    { name: "materialsZip", maxCount: 1 },
+    { name: "serverZip", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, figma, isVisible } = req.body;
+      const materialsZip = req.files["materialsZip"]
+        ? req.files["materialsZip"][0]
+        : null;
+      const serverZip = req.files["serverZip"]
+        ? req.files["serverZip"][0]
+        : null;
 
-    if (!id) {
-      return res.status(400).send({
+      if (!title) {
+        return res.status(400).json({
+          status: "error",
+          message: "Title is required",
+        });
+      }
+
+      const model = {
+        title,
+        figma,
+        isVisible: isVisible === "true",
+        materialsZip: materialsZip
+          ? materialsZip.buffer.toString("base64")
+          : null,
+        serverZip: serverZip ? serverZip.buffer.toString("base64") : null,
+      };
+
+      const result = await updateProject(id, model);
+
+      if (!result || result.status !== "ok") {
+        return res.status(500).json({
+          status: "error",
+          message: result.message || "Failed to update project",
+          data: [],
+        });
+      }
+
+      return res.status(200).json({ ...result });
+    } catch (error) {
+      console.error("Error updating project:", error);
+      return res.status(500).json({
         status: "error",
-        message: "Project ID is required",
-        data: [],
+        message: "Internal server error",
+        error: error.message,
       });
     }
-
-    if (!isValidObjectId(id)) return;
-
-    const model = { id, title, zip, figma, server, isVisible };
-
-    const result = await updateProject(model);
-
-    if (result.status === "not_found") {
-      return res.status(404).send(result);
-    }
-
-    if (result.status === "error") {
-      return res.status(500).send(result);
-    }
-
-    return res.status(200).send(result);
-  } catch (error) {
-    console.error("Error updating project:", error);
-    return res.status(500).send({
-      status: "error",
-      message: "Internal server error",
-      error: error.message,
-    });
   }
-});
+);
 
 // DELETE PROJECT
 projectRouter.delete("/:id", auth, async (req, res) => {

@@ -4,7 +4,6 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate, useLocation } from "react-router-dom";
 import { apiUrl } from "../apiUrl";
 
-// Opretter en AuthContext, der bruges til at dele autentificeringsdata globalt
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -16,35 +15,39 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const checkUser = async () => {
-      // Tjekker, om brugeren er i backoffice-området og ikke på login-siden
       if (
         location.pathname.includes("backoffice") &&
         !location.pathname.includes("login")
       ) {
-        if (auth.token !== undefined) {
-          let response = await fetch(`${apiUrl}/auth/token`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: auth.token }),
-          });
+        if (auth.token) {
+          try {
+            let response = await fetch(`${apiUrl}/auth/token`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token: auth.token }),
+            });
 
-          let result = await response.json();
+            let result = await response.json();
 
-          // Hvis tokenen er udløbet
-          if (result.message === "Token Expired") {
-            saveAuth({});
-            setUser({});
-
-            return navigate("/login");
-          } else {
-            setUser(result.data);
+            if (response.status === 401) {
+              console.warn("Token er udløbet eller ugyldig.");
+              saveAuth({});
+              setUser({});
+              navigate("/login");
+            } else if (response.ok) {
+              setUser(result.data);
+            } else {
+              console.error("Fejl ved verificering af token:", result.message);
+            }
+          } catch (error) {
+            console.error("Netværksfejl ved token-check:", error);
+            navigate("/login");
           }
         } else {
-          // Hvis der ikke er en token, navigér til backoffice-login
-          return navigate("/login");
+          navigate("/login");
         }
       }
     };
@@ -52,51 +55,53 @@ export const AuthContextProvider = ({ children }) => {
     checkUser();
   }, [location.pathname, auth.token, navigate, saveAuth]);
 
-  // Funktion til at hente token fra auth-objektet
   const token = auth.token ? auth.token : "";
 
-  // Funktion til at tjekke, om brugeren er logget ind
-  const signedIn = auth.token !== undefined;
+  const signedIn = Boolean(auth.token);
 
-  // Funktion til at logge brugeren ind
   const signIn = async (email, password) => {
-    let response = await fetch(`${apiUrl}/auth/signin`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
+    try {
+      let response = await fetch(`${apiUrl}/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
 
-    let result = await response.json();
-    console.log(result);
+      let result = await response.json();
 
-    const user = jwtDecode(result.data.token); // Dekodér brugeren fra tokenen
+      if (!response.ok) {
+        console.error("Login fejl:", result.message);
+        return { status: "error", message: result.message };
+      }
 
-    saveAuth({ token: result.data.token });
-    setUser(user);
-    navigate("/");
+      const user = jwtDecode(result.data.token);
+      saveAuth({ token: result.data.token });
+      setUser(user);
+      navigate("/");
 
-    return user;
+      return { status: "ok", user };
+    } catch (error) {
+      console.error("Fejl ved login:", error);
+      return { status: "error", message: "Netværksfejl ved login" };
+    }
   };
 
-  // Funktion til at hente brugerdata fra den gemte token
   const getUser = () => {
-    return token !== "" ? jwtDecode(token) : {};
+    return token ? jwtDecode(token) : {};
   };
 
-  // Funktion til at logge brugeren ud
   const signOut = () => {
     saveAuth({});
     setUser({});
+    navigate("/login");
   };
 
-  // Værdi, der leveres til AuthContext.Provider for at blive brugt af komponenter
   const value = { token, user, getUser, signIn, signOut, signedIn };
 
-  // Returnér en AuthContext.Provider, der deler værdien med børnene i komponenttræet
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -63,6 +63,9 @@ h2 {
   div {
     display: flex;
     flex-direction: column;
+    svg {
+      margin: 10px auto;
+    }
   }
 
   .buttons {
@@ -96,6 +99,12 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
   padding: 20px;
+}
+
+.errorMessage {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 @media (max-width: 2000px) {

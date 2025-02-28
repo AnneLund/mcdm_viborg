@@ -3,16 +3,28 @@ import { useAuthContext } from "../../context/useAuthContext";
 import styles from "./login.module.css";
 
 const Login = () => {
-  const { error, signIn } = useAuthContext();
+  const { signIn } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setErrorMessage("");
+
     try {
-      await signIn(email, password);
+      const result = await signIn(email, password);
+
+      if (result.status === "error") {
+        setErrorMessage(result.message);
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Login-fejl:", err);
+      setErrorMessage("Noget gik galt. Prøv igen senere.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -20,12 +32,12 @@ const Login = () => {
     <div className={styles.container}>
       <h3>Login for at få adgang</h3>
       <form onSubmit={handleSubmit} className={styles.form}>
-        {error && <p style={{ color: "red" }}>{error}</p>}
         <div className={styles.formGroup}>
           <input
             className={styles.input}
             type='email'
             placeholder='Email'
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -33,11 +45,18 @@ const Login = () => {
             className={styles.input}
             type='password'
             placeholder='Password'
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
-        <button className={styles.button} type='submit'>
-          Log ind
+        {errorMessage && (
+          <p className='errorMessage' style={{ color: "red" }}>
+            {errorMessage}
+          </p>
+        )}
+        <button className={styles.button} type='submit' disabled={isLoading}>
+          {isLoading ? "Logger ind..." : "Log ind"}
         </button>
       </form>
     </div>

@@ -1,37 +1,42 @@
 import jwt from "jsonwebtoken";
 
 const auth = (req, res, next) => {
-  
-  const tokenHeader = req.headers['authorization'];
-  const useAuthHeader = process.env.USE_JWT || true;
- 
-  if(useAuthHeader !== 'false')
-  {
+  const tokenHeader = req.headers["authorization"];
+  const useAuthHeader = process.env.USE_JWT === "false" ? false : true;
 
+  if (useAuthHeader) {
     if (!tokenHeader) {
-    
-      return res.json({'status' : 'error', 'message' : 'No access without token.'});
-  
+      return res.status(401).json({
+        status: "error",
+        message: "Adgang nægtet! Ingen token blev fundet i headeren.",
+      });
     }
+
+    const tokenParts = tokenHeader.split(" ");
+    if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+      return res.status(401).json({
+        status: "error",
+        message:
+          "Ugyldigt token-format! Token skal være i formatet: Bearer <token>",
+      });
+    }
+
+    const token = tokenParts[1];
+
     try {
-  
-      const token = tokenHeader.split(' ')[1];
-  
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded; 
-  
+      req.user = decoded;
+      next();
     } catch (err) {
-  
-      console.log('Error', err);
-      return res.json({'status' : 'error', 'message' : 'Not a valid Token - are you signed in?'});
-  
+      console.error("Token verificeringsfejl:", err);
+      return res.status(401).json({
+        status: "error",
+        message: "Ugyldigt eller udløbet token! Log ind igen.",
+      });
     }
+  } else {
+    next();
   }
-
-
-  return next();
-
-  
-}
+};
 
 export default auth;

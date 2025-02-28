@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import { projects } from "../projects.json";
+import { Outlet, useNavigate } from "react-router-dom";
+import { MdAdd } from "react-icons/md";
 import styled from "styled-components";
 import { useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
+import useFetchProjects from "../hooks/useFetchProjects";
 
 const Select = styled.select`
   font-size: 1rem;
@@ -22,18 +23,21 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { projects } = useFetchProjects();
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedProject(selectedValue);
 
-    // Naviger til det valgte projekt
     if (selectedValue) {
       navigate(`/projects/${selectedValue}`);
     }
   };
 
-  // Filtrer kun synlige projekter
+  const handleAdd = () => {
+    navigate("/projects/add");
+  };
+
   const visibleProjects =
     user?.role === "admin"
       ? projects
@@ -49,7 +53,7 @@ const Projects = () => {
           {visibleProjects.length > 0 ? (
             <>
               {visibleProjects.map((project) => (
-                <option key={project.id} value={project.id}>
+                <option key={project._id} value={project._id}>
                   {project.title}
                 </option>
               ))}
@@ -58,6 +62,12 @@ const Projects = () => {
             <option value=''>Ingen opgaver lige nu..</option>
           )}
         </Select>
+        {user?.role === "admin" && (
+          <>
+            <MdAdd size={50} onClick={handleAdd} />
+            <Outlet />
+          </>
+        )}
       </div>
     </article>
   );
