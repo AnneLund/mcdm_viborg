@@ -23,7 +23,7 @@ const Projects = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { projects } = useFetchProjects();
+  const { projects, refetch } = useFetchProjects();
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
@@ -65,7 +65,7 @@ const Projects = () => {
         {user?.role === "admin" && (
           <>
             <MdAdd size={50} onClick={handleAdd} />
-            <Outlet />
+            <Outlet context={{ refetch }} />
           </>
         )}
       </div>

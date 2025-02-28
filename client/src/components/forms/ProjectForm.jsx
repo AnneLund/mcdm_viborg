@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
-import { apiUrl } from "../../apiUrl";
 import styles from "./form.module.css";
+import useFetchProjects from "../../hooks/useFetchProjects";
+import { useAlert } from "../../context/Alert";
+import { useOutletContext } from "react-router-dom";
 
 const ProjectForm = ({ isEditMode, project }) => {
   const [materialsZip, setMaterialsZip] = useState(null);
   const [serverZip, setServerZip] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { createProject } = useFetchProjects();
+  const { showSuccess, showError, showConfirmation } = useAlert();
+  const { refetch } = useOutletContext();
 
   const {
     register,
@@ -36,10 +41,9 @@ const ProjectForm = ({ isEditMode, project }) => {
     try {
       const data = new FormData();
       data.append("title", formData.title);
-      data.append("isVisible", formData.isVisible);
+      data.append("isVisible", formData.isVisible ? "true" : "false");
       data.append("figma", formData.figma);
 
-      // Tilføj filer, hvis de er valgt
       if (materialsZip) {
         data.append("materialsZip", materialsZip);
       }
@@ -47,22 +51,19 @@ const ProjectForm = ({ isEditMode, project }) => {
         data.append("serverZip", serverZip);
       }
 
-      const response = await fetch(
-        `${apiUrl}/projects${project ? `/${project.id}` : ""}`,
-        {
-          method: project ? "PUT" : "POST",
-          body: data,
+      const response = await createProject(data);
+      if (response.status === "ok") {
+        showSuccess("Projektet er oprettet med succes!");
+        if (isEditMode) {
+          showConfirmation("Projektet er redigeret med succes!");
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Fejl ved oprettelse/redigering af projekt");
+        await refetch();
+      } else {
+        showError("Fejl ved oprettelse af projekt:");
+        console.error("Error:", response.error);
       }
-
-      console.log("Projekt gemt med succes!");
-      isEditMode(false);
     } catch (error) {
-      console.error("Fejl ved gemning af projekt:", error);
+      console.error("Fejl ved tilføjelse af projekt:", error);
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +75,7 @@ const ProjectForm = ({ isEditMode, project }) => {
 
   return (
     <div>
-      <h2>{project ? "Rediger Projekt" : "Opret Projekt"}</h2>
+      <h2>{project ? "Rediger Projekt" : "Opret nyt projekt"}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label>
           <input

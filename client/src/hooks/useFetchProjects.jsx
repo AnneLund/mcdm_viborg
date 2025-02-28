@@ -1,25 +1,37 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { apiUrl } from "../apiUrl";
 import { useAuthContext } from "../context/useAuthContext";
 
 const useFetchProjects = () => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { token } = useAuthContext();
 
-  const fetchProjects = async () => {
+  // HENT ALLE AKTIVITETER – memoiseret med useCallback, så referencen forbliver stabil (dvs at den ikke bliver genoprettet ved hver render)
+  const fetchProjects = useCallback(async () => {
+    setError(null);
     setIsLoading(true);
-    const result = await fetch(`${apiUrl}/projects`);
-    const response = await result.json();
-    setProjects(response.data);
-    setIsLoading(false);
-  };
+    try {
+      const response = await fetch(`${apiUrl}/projects`);
+      const data = await response.json();
+      setProjects(data.data);
+    } catch (error) {
+      setError(error.message);
+      console.error("Error fetching projects:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Refetch-funktion, der blot kalder fetchTerms
+  const refetch = useCallback(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   useEffect(() => {
     fetchProjects();
   }, []);
-
-  const refreshProjects = () => fetchProjects();
 
   /* Create Project */
   const createProject = async (formData) => {
@@ -35,7 +47,6 @@ const useFetchProjects = () => {
     const result = await response.json();
 
     if (response.ok) {
-      refreshProjects();
       setIsLoading(false);
       return result.data;
     } else {
@@ -77,7 +88,7 @@ const useFetchProjects = () => {
       const result = await response.json();
       console.log(result);
 
-      refreshProjects();
+      refetch();
 
       return result.data;
     } catch (error) {
@@ -100,7 +111,7 @@ const useFetchProjects = () => {
 
     const result = await response.json();
     if (response.ok) {
-      refreshProjects();
+      refetch();
       setIsLoading(false);
       return result;
     } else {
@@ -114,7 +125,7 @@ const useFetchProjects = () => {
     editProject,
     deleteProject,
     isLoading,
-    refreshProjects,
+    refetch,
   };
 };
 
