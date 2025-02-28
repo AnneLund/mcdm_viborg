@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { projects } from "../projects.json";
 import styled from "styled-components";
 import { useState } from "react";
+import { useAuthContext } from "../context/useAuthContext";
 
 const Select = styled.select`
   font-size: 1rem;
@@ -20,6 +21,7 @@ const Select = styled.select`
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
@@ -32,9 +34,10 @@ const Projects = () => {
   };
 
   // Filtrer kun synlige projekter
-  const visibleProjects = projects.filter(
-    (project) => project.isVisible === true
-  );
+  const visibleProjects =
+    user?.role === "admin"
+      ? projects
+      : projects.filter((project) => project.isVisible === true);
 
   return (
     <article className='projects'>
@@ -43,7 +46,7 @@ const Projects = () => {
         <p>Vælg et projekt for at se opgaver og materialer.</p>
         <Select onChange={handleSelectChange} value={selectedProject}>
           <option value=''>Vælg et projekt</option>
-          {visibleProjects > 0 ? (
+          {visibleProjects.length > 0 ? (
             <>
               {visibleProjects.map((project) => (
                 <option key={project.id} value={project.id}>

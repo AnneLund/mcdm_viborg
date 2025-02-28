@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { Link, useRoutes } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -88,7 +88,11 @@ function App() {
 
   return (
     <article className='app'>
-      <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
+      <Link to='/'>
+        {" "}
+        <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
+      </Link>
+
       {routes}
     </article>
   );
