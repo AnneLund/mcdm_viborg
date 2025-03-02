@@ -1,12 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { useAuthContext } from "../context/useAuthContext";
 import styled from "styled-components";
 import ActionButton from "../components/button/ActionButton";
+import BackArrow from "../components/button/BackArrow";
 
 const Home = () => {
   const { user, signOut } = useAuthContext();
 
+  const location = useLocation();
   return (
     <article className='home'>
       <Navigation />
@@ -15,6 +17,8 @@ const Home = () => {
         <UserName>{user?.name}</UserName>
         <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
       </StyledUserInfo>
+      {location.pathname != "/" && <BackArrow />}
+
       <Outlet />
     </article>
   );

@@ -26,7 +26,7 @@ const Navigation = () => {
           <StyledNavLink to='/projects' onClick={closeMenu}>
             Projekter
           </StyledNavLink>
-          <StyledNavLink to='/smallprojects' onClick={closeMenu}>
+          <StyledNavLink to='/exercises' onClick={closeMenu}>
             Opgaver
           </StyledNavLink>
           <StyledNavLink to='/register' onClick={closeMenu}>

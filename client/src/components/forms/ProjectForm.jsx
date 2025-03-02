@@ -5,15 +5,19 @@ import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
 import useFetchProjects from "../../hooks/useFetchProjects";
 import { useAlert } from "../../context/Alert";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 
-const ProjectForm = ({ isEditMode, project }) => {
+const ProjectForm = ({ isEditMode }) => {
   const [materialsZip, setMaterialsZip] = useState(null);
   const [serverZip, setServerZip] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { createProject } = useFetchProjects();
-  const { showSuccess, showError, showConfirmation } = useAlert();
+  const [selectedProject, setSelectedProject] = useState("");
+  const { createProject, projects, editProject } = useFetchProjects();
+  const { showSuccess, showError } = useAlert();
   const { refetch } = useOutletContext();
+  const { id } = useParams();
+  const project = projects?.find((p) => p._id === id);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -36,13 +40,23 @@ const ProjectForm = ({ isEditMode, project }) => {
     }
   }, [project, setValue]);
 
+  const handleSelectChange = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedProject(selectedValue === "true");
+  };
+
   const onSubmit = async (formData) => {
     setIsLoading(true);
+
     try {
       const data = new FormData();
       data.append("title", formData.title);
-      data.append("isVisible", formData.isVisible ? "true" : "false");
+      data.append("isVisible", selectedProject ? "true" : "false");
       data.append("figma", formData.figma);
+
+      if (isEditMode && id) {
+        data.append("id", id);
+      }
 
       if (materialsZip) {
         data.append("materialsZip", materialsZip);
@@ -51,11 +65,14 @@ const ProjectForm = ({ isEditMode, project }) => {
         data.append("serverZip", serverZip);
       }
 
-      const response = await createProject(data);
+      const response = isEditMode
+        ? await editProject(data)
+        : await createProject(data);
+
       if (response.status === "ok") {
         showSuccess("Projektet er oprettet med succes!");
         if (isEditMode) {
-          showConfirmation("Projektet er redigeret med succes!");
+          showSuccess("Opdateret!", "Projektet er opdateret med succes!");
         }
         await refetch();
       } else {
@@ -66,6 +83,7 @@ const ProjectForm = ({ isEditMode, project }) => {
       console.error("Fejl ved tilføjelse af projekt:", error);
     } finally {
       setIsLoading(false);
+      navigate(-1);
     }
   };
 
@@ -75,7 +93,7 @@ const ProjectForm = ({ isEditMode, project }) => {
 
   return (
     <div>
-      <h2>{project ? "Rediger Projekt" : "Opret nyt projekt"}</h2>
+      <h2>{isEditMode ? "Rediger Projekt" : "Opret nyt projekt"}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label>
           <input
@@ -107,10 +125,34 @@ const ProjectForm = ({ isEditMode, project }) => {
             onChange={(e) => setServerZip(e.target.files[0])}
           />
         </label>
+        <label>
+          <h3>Synlighed for elever</h3>
+          <select
+            onChange={handleSelectChange}
+            defaultValue={project?.isVisible ? "Synlig" : "Usynlig"}>
+            {isEditMode ? (
+              <>
+                <option value={project?.isVisible} disabled>
+                  {project?.isVisible ? "Synlig" : "Usynlig"}
+                </option>
 
-        <div className='buttons'>
+                {!project?.isVisible && <option value='true'>Synlig</option>}
+                {project?.isVisible && <option value='false'>Usynlig</option>}
+              </>
+            ) : (
+              <>
+                <option value='false'>Usynlig</option>
+                <option value='true'>Synlig</option>
+              </>
+            )}
+          </select>
+        </label>
+
+        <div id='buttons'>
           <ActionButton
-            onClick={() => isEditMode(false)}
+            onClick={() => {
+              navigate(-1);
+            }}
             buttonText='Annuller'
             cancel={true}
           />

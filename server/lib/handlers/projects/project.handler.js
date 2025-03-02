@@ -26,11 +26,12 @@ export const createProject = async (body) => {
 };
 
 // UPDATE PROJECT
-export const updateProject = async (body) => {
+export const updateProject = async (id, body) => {
   try {
     await dbConnect();
 
-    const project = await projectModel.findById(body.id);
+    const project = await projectModel.findById(id);
+
     if (!project) {
       return {
         status: "not_found",
@@ -38,7 +39,8 @@ export const updateProject = async (body) => {
         data: [],
       };
     }
-    const updatedProject = await projectModel.findByIdAndUpdate(body.id, body, {
+
+    const updatedProject = await projectModel.findByIdAndUpdate(id, body, {
       new: true,
     });
 

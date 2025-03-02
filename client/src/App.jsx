@@ -3,18 +3,20 @@ import "./App.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Projects from "./pages/Projects";
-import Project from "./components/project/Project";
 import Register from "./pages/register/Register";
 import TermForm from "./components/forms/TermForm";
 import Login from "./components/login/Login";
 import { useAuthContext } from "./context/useAuthContext";
-import SmallProjects from "./pages/SmallProjects";
+import SmallProjects from "./pages/Exercises";
 import Faqs from "./pages/Faqs";
 import FaqForm from "./components/forms/FaqForm";
 import Exam from "./pages/Exam";
 import ExamProject from "./pages/ExamProject";
 import Dates from "./pages/Dates";
 import ProjectForm from "./components/forms/ProjectForm";
+import Project from "./pages/project/Project";
+import Exercises from "./pages/Exercises";
+import ExerciseForm from "./components/forms/ExerciseForm";
 
 function App() {
   const { signedIn } = useAuthContext();
@@ -44,11 +46,22 @@ function App() {
         {
           path: "projects/:id",
           element: <Project />,
+          children: [
+            {
+              path: "edit/:id",
+              element: <ProjectForm isEditMode={true} />,
+            },
+          ],
         },
         {
-          path: "smallprojects",
-          element: <SmallProjects />,
+          path: "exercises",
+          element: <Exercises />,
+          children: [
+            { path: "add", element: <ExerciseForm /> },
+            { path: "edit/:id", element: <ExerciseForm isEditMode={true} /> },
+          ],
         },
+
         {
           path: "register",
           element: <Register />,

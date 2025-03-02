@@ -74,20 +74,18 @@ projectRouter.post(
         });
       }
 
-      // Upload filerne til S3
       const materialsZipUrl = await uploadFileToS3(
         materialsZipFile,
         "mediacollege"
       );
       const serverZipUrl = await uploadFileToS3(serverZipFile, "mediacollege");
 
-      // Gem kun URL'erne, ikke selve filbufferen!
       const projectData = {
         title,
         figma,
-        isVisible: isVisible === "true", // Konverter fra string til boolean
-        materialsZip: materialsZipUrl, // Gem URL'en, ikke Base64
-        serverZip: serverZipUrl, // Gem URL'en, ikke Base64
+        isVisible: isVisible === "true",
+        materialsZip: materialsZipUrl,
+        serverZip: serverZipUrl,
       };
 
       const result = await createProject(projectData);
@@ -121,14 +119,11 @@ projectRouter.put(
   ]),
   async (req, res) => {
     try {
-      const { id } = req.params;
       const { title, figma, isVisible } = req.body;
-      const materialsZip = req.files["materialsZip"]
-        ? req.files["materialsZip"][0]
-        : null;
-      const serverZip = req.files["serverZip"]
-        ? req.files["serverZip"][0]
-        : null;
+      const { id } = req.params;
+
+      const materialsZipFile = req.files["materialsZip"]?.[0] || null;
+      const serverZipFile = req.files["serverZip"]?.[0] || null;
 
       if (!title) {
         return res.status(400).json({
@@ -136,28 +131,32 @@ projectRouter.put(
           message: "Title is required",
         });
       }
+      const materialsZipUrl = materialsZipFile
+        ? await uploadFileToS3(materialsZipFile, "mediacollege")
+        : null;
+      const serverZipUrl = serverZipFile
+        ? await uploadFileToS3(serverZipFile, "mediacollege")
+        : null;
 
-      const model = {
+      const updateData = {
         title,
         figma,
         isVisible: isVisible === "true",
-        materialsZip: materialsZip
-          ? materialsZip.buffer.toString("base64")
-          : null,
-        serverZip: serverZip ? serverZip.buffer.toString("base64") : null,
       };
 
-      const result = await updateProject(id, model);
+      if (materialsZipUrl) updateData.materialsZip = materialsZipUrl;
+      if (serverZipUrl) updateData.serverZip = serverZipUrl;
+
+      const result = await updateProject(id, updateData);
 
       if (!result || result.status !== "ok") {
         return res.status(500).json({
           status: "error",
           message: result.message || "Failed to update project",
-          data: [],
         });
       }
 
-      return res.status(200).json({ ...result });
+      return res.status(200).json({ status: "ok", data: result });
     } catch (error) {
       console.error("Error updating project:", error);
       return res.status(500).json({

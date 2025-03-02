@@ -29,8 +29,6 @@ export const AlertProvider = ({ children }) => {
       text: text,
       icon: "error",
       confirmButtonText: "OK",
-      timer: 2000,
-      timerProgressBar: true,
     });
   };
 
