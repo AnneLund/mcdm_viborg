@@ -22,6 +22,7 @@ import Users from "./components/users/Users";
 import PresentationSchema from "./pages/PresentationSchema";
 import Events from "./pages/Events";
 import EventForm from "./components/forms/EventForm";
+import Navigation from "./components/Navigation";
 
 function App() {
   const { signedIn, user } = useAuthContext();
@@ -151,10 +152,9 @@ function App() {
   return (
     <article className='app'>
       <Link to='/'>
-        {" "}
         <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
       </Link>
-
+      {location.pathname.includes("backoffice") && <Navigation />}
       {routes}
     </article>
   );

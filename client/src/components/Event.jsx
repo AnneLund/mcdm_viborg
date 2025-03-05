@@ -30,6 +30,10 @@ const Event = ({ event }) => {
     setShowSchema((prev) => !prev);
   };
 
+  console.log("👤 Bruger rolle:", user?.role);
+  console.log("📄 event.file:", event.file);
+  console.log("📌 event.presentation:", event.presentation);
+
   return (
     <ListItem key={event._id} $isToday={isToday}>
       <EventTitle>
@@ -39,7 +43,7 @@ const Event = ({ event }) => {
       {event.event}
 
       {/* 🔹 Admin kan uploade plan, hvis der ikke er en fil */}
-      {user.role === "admin" && event.presentation && !event.file && (
+      {user?.role === "admin" && event.presentation && !event.file && (
         <div>
           <ActionButton
             onClick={handleUploadClick}
@@ -54,7 +58,7 @@ const Event = ({ event }) => {
       {/* 🔹 ALLE kan se linket, hvis en fil eksisterer */}
       {event.presentation && event.file && (
         <div>
-          <a href={event.file} target='_blank'>
+          <a href={event.file} target='_blank' rel='noopener noreferrer'>
             Se fremlæggelsesplan
           </a>
         </div>
