@@ -40,14 +40,13 @@ const Events = () => {
         ) : (
           <p className='noEvents'>Ingen kommende begivenheder.</p>
         )}
-        <ListItem>
-          {user?.role === "admin" && (
-            <>
-              <MdAdd size={50} onClick={handleAdd} />
-              <Outlet context={{ refetch }} />
-            </>
-          )}
-        </ListItem>
+
+        {user?.role === "admin" && (
+          <ListItem>
+            <MdAdd size={50} onClick={handleAdd} />
+            <Outlet context={{ refetch }} />
+          </ListItem>
+        )}
       </List>
     </Article>
   );

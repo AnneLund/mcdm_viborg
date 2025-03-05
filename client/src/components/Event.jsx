@@ -64,6 +64,13 @@ const Event = ({ event }) => {
         </div>
       )}
       {event.description && <Description>{event.description}</Description>}
+      {event.presentation && event.file && (
+        <div>
+          <a href={event.file} target='_blank'>
+            Se fremlæggelsesplan
+          </a>
+        </div>
+      )}
     </ListItem>
   );
 };
