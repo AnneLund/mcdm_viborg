@@ -73,16 +73,12 @@ const Event = ({ event }) => {
       )}
       {event.description && <Description>{event.description}</Description>}
 
-      {user.role === "guest" && (
-        <>
-          {event.presentation && event.file && (
-            <div>
-              <a href={event.file} target='_blank'>
-                Se fremlæggelsesplan
-              </a>
-            </div>
-          )}
-        </>
+      {event.presentation && event.file && (
+        <div>
+          <a href={event.file} target='_blank'>
+            Se fremlæggelsesplan
+          </a>
+        </div>
       )}
     </ListItem>
   );

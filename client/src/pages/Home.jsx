@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import { useAuthContext } from "../context/useAuthContext";
 import styled from "styled-components";
@@ -7,10 +7,12 @@ import BackArrow from "../components/button/BackArrow";
 import AdminNavigation from "../components/AdminNavigation";
 import Backoffice from "./Backoffice";
 import { useMemo } from "react";
+import { ButtonContainer } from "../styles/buttonStyles";
 
 const Home = () => {
   const { user, signOut } = useAuthContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const isBackoffice = location.pathname.startsWith("/backoffice");
   const showBackArrow = useMemo(
     () => location.pathname !== "/",
@@ -18,16 +20,27 @@ const Home = () => {
   );
 
   return (
-    <article className='home'>
+    <>
       <Navigation />
       <StyledUserInfo>
         <p>Logget ind som:</p>
         <UserName>{user?.name}</UserName>
-        <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
+        <ButtonContainer>
+          <ActionButton
+            buttonText='Log ud'
+            background='red'
+            onClick={signOut}
+          />
+          <ActionButton
+            buttonText='Skift kode'
+            background='blue'
+            onClick={() => navigate("/change-password")}
+          />
+        </ButtonContainer>
       </StyledUserInfo>
       {showBackArrow && <BackArrow />}
       {!isBackoffice && <Outlet />}
-    </article>
+    </>
   );
 };
 

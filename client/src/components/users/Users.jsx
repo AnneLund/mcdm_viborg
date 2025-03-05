@@ -1,9 +1,10 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
-import styled from "styled-components";
 import { MdAdd } from "react-icons/md";
 import User from "./User";
 import Loading from "../Loading/Loading";
+import { UsersContainer } from "../../styles/containerStyles";
+import { Table, Th } from "../../styles/tableStyles";
 
 const Users = () => {
   const { users, refetch, isLoading } = useFetchUsers();
@@ -40,32 +41,5 @@ const Users = () => {
     </UsersContainer>
   );
 };
-
-const UsersContainer = styled.section`
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-
-  svg {
-    cursor: pointer;
-  }
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-`;
-
-const Th = styled.th`
-  background: #007bff;
-  color: white;
-  padding: 10px;
-  text-align: left;
-`;
 
 export default Users;

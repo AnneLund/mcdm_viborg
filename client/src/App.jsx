@@ -23,6 +23,7 @@ import PresentationSchema from "./pages/PresentationSchema";
 import Events from "./pages/Events";
 import EventForm from "./components/forms/EventForm";
 import Navigation from "./components/Navigation";
+import ChangePassword from "./components/forms/ChangePassword";
 
 function App() {
   const { signedIn, user } = useAuthContext();
@@ -110,6 +111,10 @@ function App() {
             { path: "add", element: <EventForm /> },
             { path: "edit/:id", element: <EventForm isEditMode={true} /> },
           ],
+        },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
         },
       ],
     },

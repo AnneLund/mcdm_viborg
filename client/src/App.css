@@ -177,3 +177,6 @@ h2 {
     gap: 10px;
   }
 }
+svg {
+  margin: 10px 0;
+}

@@ -1,19 +1,18 @@
 import { useState, useRef, useEffect } from "react";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import ActionButton from "../components/button/ActionButton";
-import styled from "styled-components";
-import { apiUrl } from "../apiUrl";
 import { useAlert } from "../context/Alert";
 import Loading from "../components/Loading/Loading";
 import useFetchEvents from "../hooks/useFetchEvents";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { useNavigate } from "react-router-dom";
+import { downloadPDF } from "../helpers/downloadPdf.js";
+import { InputContainer } from "../styles/formStyles.jsx";
+import { Article, Section } from "../styles/containerStyles.jsx";
+import { StudentItem, StudentList } from "../styles/listStyles.jsx";
+import { ButtonContainer } from "../styles/buttonStyles.jsx";
 
 const PresentationSchema = ({ event }) => {
   const [newStudent, setNewStudent] = useState("");
   const pdfRef = useRef();
-  const navigate = useNavigate();
   const [schedule, setSchedule] = useState([]);
   const [fileUrl, setFileUrl] = useState("");
   const dayNames = {
@@ -29,7 +28,6 @@ const PresentationSchema = ({ event }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [planGenerated, setPlanGenerated] = useState(false);
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
-
   const { updateEvent } = useFetchEvents();
   const [remainingStudents, setRemainingStudents] = useLocalStorage(
     "remainingStudents",
@@ -45,7 +43,7 @@ const PresentationSchema = ({ event }) => {
           "Serhii",
           "Nureddin",
           "Thomas",
-          "Elsbeth",
+          "Elsbet",
           "Mark",
           "Mathias",
           "Maria",
@@ -58,8 +56,20 @@ const PresentationSchema = ({ event }) => {
 
   useEffect(() => {
     if (isDownloadingPDF && pdfRef.current) {
-      console.log("✅ pdfRef er nu klar til screenshot:", pdfRef.current);
-      setTimeout(() => downloadPDF(), 300);
+      setTimeout(
+        () =>
+          downloadPDF({
+            pdfRef,
+            updateEvent,
+            fileUrl,
+            setFileUrl,
+            showSuccess,
+            isLoading,
+            setIsLoading,
+            event,
+          }),
+        300
+      );
     }
   }, [isDownloadingPDF]);
 
@@ -189,59 +199,6 @@ const PresentationSchema = ({ event }) => {
     ];
 
     setRemainingStudents(uniqueRemainingStudents);
-  };
-
-  const downloadPDF = () => {
-    if (!pdfRef.current) {
-      console.error("Fejl: pdfRef.current er stadig null!");
-      return;
-    }
-
-    html2canvas(pdfRef.current, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const imgWidth = 190;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, "PNG", 10, 20, imgWidth, imgHeight);
-
-        const pdfBlob = pdf.output("blob");
-        uploadPDF(pdfBlob);
-      })
-      .catch((error) => {
-        console.error("Fejl i html2canvas:", error);
-      });
-  };
-
-  const uploadPDF = async (pdfBlob) => {
-    const formData = new FormData();
-    formData.append("file", pdfBlob, "presentation.pdf");
-
-    try {
-      setIsLoading(true);
-
-      const response = await fetch(`${apiUrl}/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.fileUrl) {
-        setFileUrl(data.fileUrl);
-        const formData = new FormData();
-        formData.append("file", fileUrl);
-
-        await updateEvent(event._id, { file: data.fileUrl });
-      } else {
-        console.error("Fejl: Ingen fileUrl modtaget");
-      }
-    } catch (error) {
-      console.error("Fejl ved upload:", error);
-    } finally {
-      setIsLoading(false);
-      showSuccess("Gemt!", "PDF blev gemt med succes");
-    }
   };
 
   const handleNewPlan = () => {
@@ -374,128 +331,3 @@ const PresentationSchema = ({ event }) => {
 };
 
 export default PresentationSchema;
-
-const Article = styled.article`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  width: 100%;
-
-  input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    outline: none;
-  }
-
-  input:focus {
-    border-color: #007bff;
-  }
-`;
-
-const StudentList = styled.ul`
-  list-style: none;
-  padding: 0;
-  width: 100%;
-  background: white;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
-const StudentItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  font-size: 16px;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const Section = styled.div`
-  width: 100%;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-
-  h3 {
-    margin: 20px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-  }
-
-  h4 {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 15px;
-  }
-
-  ul {
-    text-align: left;
-    padding: 0;
-
-    li {
-      list-style-type: none;
-      padding: 8px 0;
-      font-size: 16px;
-      border-bottom: 1px solid #eee;
-    }
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-
-  button {
-    flex: 1;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  button:first-child {
-    background: #007bff;
-  }
-
-  button:first-child:hover {
-    background: #0056b3;
-  }
-
-  button:last-child {
-    background: #28a745;
-  }
-
-  button:last-child:hover {
-    background: #1e7e34;
-  }
-`;

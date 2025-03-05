@@ -114,3 +114,55 @@ export const signInWithToken = async (token) => {
 
   return result;
 };
+
+export const changePassword = async (userId, currentPassword, newPassword) => {
+  await dbConnect();
+
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return {
+        status: "error",
+        message: "Bruger ikke fundet",
+        code: 404,
+        data: {},
+      };
+    }
+
+    // Tjek om den nuværende adgangskode stemmer
+    const validPassword = await bcryptjs.compare(
+      currentPassword,
+      user.hashedPassword
+    );
+    if (!validPassword) {
+      return {
+        status: "error",
+        message: "Nuværende password er forkert",
+        code: 400,
+        data: {},
+      };
+    }
+
+    // Hash den nye adgangskode
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+
+    // Opdater adgangskoden i databasen
+    user.hashedPassword = hashedPassword;
+    await user.save();
+
+    return {
+      status: "ok",
+      message: "Password opdateret!",
+      code: 200,
+      data: {},
+    };
+  } catch (error) {
+    console.error("Error in changePassword:", error);
+    return {
+      status: "error",
+      message: "Internal server error",
+      code: 500,
+      data: {},
+    };
+  }
+};
