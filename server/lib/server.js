@@ -22,6 +22,10 @@ import projectsRouter from "./routes/projects/projects.route.js";
 import fileRouter from "./routes/files/files.js";
 import exercisesRouter from "./routes/exercises/exercises.route.js";
 import exerciseRouter from "./routes/exercises/exercise.route.js";
+import authTokenRouter from "./routes/auth/token.js";
+import uploadRouter from "./routes/upload.route.js";
+import eventRouter from "./routes/events/event.route.js";
+import eventsRouter from "./routes/events/events.route.js";
 
 // Opsætning af Express
 const app = express();
@@ -77,6 +81,7 @@ app.use(express.static(path.join(__dirname, "build")));
 // Monter API-ruter
 app.use("/api", indexRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/auth/token", authTokenRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/user", userRouter);
 app.use("/api/terms", termsRouter);
@@ -88,6 +93,9 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/upload", fileRouter);
 app.use("/api/exercises", exercisesRouter);
 app.use("/api/exercise", exerciseRouter);
+app.use("/api/event", eventRouter);
+app.use("/api/events", eventsRouter);
+app.use("/api/upload", uploadRouter);
 
 // Håndter SPA-routing
 app.get("*", (req, res) => {

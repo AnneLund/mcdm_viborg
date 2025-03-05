@@ -35,6 +35,7 @@
 
 .form input[type="text"],
 .form input[type="number"],
+.form input[type="password"],
 .form input[type="file"],
 .form select {
   width: 100%; /* Fuld bredde */
@@ -48,6 +49,7 @@
 .form input[type="text"]:focus,
 .form input[type="number"]:focus,
 .form input[type="file"]:focus,
+.form input[type="password"]:focus,
 .form select:focus {
   border-color: #007bff;
   outline: none;

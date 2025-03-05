@@ -77,7 +77,7 @@ const Project = () => {
     <article className='project'>
       <header>
         <h1>
-          {project.title}{" "}
+          {project.title}
           {user.role === "admin" && (
             <>
               <MdDelete onClick={() => handleConfirmation()} />{" "}
@@ -97,6 +97,12 @@ const Project = () => {
           </p>
         )}
       </header>
+      {project.description == !null && (
+        <div className='projectDescription'>
+          <h3>Beskrivelse</h3>
+          <p>{project.description}</p>
+        </div>
+      )}
 
       {!token ? (
         <Login />

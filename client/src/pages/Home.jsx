@@ -4,11 +4,19 @@ import { useAuthContext } from "../context/useAuthContext";
 import styled from "styled-components";
 import ActionButton from "../components/button/ActionButton";
 import BackArrow from "../components/button/BackArrow";
+import AdminNavigation from "../components/AdminNavigation";
+import Backoffice from "./Backoffice";
+import { useMemo } from "react";
 
 const Home = () => {
   const { user, signOut } = useAuthContext();
-
   const location = useLocation();
+  const isBackoffice = location.pathname.startsWith("/backoffice");
+  const showBackArrow = useMemo(
+    () => location.pathname !== "/",
+    [location.pathname]
+  );
+
   return (
     <article className='home'>
       <Navigation />
@@ -17,9 +25,8 @@ const Home = () => {
         <UserName>{user?.name}</UserName>
         <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
       </StyledUserInfo>
-      {location.pathname != "/" && <BackArrow />}
-
-      <Outlet />
+      {showBackArrow && <BackArrow />}
+      {!isBackoffice && <Outlet />}
     </article>
   );
 };

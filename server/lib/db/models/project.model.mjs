@@ -3,10 +3,11 @@ mongoose.set("runValidators", true);
 
 const projectScheme = new Schema({
   title: { type: String, required: true },
-  materialsZip: { type: String, required: false },
-  figma: { type: String, required: false },
-  serverZip: { type: String, required: false },
-  isVisible: { type: Boolean, default: false },
+  description: { type: String },
+  materialsZip: { type: String },
+  figma: { type: String },
+  serverZip: { type: String },
+  isVisible: { type: Boolean },
   created: { type: Date, default: new Date() },
 });
 

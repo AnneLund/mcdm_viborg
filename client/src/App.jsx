@@ -7,19 +7,24 @@ import Register from "./pages/register/Register";
 import TermForm from "./components/forms/TermForm";
 import Login from "./components/login/Login";
 import { useAuthContext } from "./context/useAuthContext";
-import SmallProjects from "./pages/Exercises";
 import Faqs from "./pages/Faqs";
 import FaqForm from "./components/forms/FaqForm";
 import Exam from "./pages/Exam";
 import ExamProject from "./pages/ExamProject";
-import Dates from "./pages/Dates";
+import Dates from "./pages/Events";
 import ProjectForm from "./components/forms/ProjectForm";
 import Project from "./pages/project/Project";
 import Exercises from "./pages/Exercises";
 import ExerciseForm from "./components/forms/ExerciseForm";
+import Backoffice from "./pages/Backoffice";
+import UserForm from "./components/forms/UserForm";
+import Users from "./components/users/Users";
+import PresentationSchema from "./pages/PresentationSchema";
+import Events from "./pages/Events";
+import EventForm from "./components/forms/EventForm";
 
 function App() {
-  const { signedIn } = useAuthContext();
+  const { signedIn, user } = useAuthContext();
   const routes = useRoutes([
     {
       path: "/",
@@ -61,7 +66,6 @@ function App() {
             { path: "edit/:id", element: <ExerciseForm isEditMode={true} /> },
           ],
         },
-
         {
           path: "register",
           element: <Register />,
@@ -99,8 +103,42 @@ function App() {
           element: <ExamProject />,
         },
         {
-          path: "dates",
-          element: <Dates />,
+          path: "events",
+          element: <Events />,
+          children: [
+            { path: "add", element: <EventForm /> },
+            { path: "edit/:id", element: <EventForm isEditMode={true} /> },
+          ],
+        },
+      ],
+    },
+    {
+      path: "/backoffice",
+      element: (
+        <ProtectedRoute isAllowed={user.role === "admin"}>
+          <Backoffice />
+        </ProtectedRoute>
+      ),
+      children: [
+        {
+          path: "users",
+          element: <Users />,
+          children: [
+            { path: "add", element: <UserForm /> },
+            { path: "edit/:id", element: <UserForm isEditMode={true} /> },
+          ],
+        },
+        {
+          path: "schema",
+          element: <PresentationSchema />,
+        },
+        {
+          path: "events",
+          element: <Events />,
+          children: [
+            { path: "add", element: <EventForm /> },
+            { path: "edit/:id", element: <EventForm isEditMode={true} /> },
+          ],
         },
       ],
     },

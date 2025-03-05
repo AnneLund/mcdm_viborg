@@ -37,6 +37,7 @@ const ProjectForm = ({ isEditMode }) => {
       setValue("title", project.title);
       setValue("figma", project.figma);
       setValue("isVisible", project.isVisible);
+      setValue("description", project.description);
     }
   }, [project, setValue]);
 
@@ -51,6 +52,7 @@ const ProjectForm = ({ isEditMode }) => {
     try {
       const data = new FormData();
       data.append("title", formData.title);
+      data.append("description", formData.description);
       data.append("isVisible", selectedProject ? "true" : "false");
       data.append("figma", formData.figma);
 
@@ -102,6 +104,15 @@ const ProjectForm = ({ isEditMode }) => {
             {...register("title", { required: "Projektet skal have en titel" })}
           />
           {errors.title && <p>{errors.title.message}</p>}
+        </label>
+
+        <label>
+          <input
+            type='text'
+            placeholder='Beskrivelse'
+            {...register("description")}
+          />
+          {errors.description && <p>{errors.description.message}</p>}
         </label>
 
         <label>

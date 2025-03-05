@@ -1,9 +1,35 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: "autoUpdate",
+      manifest: {
+        name: "MediaCollege Denmark",
+        short_name: "MCD",
+        start_url: "/",
+        display: "standalone",
+        theme_color: "#ffffff",
+        background_color: "#ffffff",
+        icons: [
+          {
+            src: "/icons/icon-192x192.png",
+            type: "image/png",
+            sizes: "192x192",
+          },
+          {
+            src: "/icons/icon-512x512.png",
+            type: "image/png",
+            sizes: "512x512",
+          },
+        ],
+      },
+    }),
+  ],
   build: {
     outDir: "dist",
   },

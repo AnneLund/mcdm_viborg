@@ -48,10 +48,8 @@ const ExerciseForm = ({ isEditMode }) => {
         data.append("id", id);
       }
       if (file) {
-        data.append("file", file, file.name); // Fil + navn til backend
+        data.append("file", file, file.name);
       }
-
-      console.log("FormData-indhold:", Array.from(data.entries())); // Debug log
 
       const response = isEditMode
         ? await editExercise(data)

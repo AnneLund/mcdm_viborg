@@ -1,5 +1,6 @@
 import styles from "./button.module.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { MdDelete, MdOutlineEditNote, MdAdd } from "react-icons/md";
 
 const ActionButton = ({
   buttonText,
@@ -8,6 +9,7 @@ const ActionButton = ({
   arrow,
   onClick,
   showDetails,
+  actionType,
 }) => {
   return (
     <button
@@ -16,19 +18,22 @@ const ActionButton = ({
           ? styles.redButton
           : background === "green"
           ? styles.greenButton
-          : styles.orangeButton
+          : styles.blueButton
       }
       onClick={onClick}
       type={type}>
-      <h4>
+      <p>
         {buttonText}
+        {actionType === "add" && <MdAdd />}
+        {actionType === "delete" && <MdDelete />}
+        {actionType === "edit" && <MdOutlineEditNote />}
         {arrow &&
           (showDetails ? (
             <IoIosArrowUp color='white' size={30} />
           ) : (
             <IoIosArrowDown color='white' size={30} />
           ))}
-      </h4>
+      </p>
     </button>
   );
 };

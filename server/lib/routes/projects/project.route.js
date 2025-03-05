@@ -63,7 +63,7 @@ projectRouter.post(
   ]),
   async (req, res) => {
     try {
-      const { title, figma, isVisible } = req.body;
+      const { title, description, figma, isVisible } = req.body;
       const materialsZipFile = req.files["materialsZip"]?.[0] || null;
       const serverZipFile = req.files["serverZip"]?.[0] || null;
 
@@ -82,6 +82,7 @@ projectRouter.post(
 
       const projectData = {
         title,
+        description,
         figma,
         isVisible: isVisible === "true",
         materialsZip: materialsZipUrl,
@@ -119,7 +120,7 @@ projectRouter.put(
   ]),
   async (req, res) => {
     try {
-      const { title, figma, isVisible } = req.body;
+      const { title, description, figma, isVisible } = req.body;
       const { id } = req.params;
 
       const materialsZipFile = req.files["materialsZip"]?.[0] || null;
@@ -140,6 +141,7 @@ projectRouter.put(
 
       const updateData = {
         title,
+        description,
         figma,
         isVisible: isVisible === "true",
       };

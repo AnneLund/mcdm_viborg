@@ -12,7 +12,7 @@ const useFetchProjects = () => {
   const navigate = useNavigate();
   const { showSuccess, showError, showConfirmation } = useAlert();
 
-  // HENT ALLE AKTIVITETER – memoiseret med useCallback, så referencen forbliver stabil (dvs at den ikke bliver genoprettet ved hver render)
+  // HENT ALLE PROJEKTER– memoiseret med useCallback, så referencen forbliver stabil (dvs at den ikke bliver genoprettet ved hver render)
   const fetchProjects = useCallback(async () => {
     setError(null);
     setIsLoading(true);
@@ -77,8 +77,6 @@ const useFetchProjects = () => {
         },
         body: data,
       });
-
-      console.log(response);
 
       if (!response.ok) {
         showError("Der skete en fejl:", error);

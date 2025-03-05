@@ -3,9 +3,9 @@ import multer from "multer";
 import { signInWithToken } from "../../handlers/auth.handler.js";
 
 const authTokenRouter = express.Router();
-const upload = multer(); // Tilføjet multer for at sikre ingen fejl
+const upload = multer();
 
-authTokenRouter.post("/auth/token", upload.single("file"), async (req, res) => {
+authTokenRouter.post("/", upload.single("file"), async (req, res) => {
   try {
     const { token } = req.body;
 

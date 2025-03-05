@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useAuthContext } from "../context/useAuthContext";
 
 const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useAuthContext();
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -41,9 +43,14 @@ const Navigation = () => {
           <StyledNavLink to='/exam' onClick={closeMenu}>
             Eksamen
           </StyledNavLink>
-          <StyledNavLink to='/dates' onClick={closeMenu}>
+          <StyledNavLink to='/events' onClick={closeMenu}>
             Vigtige datoer
           </StyledNavLink>
+          {user.role === "admin" && (
+            <StyledNavLink to='/backoffice' onClick={closeMenu}>
+              Backoffice
+            </StyledNavLink>
+          )}
         </NavContainer>
       </NavWrapper>
     </Nav>
