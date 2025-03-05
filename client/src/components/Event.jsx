@@ -9,14 +9,22 @@ const Event = ({ event }) => {
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
 
+  const tomorrowMidnight = new Date(todayMidnight);
+  tomorrowMidnight.setDate(tomorrowMidnight.getDate() + 1);
+
   const isToday = event.eventObj.getTime() === todayMidnight.getTime();
+  const isTomorrow = event.eventObj.getTime() === tomorrowMidnight.getTime();
 
   const [showSchema, setShowSchema] = useState(false);
+
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
   const formattedDate = isToday
     ? "I dag"
+    : isTomorrow
+    ? "I morgen"
     : capitalizeFirstLetter(
         event.eventObj.toLocaleDateString("da-DK", {
           weekday: "long",
@@ -30,10 +38,6 @@ const Event = ({ event }) => {
     setShowSchema((prev) => !prev);
   };
 
-  console.log("👤 Bruger rolle:", user?.role);
-  console.log("📄 event.file:", event.file);
-  console.log("📌 event.presentation:", event.presentation);
-
   return (
     <ListItem key={event._id} $isToday={isToday}>
       <EventTitle>
@@ -41,30 +45,45 @@ const Event = ({ event }) => {
         {event.time && <p>Kl. {event.time}</p>}
       </EventTitle>
       {event.event}
-
-      {/* 🔹 Admin kan uploade plan, hvis der ikke er en fil */}
-      {user?.role === "admin" && event.presentation && !event.file && (
+      {user.role === "admin" && (
         <div>
-          <ActionButton
-            onClick={handleUploadClick}
-            buttonText='Upload fremlæggelsesprogram'
-          />
-          {showSchema && (
-            <PresentationSchema event={event} setShowSchema={setShowSchema} />
+          {event.presentation && !event.file ? (
+            <div>
+              <ActionButton
+                onClick={handleUploadClick}
+                buttonText='Upload fremlæggelsesprogram'
+              />
+              {showSchema && (
+                <PresentationSchema
+                  event={event}
+                  setShowSchema={setShowSchema}
+                />
+              )}
+            </div>
+          ) : (
+            <>
+              {event.presentation && event.file && (
+                <a href={event.file} target='_blank'>
+                  Se fremlæggelsesplan
+                </a>
+              )}
+            </>
           )}
         </div>
       )}
-
-      {/* 🔹 ALLE kan se linket, hvis en fil eksisterer */}
-      {event.presentation && event.file && (
-        <div>
-          <a href={event.file} target='_blank' rel='noopener noreferrer'>
-            Se fremlæggelsesplan
-          </a>
-        </div>
-      )}
-
       {event.description && <Description>{event.description}</Description>}
+
+      {user.role === "guest" && (
+        <>
+          {event.presentation && event.file && (
+            <div>
+              <a href={event.file} target='_blank'>
+                Se fremlæggelsesplan
+              </a>
+            </div>
+          )}
+        </>
+      )}
     </ListItem>
   );
 };
