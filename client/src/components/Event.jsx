@@ -37,33 +37,21 @@ const Event = ({ event }) => {
         {event.time && <p>Kl. {event.time}</p>}
       </EventTitle>
       {event.event}
-      {user.role === "admin" && (
+
+      {/* 🔹 Admin kan uploade plan, hvis der ikke er en fil */}
+      {user.role === "admin" && event.presentation && !event.file && (
         <div>
-          {event.presentation && !event.file ? (
-            <div>
-              <ActionButton
-                onClick={handleUploadClick}
-                buttonText='Upload fremlæggelsesprogram'
-              />
-              {showSchema && (
-                <PresentationSchema
-                  event={event}
-                  setShowSchema={setShowSchema}
-                />
-              )}
-            </div>
-          ) : (
-            <>
-              {event.presentation && event.file && (
-                <a href={event.file} target='_blank'>
-                  Se fremlæggelsesplan
-                </a>
-              )}
-            </>
+          <ActionButton
+            onClick={handleUploadClick}
+            buttonText='Upload fremlæggelsesprogram'
+          />
+          {showSchema && (
+            <PresentationSchema event={event} setShowSchema={setShowSchema} />
           )}
         </div>
       )}
-      {event.description && <Description>{event.description}</Description>}
+
+      {/* 🔹 ALLE kan se linket, hvis en fil eksisterer */}
       {event.presentation && event.file && (
         <div>
           <a href={event.file} target='_blank'>
@@ -71,6 +59,8 @@ const Event = ({ event }) => {
           </a>
         </div>
       )}
+
+      {event.description && <Description>{event.description}</Description>}
     </ListItem>
   );
 };
