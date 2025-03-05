@@ -16,7 +16,7 @@ const User = ({ user }) => {
   const handleDelete = () => {
     showConfirmation(
       "Slet bruger",
-      `Er du sikker på, at du vil slette <strong>${user.name}</strong>?`,
+      `Er du sikker på, at du vil slette ${user.name}?`,
       () => {
         deleteUser(user._id);
       }

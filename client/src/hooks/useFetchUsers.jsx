@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
 import { apiUrl } from "../apiUrl";
+import { useAlert } from "../context/Alert";
 
 const useFetchUsers = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuthContext();
+  const { showSuccess, showError } = useAlert();
 
   // HENT ALLE BRUGERE – memoiseret med useCallback, så referencen forbliver stabil (dvs at den ikke bliver genoprettet ved hver render)
   const fetchUsers = useCallback(async () => {
@@ -57,7 +59,7 @@ const useFetchUsers = () => {
     }
   };
 
-  // OPDATER FAQ
+  // OPDATER BRUGER
   const updateUser = async (userData) => {
     try {
       const response = await fetch(`${apiUrl}/user`, {
@@ -80,19 +82,30 @@ const useFetchUsers = () => {
     }
   };
 
-  // SLET FAQ
+  // SLET BRUGER
   const deleteUser = async (params) => {
-    await fetch(`${apiUrl}/user/${params}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`${apiUrl}/user/${params}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    /* Filter all the users without the matching ID. */
-    const filteredArray = users.filter((act) => act._id !== params);
+      const data = await response.json();
+      if (!response.ok) {
+        showError(data.message || "Kunne ikke slette brugeren");
+        throw new Error(data.message || "Kunne ikke slette brugeren");
+      }
+      if (response.ok) {
+        showSuccess("Bruger slettet!");
+      }
 
-    setUsers(filteredArray);
+      return { success: true, params };
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return { success: false, error: error.message };
+    }
   };
 
   // HENT FAQ BASERET PÅ ID

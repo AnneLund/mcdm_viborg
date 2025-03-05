@@ -163,7 +163,7 @@ userRouter.put("/", auth, upload.single("picture"), async (req, res) => {
 });
 
 // DELETE
-userRouter.delete("/", auth, async (req, res) => {
+userRouter.delete("/:id", auth, async (req, res) => {
   if (!req.params.id) {
     return res.status(200).send({ message: "No ID provided", data: {} });
   }
@@ -173,7 +173,7 @@ userRouter.delete("/", auth, async (req, res) => {
   if (result.status === "ok") {
     return res.status(200).send({ message: result.message, data: [] });
   } else {
-    return res.status(200).send({ message: result.message, data: {} });
+    return res.status(400).send({ message: result.message, data: {} });
   }
 });
 
