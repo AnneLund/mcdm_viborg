@@ -26,15 +26,17 @@ const Home = () => {
         <p>Logget ind som:</p>
         <UserName>{user?.name}</UserName>
         <ButtonContainer>
+          {user.role === "student" && (
+            <ActionButton
+              buttonText='Skift kode'
+              background='blue'
+              onClick={() => navigate("/change-password")}
+            />
+          )}
           <ActionButton
             buttonText='Log ud'
             background='red'
             onClick={signOut}
-          />
-          <ActionButton
-            buttonText='Skift kode'
-            background='blue'
-            onClick={() => navigate("/change-password")}
           />
         </ButtonContainer>
       </StyledUserInfo>
