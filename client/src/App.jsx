@@ -11,7 +11,6 @@ import Faqs from "./pages/Faqs";
 import FaqForm from "./components/forms/FaqForm";
 import Exam from "./pages/Exam";
 import ExamProject from "./pages/ExamProject";
-import Dates from "./pages/Events";
 import ProjectForm from "./components/forms/ProjectForm";
 import Project from "./pages/project/Project";
 import Exercises from "./pages/Exercises";
@@ -24,7 +23,6 @@ import Events from "./pages/Events";
 import EventForm from "./components/forms/EventForm";
 import Navigation from "./components/Navigation";
 import ChangePassword from "./components/forms/ChangePassword";
-
 function App() {
   const { signedIn, user } = useAuthContext();
   const routes = useRoutes([

@@ -4,8 +4,6 @@ import { useAuthContext } from "../context/useAuthContext";
 import styled from "styled-components";
 import ActionButton from "../components/button/ActionButton";
 import BackArrow from "../components/button/BackArrow";
-import AdminNavigation from "../components/AdminNavigation";
-import Backoffice from "./Backoffice";
 import { useMemo } from "react";
 import { ButtonContainer } from "../styles/buttonStyles";
 
