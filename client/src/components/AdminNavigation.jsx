@@ -4,6 +4,7 @@ const AdminNavigation = () => {
   return (
     <NavContainer>
       <StyledNavLink to='/backoffice/users'>Brugere</StyledNavLink>
+      <StyledNavLink to='/backoffice/teams'>Hold</StyledNavLink>
     </NavContainer>
   );
 };

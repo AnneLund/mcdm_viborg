@@ -5,6 +5,9 @@ import { useAlert } from "../context/Alert";
 
 const useFetchUsers = () => {
   const [users, setUsers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+  const [user, setUser] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuthContext();
@@ -38,7 +41,7 @@ const useFetchUsers = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: userData, // 📌 Hvis det er FormData, skal vi IKKE tilføje Content-Type
+        body: userData,
       };
 
       if (!isFormData) {
@@ -60,15 +63,17 @@ const useFetchUsers = () => {
   };
 
   // OPDATER BRUGER
-  const updateUser = async (userData) => {
+  const updateUser = async (id, userData) => {
     try {
-      const response = await fetch(`${apiUrl}/user`, {
+      const response = await fetch(`${apiUrl}/user/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: userData,
       });
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Fejl ved opdatering af user");
@@ -78,6 +83,30 @@ const useFetchUsers = () => {
       return result;
     } catch (error) {
       console.error("Fejl ved oprettelse:", error);
+      throw error;
+    }
+  };
+
+  // OPDATÉR FEEDBACK PÅ BRUGER
+  const updateUserFeedback = async (id, feedbackData) => {
+    try {
+      const response = await fetch(`${apiUrl}/user/${id}/feedback`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ feedback: feedbackData }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Fejl ved tilføjelse af feedback");
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Fejl ved tilføjelse af feedback:", error);
       throw error;
     }
   };
@@ -108,7 +137,7 @@ const useFetchUsers = () => {
     }
   };
 
-  // HENT FAQ BASERET PÅ ID
+  // HENT USER BASERET PÅ ID
   const fetchUserById = async (id) => {
     setError(null);
     setIsLoading(true);
@@ -122,6 +151,7 @@ const useFetchUsers = () => {
       }
 
       const user = await response.json();
+      setUser(user.data);
       return user.data;
     } catch (error) {
       setError(error.message);
@@ -137,12 +167,14 @@ const useFetchUsers = () => {
 
   return {
     users,
+    user,
     createUser,
     deleteUser,
     setUsers,
     fetchUsers,
     fetchUserById,
     updateUser,
+    updateUserFeedback,
     isLoading,
     refetch,
     error,

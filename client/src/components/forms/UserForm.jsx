@@ -6,13 +6,16 @@ import styles from "./form.module.css";
 import { useAlert } from "../../context/Alert";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
+import useFetchTeams from "../../hooks/useFetchTeams";
 
 const UserForm = ({ isEditMode }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
   const { createUser, users, updateUser } = useFetchUsers();
+  const { teams } = useFetchTeams();
   const { showSuccess, showError } = useAlert();
   const { refetch } = useOutletContext();
   const { id } = useParams();
@@ -20,8 +23,11 @@ const UserForm = ({ isEditMode }) => {
   const navigate = useNavigate();
 
   const handleRoleChange = (event) => {
-    const selectedRole = event.target.value;
-    setSelectedRole(selectedRole);
+    setSelectedRole(event.target.value);
+  };
+
+  const handleTeamChange = (event) => {
+    setSelectedTeam(event.target.value);
   };
 
   const onImageChange = (e) => {
@@ -42,17 +48,25 @@ const UserForm = ({ isEditMode }) => {
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
-      role: user?.role || false,
-      password: user?.password || "",
+      team: user?.team || "",
+      role: user?.role || "",
+      password: "",
+      comments: "",
+      focusPoints: "",
     },
   });
 
   useEffect(() => {
     if (user) {
       setValue("name", user.name);
-      setValue("password", user.password);
       setValue("email", user.email);
-      setValue("role", user.role);
+      setValue("team", user.team);
+      setValue("role", user.role || "");
+      setValue("comments", user.feedback?.[0]?.comments || "");
+      setValue(
+        "focusPoints",
+        user.feedback?.[0]?.focusPoints?.join(", ") || ""
+      );
     }
   }, [user, setValue]);
 
@@ -60,9 +74,9 @@ const UserForm = ({ isEditMode }) => {
     setIsLoading(true);
     const data = new FormData();
 
-    if (isEditMode && id) {
-      data.append("id", id);
-    }
+    // if (isEditMode && id) {
+    //   data.append("id", id);
+    // }
 
     if (selectedFile) {
       data.append("picture", selectedFile);
@@ -74,8 +88,23 @@ const UserForm = ({ isEditMode }) => {
       }
     });
 
+    if (formData.comments || formData.focusPoints) {
+      data.append(
+        "feedback",
+        JSON.stringify([
+          {
+            comments: formData.comments,
+            focusPoints: formData.focusPoints
+              .split(",")
+              .map((point) => point.trim()),
+            date: new Date().toISOString(),
+          },
+        ])
+      );
+    }
+
     try {
-      isEditMode ? await updateUser(data) : await createUser(data, true);
+      isEditMode ? await updateUser(id, data) : await createUser(data, true);
       await refetch();
       navigate(-1);
     } catch (error) {
@@ -128,6 +157,18 @@ const UserForm = ({ isEditMode }) => {
           {errors.password && <p>{errors.password?.message}</p>}
         </label>
         <label>
+          <select name='team' {...register("team")} onChange={handleTeamChange}>
+            <option value=''>Vælg hold</option>
+            {teams.map((team) => (
+              <option value={team.team} key={team._id}>
+                {team.team}
+              </option>
+            ))}
+          </select>
+          {errors.role && <p>{errors.role?.message}</p>}
+        </label>
+
+        <label>
           <select
             name='role'
             {...register("role", { required: "Brugeren skal have en rolle" })}
@@ -135,10 +176,33 @@ const UserForm = ({ isEditMode }) => {
             <option value=''>Vælg rolle</option>
             <option value='student'>Studerende</option>
             <option value='admin'>Underviser</option>
+            <option value='teacher'>Lærer</option>
             <option value='guest'>Gæst</option>
           </select>
           {errors.role && <p>{errors.role?.message}</p>}
         </label>
+        {isEditMode && (
+          <>
+            <label>
+              <h3>Feedback</h3>
+              <textarea
+                name='comments'
+                placeholder='Skriv feedback her...'
+                {...register("comments")}
+              />
+            </label>
+
+            <label>
+              <h3>Fokusområder</h3>
+              <input
+                type='text'
+                name='focusPoints'
+                placeholder='Skriv fokuspunkter, adskilt med komma'
+                {...register("focusPoints")}
+              />
+            </label>
+          </>
+        )}
 
         <div id='buttons'>
           <ActionButton

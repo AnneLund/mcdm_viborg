@@ -47,7 +47,7 @@ const Event = ({ event }) => {
       {event.event}
       {user.role === "admin" && (
         <div>
-          {event.presentation && !event.file ? (
+          {event.presentation && !event.file && (
             <div>
               <ActionButton
                 onClick={handleUploadClick}
@@ -60,14 +60,6 @@ const Event = ({ event }) => {
                 />
               )}
             </div>
-          ) : (
-            <>
-              {event.presentation && event.file && (
-                <a href={event.file} target='_blank'>
-                  Se fremlæggelsesplan
-                </a>
-              )}
-            </>
           )}
         </div>
       )}

@@ -20,6 +20,12 @@ export const AlertProvider = ({ children }) => {
       confirmButtonText: "OK",
       timer: 2000,
       timerProgressBar: true,
+      customClass: {
+        confirmButton: "custom-confirm-button",
+        cancelButton: "custom-cancel-button",
+        title: "custom-title",
+        content: "custom-content",
+      },
     });
   };
 
@@ -29,6 +35,12 @@ export const AlertProvider = ({ children }) => {
       text: text,
       icon: "error",
       confirmButtonText: "OK",
+      customClass: {
+        confirmButton: "custom-confirm-button",
+        cancelButton: "custom-cancel-button",
+        title: "custom-title",
+        content: "custom-content",
+      },
     });
   };
 
@@ -44,6 +56,9 @@ export const AlertProvider = ({ children }) => {
       customClass: {
         confirmButton: "custom-confirm-button",
         cancelButton: "custom-cancel-button",
+        title: "custom-title",
+        content: "custom-content",
+        htmlContent: "custom-content-html",
       },
       buttonsStyling: false,
     }).then((result) => {

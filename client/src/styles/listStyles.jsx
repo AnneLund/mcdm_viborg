@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StudentList = styled.ul`
+export const List = styled.ul`
   list-style: none;
   padding: 0;
   width: 100%;
@@ -10,12 +10,14 @@ export const StudentList = styled.ul`
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
-export const StudentItem = styled.li`
+export const ListItem = styled.li`
   display: flex;
   justify-content: space-between;
   padding: 12px;
+  margin: 10px;
   border-bottom: 1px solid #eee;
   font-size: 16px;
+  cursor: pointer;
 
   &:last-child {
     border-bottom: none;

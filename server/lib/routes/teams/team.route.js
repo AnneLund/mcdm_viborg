@@ -1,48 +1,44 @@
 import express from "express";
 import {
-  createEvent,
-  deleteEvent,
-  getEventById,
-  updateEvent,
-} from "../../handlers/events/event.handler.js";
+  createTeam,
+  deleteTeam,
+  getTeamById,
+  updateTeam,
+} from "../../handlers/teams/team.handler.js";
 import auth from "../../middleware/auth.middleware.js";
 import { isValidObjectId } from "../../helpers/isValidObjectId.js";
 import { upload } from "../../helpers/multerUpload.js";
 
-const eventRouter = express.Router();
+const teamRouter = express.Router();
 
-// CREATE EVENT
-eventRouter.post("/", upload.none(), async (req, res) => {
+// CREATE TEAM
+teamRouter.post("/", upload.none(), async (req, res) => {
   try {
-    const { event, description, presentation, date, time, file } = req.body;
+    const { team, description } = req.body;
 
-    if (!event) {
+    if (!team) {
       return res.status(400).json({
         status: "error",
         message: "Please provide all required fields",
       });
     }
-    const eventData = {
-      event,
+    const teamData = {
+      team,
       description,
-      presentation,
-      date,
-      time,
-      file,
     };
 
-    const result = await createEvent(eventData);
+    const result = await createTeam(teamData);
 
     if (!result || result.status !== "ok") {
       return res.status(500).json({
         status: "error",
-        message: result.message || "Failed to add event",
+        message: result.message || "Failed to add team",
       });
     }
 
     return res.status(201).json({ status: "ok", data: result });
   } catch (error) {
-    console.error("Error adding event:", error);
+    console.error("Error adding team:", error);
     return res.status(500).json({
       status: "error",
       message: "Internal server error",
@@ -51,10 +47,10 @@ eventRouter.post("/", upload.none(), async (req, res) => {
   }
 });
 
-// UPDATE EVENT
-eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
+// UPDATE TEAM
+teamRouter.put("/:id", auth, upload.none(), async (req, res) => {
   try {
-    const { event, description, presentation, date, time, file } = req.body;
+    const { team, description } = req.body;
     const { id } = req.params;
 
     if (!id) {
@@ -65,26 +61,22 @@ eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
     }
 
     const updateData = {
-      event,
+      team,
       description,
-      presentation,
-      date,
-      time,
-      file,
     };
 
-    const result = await updateEvent(id, updateData);
+    const result = await updateTeam(id, updateData);
 
     if (!result || result.status !== "ok") {
       return res.status(500).json({
         status: "error",
-        message: result.message || "Failed to update event",
+        message: result.message || "Failed to update team",
       });
     }
 
     return res.status(200).json({ status: "ok", data: result });
   } catch (error) {
-    console.error("Fejl i updateEvent:", error);
+    console.error("Fejl i updateTeam:", error);
     return res.status(500).json({
       status: "error",
       message: "Internal server error",
@@ -93,8 +85,8 @@ eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
   }
 });
 
-// DELETE EVENT
-eventRouter.delete("/:id", auth, async (req, res) => {
+// DELETE TEAM
+teamRouter.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -108,7 +100,7 @@ eventRouter.delete("/:id", auth, async (req, res) => {
 
     if (!isValidObjectId(id)) return;
 
-    const result = await deleteEvent(id);
+    const result = await deleteTeam(id);
 
     if (result.status === "not_found") {
       return res.status(404).send(result);
@@ -120,7 +112,7 @@ eventRouter.delete("/:id", auth, async (req, res) => {
 
     return res.status(200).send(result);
   } catch (error) {
-    console.error("Error deleting event:", error);
+    console.error("Error deleting team:", error);
     return res.status(500).send({
       status: "error",
       message: "Internal server error",
@@ -129,22 +121,22 @@ eventRouter.delete("/:id", auth, async (req, res) => {
   }
 });
 
-// GET EVENT BY ID
-eventRouter.get("/:id", async (req, res) => {
+// GET TEAM BY ID
+teamRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
     if (!id) {
       return res.status(400).send({
         status: "error",
-        message: "Event ID is required",
+        message: "Team ID is required",
         data: [],
       });
     }
 
     if (!isValidObjectId(id)) return;
 
-    const result = await getEventById(id);
+    const result = await getTeamById(id);
 
     if (result.status === "not_found") {
       return res.status(404).send(result);
@@ -156,7 +148,7 @@ eventRouter.get("/:id", async (req, res) => {
 
     return res.status(200).send(result);
   } catch (error) {
-    console.error("Error fetching event:", error);
+    console.error("Error fetching team:", error);
     return res.status(500).send({
       status: "error",
       message: "Internal server error",
@@ -165,4 +157,4 @@ eventRouter.get("/:id", async (req, res) => {
   }
 });
 
-export default eventRouter;
+export default teamRouter;

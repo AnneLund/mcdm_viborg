@@ -36,7 +36,7 @@ const EventForm = ({ isEditMode }) => {
     if (event) {
       setValue("event", event.event);
       setValue("date", event.date);
-      setValue("time", event.ftime);
+      setValue("time", event.time);
       setValue("file", event.file);
       setValue("description", event.description);
     }

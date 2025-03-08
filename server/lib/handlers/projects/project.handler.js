@@ -1,7 +1,7 @@
 import dbConnect from "../../db/dbConnect.js";
 import projectModel from "../../db/models/project.model.mjs";
 
-// ADD PROJECT
+// cREATE PROJECT
 export const createProject = async (body) => {
   try {
     await dbConnect();

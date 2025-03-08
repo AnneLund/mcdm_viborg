@@ -7,7 +7,7 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { downloadPDF } from "../helpers/downloadPdf.js";
 import { InputContainer } from "../styles/formStyles.jsx";
 import { Article, Section } from "../styles/containerStyles.jsx";
-import { StudentItem, StudentList } from "../styles/listStyles.jsx";
+import { List, ListItem } from "../styles/listStyles.jsx";
 import { ButtonContainer } from "../styles/buttonStyles.jsx";
 
 const PresentationSchema = ({ event }) => {
@@ -216,18 +216,18 @@ const PresentationSchema = ({ event }) => {
       {!planGenerated ? (
         <>
           <h3>Tilføj elever</h3>
-          <StudentList>
+          <List>
             {students.map((student, index) => (
-              <StudentItem key={index}>
+              <ListItem key={index}>
                 {student}{" "}
                 <ActionButton
                   onClick={() => removeStudent(student)}
                   actionType='delete'
                   background='red'
                 />
-              </StudentItem>
+              </ListItem>
             ))}
-            <StudentItem>
+            <ListItem>
               <InputContainer>
                 <input
                   type='text'
@@ -241,8 +241,8 @@ const PresentationSchema = ({ event }) => {
                   background='green'
                 />
               </InputContainer>
-            </StudentItem>
-          </StudentList>
+            </ListItem>
+          </List>
           <ActionButton
             onClick={handleButtonClicked}
             buttonText='📅 Lav fremlæggelsesplan'
@@ -256,17 +256,17 @@ const PresentationSchema = ({ event }) => {
               <Section>
                 <h3>Fremlæggelsesplan</h3>
                 <h4>{dayNames[selectedDay]}</h4>
-                <StudentList>
+                <List>
                   {schedule
                     .filter((item) => !remainingStudents.includes(item.name))
                     .map((item, index) => (
-                      <StudentItem
+                      <ListItem
                         key={index}
                         style={{ margin: "10px 0", listStyle: "none" }}>
                         Kl. {item.time} - {item.name}
-                      </StudentItem>
+                      </ListItem>
                     ))}
-                </StudentList>
+                </List>
                 <ButtonContainer>
                   <ActionButton
                     onClick={handleNewPlan}
@@ -292,27 +292,27 @@ const PresentationSchema = ({ event }) => {
                   fontFamily: "Arial, sans-serif",
                 }}>
                 <h3>Fremlæggelsesplan - {dayNames[selectedDay]}</h3>
-                <StudentList>
+                <List>
                   {schedule
                     .filter((item) => !remainingStudents.includes(item.name))
                     .map((item, index) => (
-                      <StudentItem
+                      <ListItem
                         key={index}
                         style={{ margin: "10px 0", listStyle: "none" }}>
                         Kl. {item.time} - {item.name}
-                      </StudentItem>
+                      </ListItem>
                     ))}
-                </StudentList>
+                </List>
               </Section>
 
               {/* 🔹 Overskydende elever vises KUN i UI */}
               <Section>
                 <h3>Overskydende elever</h3>
-                <StudentList>
+                <List>
                   {remainingStudents.map((student, index) => (
-                    <StudentItem key={index}>{student}</StudentItem>
+                    <ListItem key={index}>{student}</ListItem>
                   ))}
-                </StudentList>
+                </List>
               </Section>
             </>
           ) : (

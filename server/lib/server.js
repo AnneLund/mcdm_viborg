@@ -9,8 +9,6 @@ import connectDB from "./db/dbConnect.js";
 // Routes
 import indexRouter from "./routes/mcd/www/index.route.js";
 import authRouter from "./routes/auth/auth.js";
-import userRouter from "./routes/users/user.route.js";
-import usersRouter from "./routes/users/users.route.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import termsRouter from "./routes/terms/terms.route.js";
@@ -26,6 +24,9 @@ import authTokenRouter from "./routes/auth/token.js";
 import uploadRouter from "./routes/upload.route.js";
 import eventRouter from "./routes/events/event.route.js";
 import eventsRouter from "./routes/events/events.route.js";
+import userRouter from "./routes/users/user.route.js";
+import teamsRouter from "./routes/teams/teams.route.js";
+import teamRouter from "./routes/teams/team.route.js";
 
 // Opsætning af Express
 const app = express();
@@ -82,8 +83,8 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use("/api", indexRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/auth/token", authTokenRouter);
-app.use("/api/users", usersRouter);
 app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/terms", termsRouter);
 app.use("/api/term", termRouter);
 app.use("/api/faq", faqRouter);
@@ -96,6 +97,8 @@ app.use("/api/exercise", exerciseRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/teams", teamsRouter);
+app.use("/api/team", teamRouter);
 
 // Håndter SPA-routing
 app.get("*", (req, res) => {

@@ -23,6 +23,10 @@ import Events from "./pages/Events";
 import EventForm from "./components/forms/EventForm";
 import Navigation from "./components/Navigation";
 import ChangePassword from "./components/forms/ChangePassword";
+import Teams from "./components/teams/Teams";
+import TeamForm from "./components/forms/TeamForm";
+import TeamUsersList from "./components/teams/TeamUsersList";
+import StudentPanel from "./pages/StudentPanel";
 function App() {
   const { signedIn, user } = useAuthContext();
   const routes = useRoutes([
@@ -114,7 +118,15 @@ function App() {
           path: "change-password",
           element: <ChangePassword />,
         },
+        {
+          path: "studentpanel/:id",
+          element: <StudentPanel />,
+        },
       ],
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
     {
       path: "/backoffice",
@@ -133,6 +145,16 @@ function App() {
           ],
         },
         {
+          path: "teams",
+          element: <Teams />,
+          children: [
+            { path: "add", element: <TeamForm /> },
+            { path: "edit/:id", element: <TeamForm isEditMode={true} /> },
+            { path: "team/:id", element: <TeamUsersList /> },
+            { path: "team/:id/user/:id", element: <StudentPanel /> },
+          ],
+        },
+        {
           path: "schema",
           element: <PresentationSchema />,
         },
@@ -145,10 +167,6 @@ function App() {
           ],
         },
       ],
-    },
-    {
-      path: "/login",
-      element: <Login />,
     },
   ]);
 
