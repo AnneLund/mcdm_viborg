@@ -38,9 +38,11 @@ const StudentPanel = () => {
         <p>
           <strong>Email:</strong> {user.email}
         </p>
-        <p>
-          <strong>Hold:</strong> {user.team.team}
-        </p>
+        {user.team && (
+          <p>
+            <strong>Hold:</strong> {user.team.team}
+          </p>
+        )}
       </header>
 
       {user.feedback.length > 0 && (
