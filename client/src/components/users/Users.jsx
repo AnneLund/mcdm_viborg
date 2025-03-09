@@ -3,8 +3,7 @@ import { useFetchUsers } from "../../hooks/useFetchUsers";
 import { MdAdd } from "react-icons/md";
 import User from "./User";
 import Loading from "../Loading/Loading";
-import { Container } from "../../styles/containerStyles";
-import { Table, Th } from "../../styles/tableStyles";
+import { Table } from "../../styles/tableStyles";
 
 const Users = () => {
   const { users, refetch, isLoading } = useFetchUsers();
@@ -19,16 +18,16 @@ const Users = () => {
   }
 
   return (
-    <Container>
+    <>
       <h2>Brugerliste</h2>
       <Table>
         <thead>
           <tr>
-            <Th>Navn</Th>
-            <Th>Billede</Th>
-            <Th>Email</Th>
-            <Th>Rolle</Th>
-            <Th>Handlinger</Th>
+            <th>Navn</th>
+            <th>Billede</th>
+            <th>Email</th>
+            <th>Rolle</th>
+            <th>Handlinger</th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +38,7 @@ const Users = () => {
       </Table>
       <MdAdd size={40} onClick={handleAdd} />
       <Outlet context={{ refetch }} />
-    </Container>
+    </>
   );
 };
 

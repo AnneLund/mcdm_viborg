@@ -19,14 +19,14 @@ const Teams = () => {
   }
 
   return (
-    <Container>
+    <>
       <h2>Holdliste</h2>
       <Table>
         <thead>
           <tr>
-            <Th>Hold</Th>
-            <Th>Beskrivelse</Th>
-            <Th>Handlinger</Th>
+            <th>Hold</th>
+            <th>Beskrivelse</th>
+            <td>Handlinger</td>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@ const Teams = () => {
       </Table>
       <MdAdd size={40} onClick={handleAdd} />
       <Outlet context={{ refetch }} />
-    </Container>
+    </>
   );
 };
 

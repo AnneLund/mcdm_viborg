@@ -15,9 +15,12 @@ const UserFeedBack = ({ feedback }) => {
       )}
 
       <DateText>{formatDate(feedback.date)}</DateText>
-      <CommentText>
-        <span>Kommentarer</span> {feedback.comments}
-      </CommentText>
+      <List>
+        <CommentText>
+          <span>Kommentarer</span>
+        </CommentText>
+        <ListItem> {feedback.comments}</ListItem>
+      </List>
 
       {feedback.focusPoints && (
         <List>

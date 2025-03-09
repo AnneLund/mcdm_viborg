@@ -22,7 +22,7 @@ const ActionButton = ({
       }
       onClick={onClick}
       type={type}>
-      <p>
+      <p id='text'>
         {buttonText}
         {actionType === "add" && <MdAdd />}
         {actionType === "delete" && <MdDelete />}

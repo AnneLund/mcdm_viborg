@@ -4,19 +4,21 @@ import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
 import ActionButton from "../components/button/ActionButton";
 import FeedbackForm from "../components/forms/FeedbackForm";
+import { useAuthContext } from "../context/useAuthContext";
 import UserFeedBack from "../components/users/UserFeedback";
 
 const StudentPanel = () => {
   const { id } = useParams();
   const { fetchUserById, isLoading, error } = useFetchUsers();
-  const [user, setUser] = useState(null);
+  const [student, setStudent] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const { user } = useAuthContext();
 
   useEffect(() => {
     if (id) {
       fetchUserById(id)
         .then((data) => {
-          if (data) setUser(data);
+          if (data) setStudent(data);
         })
         .catch((error) => console.error("Fejl ved hentning af bruger:", error));
     }
@@ -28,42 +30,41 @@ const StudentPanel = () => {
 
   if (isLoading) return <p>Indlæser bruger...</p>;
   if (error) return <p>Fejl: {error}</p>;
-  if (!user) return <p>Ingen bruger fundet.</p>;
+  if (!student) return <p>Ingen bruger fundet.</p>;
 
   return (
     <Section>
-      <h1>{user.name}</h1>
-      <img src={user.picture} alt={user.name} className='studentImg' />
       <header>
+        <h1>{student.name}</h1>
+        <img src={student.picture} alt={student.name} className='studentImg' />
         <p>
-          <strong>Email:</strong> {user.email}
+          <strong>Email:</strong> {student.email}
         </p>
-        {user.team && (
+        {student.team && (
           <p>
-            <strong>Hold:</strong> {user.team.team}
+            <strong>Hold:</strong> {student.team.team}
           </p>
         )}
       </header>
 
-      {user.feedback.length > 0 && (
+      {student.feedback.length > 0 && (
         <>
-          {user.feedback.map((feedback, index) => (
+          {student.feedback.map((feedback, index) => (
             <div key={index}>
               <h4>Feedback</h4>
+              {(user.role === "teacher" || user.role === "admin") && (
+                <div className='button'>
+                  <ActionButton
+                    onClick={handleShowForm}
+                    buttonText='Tilføj feedback'
+                    background='green'
+                  />
+                  {showForm && <FeedbackForm isEditMode={true} />}
+                </div>
+              )}
               <UserFeedBack feedback={feedback} />
             </div>
           ))}
-        </>
-      )}
-      {user.admin === "teacher" && (
-        <>
-          {" "}
-          <ActionButton
-            onClick={handleShowForm}
-            buttonText='Tilføj feedback'
-            background='green'
-          />
-          {showForm && <FeedbackForm isEditMode={true} />}
         </>
       )}
     </Section>

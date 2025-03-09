@@ -19,40 +19,67 @@ export const Article = styled.article`
 
 export const Section = styled.div`
   width: 100%;
-  text-align: center;
-  margin-top: 20px;
+  max-width: 600px;
+  margin: 20px auto;
   padding: 20px;
-  background: white;
+  background: #fff;
   border-radius: 8px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 
-  h3 {
-    margin: 20px;
-    font-size: 20px;
-    font-weight: bold;
+  header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  h1 {
+    font-size: 24px;
     color: #333;
+    margin-bottom: 10px;
+  }
+
+  .studentImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid #ddd;
+  }
+
+  p {
+    font-size: 16px;
+    color: #555;
+    margin: 5px 0;
+  }
+
+  strong {
+    color: #222;
   }
 
   h4 {
     font-size: 18px;
-    color: #555;
-    margin-bottom: 15px;
+    color: #444;
+    margin-top: 20px;
+    text-align: center;
   }
 
-  ul {
-    text-align: left;
-    padding: 0;
+  @media (max-width: 600px) {
+    max-width: 90%;
+    padding: 15px;
 
-    li {
-      list-style-type: none;
-      padding: 8px 0;
-      font-size: 16px;
-      border-bottom: 1px solid #eee;
+    h1 {
+      font-size: 20px;
     }
-  }
 
-  img {
-    width: 50px;
+    p {
+      font-size: 14px;
+    }
+
+    .studentImg {
+      width: 60px;
+      height: 60px;
+    }
   }
 `;
 

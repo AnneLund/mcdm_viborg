@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
 import { useAuthContext } from "../context/useAuthContext";
+import {
+  MainBurgerMenu,
+  MainNav,
+  MainNavContainer,
+  MainNavWrapper,
+  MainStyledNavLink,
+} from "../styles/navigationStyles";
 
 const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,147 +21,45 @@ const Navigation = () => {
   };
 
   return (
-    <Nav>
-      <NavWrapper>
-        <BurgerMenu onClick={toggleMenu} $menuOpen={menuOpen}>
+    <MainNav>
+      <MainNavWrapper>
+        <MainBurgerMenu onClick={toggleMenu} $menuOpen={menuOpen}>
           <span />
           <span />
           <span />
-        </BurgerMenu>
+        </MainBurgerMenu>
 
-        <NavContainer $menuOpen={menuOpen}>
-          <StyledNavLink to='/projects' onClick={closeMenu}>
+        <MainNavContainer $menuOpen={menuOpen}>
+          <MainStyledNavLink to='/projects' onClick={closeMenu}>
             Projekter
-          </StyledNavLink>
-          <StyledNavLink to='/exercises' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/exercises' onClick={closeMenu}>
             Opgaver
-          </StyledNavLink>
-          <StyledNavLink to='/register' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/register' onClick={closeMenu}>
             Stikordsregister
-          </StyledNavLink>
-          <StyledNavLink to='/faqs' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/faqs' onClick={closeMenu}>
             FAQ
-          </StyledNavLink>
-          <StyledNavLink to='/examproject' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/examproject' onClick={closeMenu}>
             Eksamensprojektet
-          </StyledNavLink>
-          <StyledNavLink to='/exam' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/exam' onClick={closeMenu}>
             Eksamen
-          </StyledNavLink>
-          <StyledNavLink to='/events' onClick={closeMenu}>
+          </MainStyledNavLink>
+          <MainStyledNavLink to='/events' onClick={closeMenu}>
             Vigtige datoer
-          </StyledNavLink>
+          </MainStyledNavLink>
           {user.role === "admin" && (
-            <StyledNavLink to='/backoffice' onClick={closeMenu}>
+            <MainStyledNavLink to='/backoffice' onClick={closeMenu}>
               Backoffice
-            </StyledNavLink>
+            </MainStyledNavLink>
           )}
-        </NavContainer>
-      </NavWrapper>
-    </Nav>
+        </MainNavContainer>
+      </MainNavWrapper>
+    </MainNav>
   );
 };
 
 export default Navigation;
-
-// ----------- STYLED COMPONENTS -----------
-
-const Nav = styled.nav`
-  background: linear-gradient(135deg, #2c3e50, #4ca1af);
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  margin: 20px 0;
-  width: 100%;
-`;
-
-const NavWrapper = styled.div`
-  max-width: 1200px;
-  margin: auto;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-`;
-
-// Burger-menu ikon
-const BurgerMenu = styled.div`
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  z-index: 10;
-  margin-left: auto;
-
-  span {
-    background: white;
-    height: 4px;
-    width: 30px;
-    margin: 3px 0;
-    border-radius: 3px;
-    transition: all 0.3s ease;
-  }
-
-  /* Menu-animation */
-  ${({ $menuOpen }) =>
-    $menuOpen &&
-    `
-    span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    span:nth-child(2) {
-      opacity: 0;
-    }
-    span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-  `}
-
-  @media (max-width: 768px) {
-    display: flex;
-  }
-`;
-
-// Navigation container (grid for desktop, dropdown for mobile)
-const NavContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  width: 100%;
-  transition: all 0.3s ease-in-out;
-  border-radius: 0 0 10px 10px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    background: linear-gradient(135deg, #2c3e50, #4ca1af);
-    position: absolute;
-    top: 85%;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 10px 0;
-    overflow: hidden;
-    height: ${({ $menuOpen }) => ($menuOpen ? "auto" : "0")};
-    opacity: ${({ $menuOpen }) => ($menuOpen ? "1" : "0")};
-    visibility: ${({ $menuOpen }) => ($menuOpen ? "visible" : "hidden")};
-  }
-`;
-
-const StyledNavLink = styled(NavLink)`
-  color: white;
-  font-size: 18px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease-in-out;
-
-  &.active {
-    font-weight: bold;
-    /* border-bottom: 2px solid white; */
-    text-decoration: underline 3px;
-  }
-
-  @media (max-width: 768px) {
-    padding: 15px;
-    display: block;
-  }
-`;

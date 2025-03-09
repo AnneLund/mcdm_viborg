@@ -28,12 +28,14 @@ const Team = ({ team }) => {
       key={team._id}
       onClick={() => navigate(`/backoffice/teams/team/${team._id}`)}
       style={{ cursor: "pointer" }}>
-      <Td>{team.team}</Td>
-      <Td>{team.description}</Td>
-      <Td>
-        <MdDelete size={30} onClick={handleDelete} />
-        <MdOutlineEditNote size={30} onClick={() => handleEdit(team._id)} />
-      </Td>
+      <td data-label='Hold'>{team.team}</td>
+      <td data-label='Beskrivelse'>{team.description}</td>
+      <td data-label='Handlinger' className='teamActions'>
+        <div>
+          <MdDelete size={30} onClick={handleDelete} />
+          <MdOutlineEditNote size={30} onClick={() => handleEdit(team._id)} />
+        </div>
+      </td>
     </tr>
   );
 };

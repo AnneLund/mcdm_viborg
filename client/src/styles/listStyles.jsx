@@ -22,6 +22,10 @@ export const ListItem = styled.li`
   &:last-child {
     border-bottom: none;
   }
+
+  strong {
+    display: block;
+  }
 `;
 
 export const EventList = styled.ul`
