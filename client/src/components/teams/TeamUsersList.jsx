@@ -12,9 +12,17 @@ const TeamUsersList = () => {
   if (error) return <p>Fejl: {error}</p>;
   if (users.length === 0) return <p>Ingen brugere i dette team.</p>;
 
-  const students = users.filter((user) => user.role === "student");
-  const teachers = users.filter((user) => user.role === "teacher");
-  const guests = users.filter((user) => user.role === "guest");
+  const sortUsersByName = (usersArray) => {
+    return usersArray.sort((a, b) => a.name.localeCompare(b.name));
+  };
+
+  const students = sortUsersByName(
+    users.filter((user) => user.role === "student")
+  );
+  const teachers = sortUsersByName(
+    users.filter((user) => user.role === "teacher")
+  );
+  const guests = sortUsersByName(users.filter((user) => user.role === "guest"));
 
   return (
     <Section>

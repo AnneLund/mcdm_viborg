@@ -48,7 +48,6 @@ export const Section = styled.div`
 
   p {
     font-size: 16px;
-    color: #555;
     margin: 5px 0;
   }
 
@@ -56,11 +55,17 @@ export const Section = styled.div`
     color: #222;
   }
 
-  h4 {
-    font-size: 18px;
-    color: #444;
+  h3 {
+    font-size: 25px;
     margin-top: 20px;
     text-align: center;
+  }
+  h4 {
+    font-size: 18px;
+    margin: 20px;
+    text-align: left;
+    width: 100%;
+    border-bottom: 2px solid #ddd;
   }
 
   svg {

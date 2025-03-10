@@ -49,7 +49,6 @@ userRouter.post("/", upload.single("picture"), async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 📌 Hvis der er en fil → upload, ellers brug standardbilledet
     let fileUrl = file
       ? await uploadFileToS3(file, "mediacollege")
       : "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/mediacollege/1741194439860-no-user.jpg";
@@ -191,28 +190,53 @@ userRouter.put("/:id", auth, upload.single("picture"), async (req, res) => {
 // UPDATE USER FEEDBACK
 userRouter.put("/:id/feedback", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { feedback } = req.body;
+    const { id } = req.params; // Bruger-ID
+    const { feedbackId, feedback } = req.body; // Evt. feedback-ID for opdatering
 
     if (!feedback || typeof feedback !== "object") {
       return res.status(400).json({ message: "Feedback skal være et objekt" });
     }
 
-    // Tilføj nyt feedback til arrayet
-    const updatedUser = await userModel.findByIdAndUpdate(
-      id,
-      { $push: { feedback } },
-      { new: true }
-    );
+    let updatedUser;
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Bruger ikke fundet" });
+    if (feedbackId) {
+      // **Opdater eksisterende feedback**
+      updatedUser = await userModel.findOneAndUpdate(
+        { _id: id, "feedback._id": feedbackId },
+        {
+          $set: {
+            "feedback.$.project": feedback.project || null,
+            "feedback.$.exercise": feedback.exercise || null,
+            "feedback.$.projectComments": feedback.projectComments || [],
+            "feedback.$.focusPoints": feedback.focusPoints || [],
+            "feedback.$.date": new Date(),
+          },
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Feedback ikke fundet" });
+      }
+
+      res.json({ message: "Feedback opdateret", user: updatedUser });
+    } else {
+      // **Tilføj ny feedback**
+      updatedUser = await userModel.findByIdAndUpdate(
+        id,
+        { $push: { feedback } },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "Bruger ikke fundet" });
+      }
+
+      res.json({ message: "Feedback tilføjet", user: updatedUser });
     }
-
-    res.json({ message: "Feedback tilføjet", user: updatedUser });
   } catch (error) {
-    console.error("Fejl ved tilføjelse af feedback:", error);
-    res.status(500).json({ message: "Serverfejl ved tilføjelse af feedback" });
+    console.error("Fejl ved tilføjelse/opdatering af feedback:", error);
+    res.status(500).json({ message: "Serverfejl ved håndtering af feedback" });
   }
 });
 

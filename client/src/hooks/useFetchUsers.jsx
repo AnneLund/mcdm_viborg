@@ -88,25 +88,46 @@ const useFetchUsers = () => {
   };
 
   // OPDATÉR FEEDBACK PÅ BRUGER
-  const updateUserFeedback = async (id, feedbackData) => {
+  const updateUserFeedback = async (
+    userId,
+    feedbackId = null,
+    feedbackData
+  ) => {
     try {
-      const response = await fetch(`${apiUrl}/user/${id}/feedback`, {
-        method: "PUT",
+      const url = feedbackId
+        ? `${apiUrl}/user/${userId}/feedback` // PUT: Opdater feedback
+        : `${apiUrl}/user/${userId}/feedback`; // POST: Opret ny feedback
+
+      const method = feedbackId ? "PUT" : "POST"; // Bestem HTTP-metoden
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ feedback: feedbackData }),
+        body: JSON.stringify({
+          feedbackId: feedbackId, // Send kun hvis vi opdaterer
+          feedback: feedbackData,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Fejl ved tilføjelse af feedback");
+        throw new Error(
+          feedbackId
+            ? "Fejl ved opdatering af feedback"
+            : "Fejl ved oprettelse af feedback"
+        );
       }
 
-      const result = await response.json();
-      return result;
+      return await response.json();
     } catch (error) {
-      console.error("Fejl ved tilføjelse af feedback:", error);
+      console.error(
+        feedbackId
+          ? "Fejl ved opdatering af feedback:"
+          : "Fejl ved oprettelse af feedback:",
+        error
+      );
       throw error;
     }
   };
