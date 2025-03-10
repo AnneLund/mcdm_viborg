@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useAlert } from "../../context/Alert";
 import useFetchTeams from "../../hooks/useFetchTeams";
 
@@ -15,6 +20,14 @@ const TeamForm = ({ isEditMode }) => {
   const { id } = useParams();
   const team = teams?.find((e) => e._id === id);
   const navigate = useNavigate();
+  const formRef = useRef();
+  const location = useLocation();
+
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo({ top: formRef.current?.offsetTop, behavior: "smooth" });
+    }, 100);
+  }, []);
 
   const {
     register,
@@ -70,7 +83,7 @@ const TeamForm = ({ isEditMode }) => {
   }
 
   return (
-    <div>
+    <div ref={formRef}>
       <h2>{isEditMode ? "Rediger team" : "Opret nyt team"}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label>

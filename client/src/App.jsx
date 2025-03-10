@@ -139,10 +139,6 @@ function App() {
         {
           path: "users",
           element: <Users />,
-          children: [
-            { path: "add", element: <UserForm /> },
-            { path: "edit/:id", element: <UserForm isEditMode={true} /> },
-          ],
         },
         {
           path: "teams",
@@ -151,7 +147,6 @@ function App() {
             { path: "add", element: <TeamForm /> },
             { path: "edit/:id", element: <TeamForm isEditMode={true} /> },
             { path: "team/:id", element: <TeamUsersList /> },
-            { path: "team/:id/user/:id", element: <StudentPanel /> },
           ],
         },
         {
@@ -166,6 +161,7 @@ function App() {
             { path: "edit/:id", element: <EventForm isEditMode={true} /> },
           ],
         },
+        { path: "/backoffice/team/:id/user/:id", element: <StudentPanel /> },
       ],
     },
   ]);

@@ -15,22 +15,21 @@ const UserFeedBack = ({ feedback }) => {
       )}
 
       <DateText>{formatDate(feedback.date)}</DateText>
+
+      <CommentText>Kommentarer</CommentText>
       <List>
-        <CommentText>
-          <span>Kommentarer</span>
-        </CommentText>
-        <ListItem> {feedback.comments}</ListItem>
+        <ListItem>{feedback.comments}</ListItem>
       </List>
 
       {feedback.focusPoints && (
-        <List>
-          <CommentText>
-            <span>Fokuspunkter</span>
-          </CommentText>
-          {feedback.focusPoints.map((focusPoint, index) => (
-            <ListItem key={index}>{focusPoint}</ListItem>
-          ))}
-        </List>
+        <>
+          <CommentText>Fokuspunkter</CommentText>
+          <List>
+            {feedback.focusPoints.map((focusPoint, index) => (
+              <ListItem key={index}>{focusPoint}</ListItem>
+            ))}
+          </List>
+        </>
       )}
     </FeedbackContainer>
   );

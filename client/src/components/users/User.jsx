@@ -5,14 +5,25 @@ import { MdDelete, MdOutlineEditNote } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
 import { RiAdminFill } from "react-icons/ri";
 import { IoPersonOutline } from "react-icons/io5";
+import { useEffect, useRef, useState } from "react";
+import UserForm from "../forms/UserForm";
 
 const User = ({ user }) => {
+  const [showForm, setShowForm] = useState(false);
   const { showConfirmation } = useAlert();
-  const { deleteUser } = useFetchUsers();
-  const navigate = useNavigate();
+  const { deleteUser, refetch } = useFetchUsers();
+  const formRef = useRef();
 
-  const handleEdit = (userId) => {
-    navigate(`/backoffice/users/edit/${userId}`);
+  useEffect(() => {
+    setTimeout(() => {
+      if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  }, []);
+
+  const handleEdit = () => {
+    setShowForm((prev) => !prev);
   };
 
   const handleDelete = () => {
@@ -26,38 +37,58 @@ const User = ({ user }) => {
   };
 
   return (
-    <tr key={user._id}>
-      <td data-label='Navn'>
-        {user.role === "student" && (
-          <>
-            {user.name} <PiStudentFill />
-          </>
-        )}
-        {user.role === "admin" && (
-          <>
-            {user.name}
-            <RiAdminFill />
-          </>
-        )}
-        {user.role === "guest" && (
-          <>
-            {user.name}
-            <IoPersonOutline />
-          </>
-        )}
-      </td>
-      <td data-label='Billede'>
-        {user.picture && (
-          <img src={user.picture} alt={user.name} width='50' height='50' />
-        )}
-      </td>
-      <td data-label='Email'>{user.email}</td>
-      <td data-label='Rolle'>{user.role}</td>
-      <td data-label='Handlinger' className='actions'>
-        <MdDelete size={30} onClick={handleDelete} />
-        <MdOutlineEditNote size={30} onClick={() => handleEdit(user._id)} />
-      </td>
-    </tr>
+    <>
+      {showForm ? (
+        <tr ref={formRef}>
+          <td colSpan='4'>
+            <UserForm
+              isEditMode={true}
+              refetch={refetch}
+              user={user}
+              setShowForm={setShowForm}
+            />
+          </td>
+        </tr>
+      ) : (
+        <tr key={user._id}>
+          <td data-label='Navn'>
+            {user.role === "student" && (
+              <>
+                {user.name} <PiStudentFill />
+              </>
+            )}
+            {user.role === "admin" && (
+              <>
+                {user.name}
+                <RiAdminFill />
+              </>
+            )}
+            {user.role === "guest" && (
+              <>
+                {user.name}
+                <IoPersonOutline />
+              </>
+            )}
+          </td>
+          <td data-label='Billede'>
+            {user.picture && (
+              <img src={user.picture} alt={user.name} width='50' height='50' />
+            )}
+          </td>
+          <td data-label='Email'>{user.email}</td>
+          <td data-label='Rolle'>{user.role}</td>
+          <td data-label='Handlinger' className='actions'>
+            <div className='teamActions'>
+              <MdDelete size={30} onClick={handleDelete} />
+              <MdOutlineEditNote
+                size={30}
+                onClick={() => handleEdit(user._id)}
+              />
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
   );
 };
 

@@ -4,21 +4,19 @@ import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
 import { useAlert } from "../../context/Alert";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
 import useFetchProjects from "../../hooks/useFetchProjects";
 import useFetchExercises from "../../hooks/useFetchExercises";
 
-const FeedbackForm = ({ isEditMode }) => {
+const FeedbackForm = ({ isEditMode, setShowForm }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { users, updateUserFeedback } = useFetchUsers();
+  const { users, updateUserFeedback, refetch } = useFetchUsers();
   const { projects } = useFetchProjects();
   const { exercises } = useFetchExercises();
   const { showSuccess, showError } = useAlert();
-  const { refetch } = useOutletContext();
   const { id } = useParams();
   const user = users?.find((p) => p._id === id);
-  const navigate = useNavigate();
 
   const {
     register,
@@ -46,8 +44,6 @@ const FeedbackForm = ({ isEditMode }) => {
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
-
-    // Ny feedback-indgang
     const newFeedback = {
       comments: formData.comments,
       project:
@@ -61,22 +57,14 @@ const FeedbackForm = ({ isEditMode }) => {
     };
 
     try {
-      await updateUserFeedback(id, newFeedback); // Sender kun én feedback
+      await updateUserFeedback(id, newFeedback);
       await refetch();
-      navigate(-1);
+      setShowForm(false);
     } catch (error) {
       console.error("Fejl ved tilføjelse af feedback:", error.message);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleSelectProject = (event) => {
-    setValue("project", event.target.value);
-  };
-
-  const handleSelectExercise = (event) => {
-    setValue("exercise", event.target.value);
   };
 
   if (isLoading) {
@@ -132,15 +120,15 @@ const FeedbackForm = ({ isEditMode }) => {
       <div id='buttons'>
         <ActionButton
           onClick={() => {
-            navigate(-1);
+            setShowForm(false);
           }}
           buttonText='Annuller'
           cancel={true}
         />
         <ActionButton
-          buttonText={isEditMode ? "Opdater feedback" : "Tilføj feedback"}
+          buttonText='Tilføj feedback'
           type='submit'
-          background={isEditMode ? "orange" : "green"}
+          background={isEditMode ? "blue" : "green"}
         />
       </div>
     </form>

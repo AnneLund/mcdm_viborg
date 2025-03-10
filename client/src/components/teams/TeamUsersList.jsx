@@ -28,7 +28,7 @@ const TeamUsersList = () => {
             {students.map((user) => (
               <ListItem
                 onClick={() =>
-                  navigate(`/backoffice/teams/team/${id}/user/${user._id}`)
+                  navigate(`/backoffice/team/${id}/user/${user._id}`)
                 }
                 key={user._id}>
                 <div className='teams-list'>

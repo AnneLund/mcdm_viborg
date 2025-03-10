@@ -8,7 +8,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
 import useFetchTeams from "../../hooks/useFetchTeams";
 
-const UserForm = ({ isEditMode }) => {
+const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
@@ -17,9 +17,9 @@ const UserForm = ({ isEditMode }) => {
   const { createUser, users, updateUser } = useFetchUsers();
   const { teams } = useFetchTeams();
   const { showSuccess, showError } = useAlert();
-  const { refetch } = useOutletContext();
+  // const { refetch } = useOutletContext();
   const { id } = useParams();
-  const user = users?.find((p) => p._id === id);
+  // const user = users?.find((p) => p._id === id);
   const navigate = useNavigate();
 
   const handleRoleChange = (event) => {
@@ -74,10 +74,6 @@ const UserForm = ({ isEditMode }) => {
     setIsLoading(true);
     const data = new FormData();
 
-    // if (isEditMode && id) {
-    //   data.append("id", id);
-    // }
-
     if (selectedFile) {
       data.append("picture", selectedFile);
     }
@@ -106,7 +102,7 @@ const UserForm = ({ isEditMode }) => {
     try {
       isEditMode ? await updateUser(id, data) : await createUser(data, true);
       await refetch();
-      navigate(-1);
+      setShowForm(false);
     } catch (error) {
       console.error("Fejl ved oprettelse af bruger:", error.message);
     } finally {
@@ -120,7 +116,7 @@ const UserForm = ({ isEditMode }) => {
 
   return (
     <div className='form'>
-      <h2>{isEditMode ? "Rediger bruger" : "Opret ny bruger"}</h2>
+      <h2>{isEditMode ? `Rediger ${user?.name}` : "Opret ny bruger"}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label>
           <h3>Billede</h3>
@@ -175,13 +171,13 @@ const UserForm = ({ isEditMode }) => {
             onChange={handleRoleChange}>
             <option value=''>Vælg rolle</option>
             <option value='student'>Studerende</option>
-            <option value='admin'>Underviser</option>
-            <option value='teacher'>Lærer</option>
+            <option value='admin'>Admin</option>
+            <option value='teacher'>Underviser</option>
             <option value='guest'>Gæst</option>
           </select>
           {errors.role && <p>{errors.role?.message}</p>}
         </label>
-        {isEditMode && (
+        {/* {isEditMode && (
           <>
             <label>
               <h3>Feedback</h3>
@@ -202,12 +198,12 @@ const UserForm = ({ isEditMode }) => {
               />
             </label>
           </>
-        )}
+        )} */}
 
         <div id='buttons'>
           <ActionButton
             onClick={() => {
-              navigate(-1);
+              setShowForm(false);
             }}
             buttonText='Annuller'
             cancel={true}

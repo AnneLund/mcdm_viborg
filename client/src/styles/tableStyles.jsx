@@ -31,6 +31,10 @@ export const Table = styled.table`
     display: flex;
     gap: 10px;
     align-items: center;
+
+    svg {
+      cursor: pointer;
+    }
   }
 
   @media (max-width: 600px) {
@@ -48,6 +52,7 @@ export const Table = styled.table`
       border: 1px solid #ddd;
       padding: 10px;
     }
+
     td {
       display: flex;
       justify-content: space-between;
@@ -55,22 +60,23 @@ export const Table = styled.table`
       text-align: right;
       position: relative;
     }
+
+    td[data-label="Billede"] {
+      display: none;
+    }
+
+    td[data-label="Navn"] {
+      svg {
+        display: none;
+      }
+    }
+
     td::before {
       content: attr(data-label);
       font-weight: bold;
-      text-align: left;
-    }
-    .actions {
-      justify-content: flex-end;
     }
 
     .teamActions {
-      justify-content: space-between;
-      align-items: center;
-      div {
-        display: flex;
-        align-items: center;
-      }
       svg {
         margin: 0;
       }

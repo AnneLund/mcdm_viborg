@@ -17,11 +17,16 @@
   min-height: 800px;
   margin: auto;
   padding: 1em;
-  color: #2c3e50;
   font-family: "Titillium Web", sans-serif;
 }
 
-a {
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #2c3e50;
 }
 
@@ -90,9 +95,13 @@ h2 {
 #buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 5px;
+  gap: 15px;
   padding-top: 10px;
+  justify-content: center;
+
+  #text {
+    color: white;
+  }
 }
 
 .button {

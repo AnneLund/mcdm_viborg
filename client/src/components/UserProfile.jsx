@@ -30,7 +30,6 @@ const UserProfile = ({ user, signOut }) => {
 
 export default UserProfile;
 
-// Styling til login-info sektionen
 const StyledUserInfo = styled.div`
   width: fit-content;
   display: flex;

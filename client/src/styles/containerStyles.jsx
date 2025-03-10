@@ -135,12 +135,11 @@ export const ColumnContainer = styled.div`
 `;
 
 export const FeedbackContainer = styled.div`
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  border-left: 5px solid #253545ee;
-  max-width: 600px;
+  width: 100%;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
 `;

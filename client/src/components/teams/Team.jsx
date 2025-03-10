@@ -1,6 +1,5 @@
-import styled from "styled-components";
 import { useAlert } from "../../context/Alert";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdDelete, MdOutlineEditNote } from "react-icons/md";
 import useFetchTeams from "../../hooks/useFetchTeams";
 
@@ -41,13 +40,3 @@ const Team = ({ team }) => {
 };
 
 export default Team;
-
-const Td = styled.td`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  &:last-child {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-`;

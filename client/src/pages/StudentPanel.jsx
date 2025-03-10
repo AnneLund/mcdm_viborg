@@ -1,17 +1,23 @@
 import { useParams } from "react-router-dom";
-import { Section } from "../styles/containerStyles";
+import {
+  Section,
+  FeedbackContainer,
+  ColumnContainer,
+} from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
 import ActionButton from "../components/button/ActionButton";
 import FeedbackForm from "../components/forms/FeedbackForm";
 import { useAuthContext } from "../context/useAuthContext";
 import UserFeedBack from "../components/users/UserFeedback";
+import { List, ListItem } from "../styles/listStyles";
 
 const StudentPanel = () => {
   const { id } = useParams();
   const { fetchUserById, isLoading, error } = useFetchUsers();
   const [student, setStudent] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [openFeedbacks, setOpenFeedbacks] = useState({});
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -26,6 +32,13 @@ const StudentPanel = () => {
 
   const handleShowForm = () => {
     setShowForm((prev) => !prev);
+  };
+
+  const handleToggleFeedback = (index) => {
+    setOpenFeedbacks((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
   };
 
   if (isLoading) return <p>Indlæser bruger...</p>;
@@ -47,26 +60,41 @@ const StudentPanel = () => {
         )}
       </header>
 
-      {student.feedback.length > 0 && (
-        <>
-          {student.feedback.map((feedback, index) => (
-            <div key={index}>
-              <h4>Feedback</h4>
-              {(user.role === "teacher" || user.role === "admin") && (
-                <div className='button'>
-                  <ActionButton
-                    onClick={handleShowForm}
-                    buttonText='Tilføj feedback'
-                    background='green'
-                  />
-                  {showForm && <FeedbackForm isEditMode={true} />}
-                </div>
-              )}
-              <UserFeedBack feedback={feedback} />
-            </div>
-          ))}
-        </>
-      )}
+      <>
+        {(user.role === "teacher" || user.role === "admin") && (
+          <>
+            {showForm ? (
+              <FeedbackForm isEditMode={true} setShowForm={setShowForm} />
+            ) : (
+              <div className='button'>
+                <ActionButton
+                  onClick={handleShowForm}
+                  buttonText='Tilføj feedback på en opgave'
+                  background='green'
+                />
+              </div>
+            )}
+          </>
+        )}
+        {student.feedback.length > 0 && (
+          <ColumnContainer>
+            <h3>Feedback på opgaver</h3>
+            {student.feedback.map((feedback, index) => (
+              <div key={index}>
+                <List>
+                  <ListItem>
+                    {feedback.project.title}
+                    <p onClick={() => handleToggleFeedback(index)}>
+                      {openFeedbacks[index] ? "Skjul feedback" : "Vis feedback"}
+                    </p>
+                  </ListItem>
+                </List>
+                {openFeedbacks[index] && <UserFeedBack feedback={feedback} />}
+              </div>
+            ))}
+          </ColumnContainer>
+        )}
+      </>
     </Section>
   );
 };
