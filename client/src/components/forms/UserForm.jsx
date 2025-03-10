@@ -4,7 +4,7 @@ import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
 import { useAlert } from "../../context/Alert";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
 import useFetchTeams from "../../hooks/useFetchTeams";
 
@@ -17,10 +17,6 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   const { createUser, users, updateUser } = useFetchUsers();
   const { teams } = useFetchTeams();
   const { showSuccess, showError } = useAlert();
-  // const { refetch } = useOutletContext();
-  const { id } = useParams();
-  // const user = users?.find((p) => p._id === id);
-  const navigate = useNavigate();
 
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
@@ -74,6 +70,8 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
     setIsLoading(true);
     const data = new FormData();
 
+    console.log("Form Data før tilføjelse:", formData);
+
     if (selectedFile) {
       data.append("picture", selectedFile);
     }
@@ -83,6 +81,8 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
         data.append(key, formData[key]);
       }
     });
+
+    console.log("FormData objekt:", Object.fromEntries(data.entries())); // Debugging af hvad der bliver sendt
 
     if (formData.comments || formData.focusPoints) {
       data.append(
@@ -100,7 +100,9 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
     }
 
     try {
-      isEditMode ? await updateUser(id, data) : await createUser(data, true);
+      isEditMode
+        ? await updateUser(user._id, data)
+        : await createUser(data, true);
       await refetch();
       setShowForm(false);
     } catch (error) {

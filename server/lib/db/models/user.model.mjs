@@ -3,6 +3,7 @@ mongoose.set("runValidators", true);
 
 const feedbackSchema = new Schema({
   date: { type: Date, default: Date.now },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   comments: { type: String, required: true },
   project: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
   exercise: { type: mongoose.Schema.Types.ObjectId, ref: "exercise" },

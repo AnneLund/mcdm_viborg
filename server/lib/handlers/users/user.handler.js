@@ -121,6 +121,10 @@ export const getUserById = async (id) => {
       .populate({
         path: "feedback.exercise",
         model: "exercise",
+      })
+      .populate({
+        path: "feedback.createdBy",
+        model: "user",
       });
     result = { status: "ok", message: "User fetched successfully", data: data };
   } catch (error) {

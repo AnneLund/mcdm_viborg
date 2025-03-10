@@ -5,6 +5,7 @@ import Loading from "../Loading/Loading";
 import { Table } from "../../styles/tableStyles";
 import { useState } from "react";
 import UserForm from "../forms/UserForm";
+import { Section } from "../../styles/containerStyles";
 
 const Users = () => {
   const { users, refetch, isLoading } = useFetchUsers();
@@ -23,9 +24,12 @@ const Users = () => {
       {showForm ? (
         <UserForm refetch={refetch} setShowForm={setShowForm} />
       ) : (
-        <>
-          <h2>Brugerliste</h2>
-          <MdAdd size={40} onClick={handleAdd} />
+        <Section>
+          <header>
+            <h2>Brugerliste</h2>
+            <MdAdd size={40} onClick={handleAdd} />
+          </header>
+
           <Table>
             <thead>
               <tr>
@@ -42,7 +46,7 @@ const Users = () => {
               ))}
             </tbody>
           </Table>
-        </>
+        </Section>
       )}
     </>
   );

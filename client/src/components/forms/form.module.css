@@ -29,7 +29,7 @@
 
 .form label {
   display: block;
-  font-size: 15px;
+  font-size: 20px;
   color: #555;
   margin-bottom: 5px;
 }
@@ -49,7 +49,7 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 20px;
   box-sizing: border-box;
 }
 
@@ -68,7 +68,6 @@
 
 .buttons {
   display: flex;
-
   justify-content: space-around;
   margin-bottom: 20px;
 
@@ -76,3 +75,9 @@
     color: white;
   }
 }
+
+/* @media (max-width: 600px) {
+  .form {
+    font-size: 10px;
+  }
+} */

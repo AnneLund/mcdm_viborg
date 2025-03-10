@@ -4,14 +4,21 @@ import { List, ListItem } from "../../styles/listStyles";
 import { CommentText, DateText, ProjectTitle } from "../../styles/textStyles";
 
 const UserFeedBack = ({ feedback }) => {
+  console.log(feedback);
   return (
     <FeedbackContainer>
       {feedback.project && (
-        <ProjectTitle>Feedback på {feedback.project.title}</ProjectTitle>
+        <ProjectTitle>
+          Feedback på {feedback.project.title}
+          {feedback.createdBy && <p>- oprettet af {feedback.createdBy.name}</p>}
+        </ProjectTitle>
       )}
 
       {feedback.exercise && (
-        <ProjectTitle>Feedback på {feedback.exercise.title}</ProjectTitle>
+        <ProjectTitle>
+          Feedback på {feedback.exercise.title}
+          {feedback.createdBy && <p>- oprettet af {feedback.createdBy.name}</p>}
+        </ProjectTitle>
       )}
 
       <DateText>{formatDate(feedback.date)}</DateText>

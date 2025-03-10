@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
 import useFetchProjects from "../../hooks/useFetchProjects";
 import useFetchExercises from "../../hooks/useFetchExercises";
+import { useAuthContext } from "../../context/useAuthContext";
 
 const FeedbackForm = ({ isEditMode, setShowForm }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,7 @@ const FeedbackForm = ({ isEditMode, setShowForm }) => {
   const { showSuccess, showError } = useAlert();
   const { id } = useParams();
   const user = users?.find((p) => p._id === id);
+  const loggedInUser = useAuthContext();
 
   const {
     register,
@@ -29,6 +31,7 @@ const FeedbackForm = ({ isEditMode, setShowForm }) => {
       project: user?.feedback?.[0]?.project || "",
       exercises: user?.feedback?.[0]?.exercise || "",
       comments: user?.feedback?.[0]?.comments || "",
+      createdBy: user?.feedback?.[0]?.createdBy || "",
       focusPoints: user?.feedback?.[0]?.focusPoints?.join(", ") || "",
     },
   });
@@ -37,6 +40,7 @@ const FeedbackForm = ({ isEditMode, setShowForm }) => {
     if (user && user.feedback && user.feedback.length > 0) {
       setValue("comments", user.feedback[0]?.comments || "");
       setValue("project", user.feedback[0]?.project || "");
+      setValue("createdBy", user.feedback[0]?.createdBy || "");
       setValue("exercise", user.feedback[0]?.exercise || "");
       setValue("focusPoints", user.feedback[0]?.focusPoints?.join(", ") || "");
     }
@@ -46,6 +50,7 @@ const FeedbackForm = ({ isEditMode, setShowForm }) => {
     setIsLoading(true);
     const newFeedback = {
       comments: formData.comments,
+      createdBy: loggedInUser.user._id,
       project:
         formData.project && formData.project !== "" ? formData.project : null,
       exercise:
@@ -58,7 +63,7 @@ const FeedbackForm = ({ isEditMode, setShowForm }) => {
 
     try {
       await updateUserFeedback(id, newFeedback);
-      await refetch();
+      refetch();
       setShowForm(false);
     } catch (error) {
       console.error("Fejl ved tilføjelse af feedback:", error.message);

@@ -1,7 +1,7 @@
 import { useAlert } from "../../context/Alert";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
-import { useNavigate } from "react-router-dom";
 import { MdDelete, MdOutlineEditNote } from "react-icons/md";
+import { GiTeacher } from "react-icons/gi";
 import { PiStudentFill } from "react-icons/pi";
 import { RiAdminFill } from "react-icons/ri";
 import { IoPersonOutline } from "react-icons/io5";
@@ -67,6 +67,12 @@ const User = ({ user }) => {
               <>
                 {user.name}
                 <IoPersonOutline />
+              </>
+            )}
+            {user.role === "teacher" && (
+              <>
+                {user.name}
+                <GiTeacher />
               </>
             )}
           </td>

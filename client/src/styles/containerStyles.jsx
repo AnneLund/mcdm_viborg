@@ -19,7 +19,6 @@ export const Article = styled.article`
 
 export const Section = styled.div`
   width: 100%;
-  max-width: 600px;
   margin: 20px auto;
   padding: 20px;
   background: #fff;
@@ -62,6 +61,10 @@ export const Section = styled.div`
     color: #444;
     margin-top: 20px;
     text-align: center;
+  }
+
+  svg {
+    cursor: pointer;
   }
 
   @media (max-width: 600px) {

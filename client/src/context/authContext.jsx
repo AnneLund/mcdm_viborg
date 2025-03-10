@@ -48,11 +48,12 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     checkUser();
-  }, [auth.token]); // Fjerner afhængigheden af location.pathname og navigate
+  }, [auth.token]);
 
   const token = auth.token ? auth.token : "";
 
   const signedIn = Boolean(auth.token);
+  const loggedInUser = auth.user ? auth.user : "";
 
   const signIn = async (email, password) => {
     try {
@@ -97,7 +98,7 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   const value = useMemo(
-    () => ({ token, user, getUser, signIn, signOut, signedIn }),
+    () => ({ token, user, getUser, signIn, signOut, signedIn, loggedInUser }),
     [token, user, signedIn]
   );
 
