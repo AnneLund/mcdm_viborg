@@ -15,6 +15,7 @@ const feedbackSchema = new Schema({
   project: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
   exercise: { type: mongoose.Schema.Types.ObjectId, ref: "exercise" },
   focusPoints: { type: [String], required: true },
+  isVisible: { type: Boolean, default: false },
 });
 
 const userSchema = new Schema({

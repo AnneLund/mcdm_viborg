@@ -188,55 +188,30 @@ userRouter.put("/:id", auth, upload.single("picture"), async (req, res) => {
 });
 
 // UPDATE USER FEEDBACK
-userRouter.put("/:id/feedback", async (req, res) => {
+
+userRouter.put("/:id/feedback/:feedbackId/visibility", async (req, res) => {
   try {
-    const { id } = req.params; // Bruger-ID
-    const { feedbackId, feedback } = req.body; // Evt. feedback-ID for opdatering
+    const { id, feedbackId } = req.params;
+    const { isVisible } = req.body;
 
-    if (!feedback || typeof feedback !== "object") {
-      return res.status(400).json({ message: "Feedback skal være et objekt" });
+    // Find brugeren og opdater feedbackens synlighed
+    const user = await userModel.findOneAndUpdate(
+      { _id: id, "feedback._id": feedbackId },
+      { $set: { "feedback.$.isVisible": isVisible } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Bruger eller feedback ikke fundet" });
     }
 
-    let updatedUser;
-
-    if (feedbackId) {
-      // **Opdater eksisterende feedback**
-      updatedUser = await userModel.findOneAndUpdate(
-        { _id: id, "feedback._id": feedbackId },
-        {
-          $set: {
-            "feedback.$.project": feedback.project || null,
-            "feedback.$.exercise": feedback.exercise || null,
-            "feedback.$.projectComments": feedback.projectComments || [],
-            "feedback.$.focusPoints": feedback.focusPoints || [],
-            "feedback.$.date": new Date(),
-          },
-        },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        return res.status(404).json({ message: "Feedback ikke fundet" });
-      }
-
-      res.json({ message: "Feedback opdateret", user: updatedUser });
-    } else {
-      // **Tilføj ny feedback**
-      updatedUser = await userModel.findByIdAndUpdate(
-        id,
-        { $push: { feedback } },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        return res.status(404).json({ message: "Bruger ikke fundet" });
-      }
-
-      res.json({ message: "Feedback tilføjet", user: updatedUser });
-    }
+    res.json({ message: "Synlighed opdateret", feedback: user.feedback });
   } catch (error) {
-    console.error("Fejl ved tilføjelse/opdatering af feedback:", error);
-    res.status(500).json({ message: "Serverfejl ved håndtering af feedback" });
+    res
+      .status(500)
+      .json({ message: "Fejl ved opdatering af synlighed", error });
   }
 });
 

@@ -149,5 +149,15 @@ export const FeedbackContainer = styled.div`
   padding: 16px;
   margin: 16px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family: "Arial", sans-serif;
+
+  .visibility {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px auto;
+
+    span {
+      display: block;
+    }
+  }
 `;
