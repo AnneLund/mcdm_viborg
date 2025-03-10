@@ -131,7 +131,8 @@ function App() {
     {
       path: "/backoffice",
       element: (
-        <ProtectedRoute isAllowed={user.role === "admin"}>
+        <ProtectedRoute
+          isAllowed={user.role === "teacher" || user.role === "admin"}>
           <Backoffice />
         </ProtectedRoute>
       ),

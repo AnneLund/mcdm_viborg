@@ -5,7 +5,6 @@ const ProtectedRoute = ({ isAllowed, redirectTo = "/login", children }) => {
     return <Navigate to={redirectTo} />;
   }
 
-  // I dette tilfælde /backoffice
   return children;
 };
 

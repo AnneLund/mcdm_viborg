@@ -39,7 +39,7 @@ const Projects = () => {
   };
 
   const visibleProjects =
-    user?.role === "admin"
+    user.role === "admin" || user.role === "teacher"
       ? projects
       : projects.filter((project) => project.isVisible === true);
 

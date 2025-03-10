@@ -78,14 +78,14 @@ const Project = () => {
       <header>
         <h1>
           {project.title}
-          {user.role === "admin" && (
+          {(user.role === "admin" || user.role === "teacher") && (
             <>
               <MdDelete onClick={() => handleConfirmation()} />{" "}
               <MdOutlineEditNote onClick={() => handleEdit()} />
             </>
           )}
         </h1>
-        {user.role === "admin" && (
+        {(user.role === "admin" || user.role === "teacher") && (
           <p className='attention'>
             <FaExclamationTriangle />
             Dette projekt er

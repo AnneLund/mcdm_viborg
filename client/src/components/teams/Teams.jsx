@@ -2,8 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { MdAdd } from "react-icons/md";
 import Team from "./Team";
 import Loading from "../Loading/Loading";
-import { Container } from "../../styles/containerStyles";
-import { Table, Th } from "../../styles/tableStyles";
+import { Table } from "../../styles/tableStyles";
 import useFetchTeams from "../../hooks/useFetchTeams";
 
 const Teams = () => {

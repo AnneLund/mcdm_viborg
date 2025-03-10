@@ -23,7 +23,7 @@ const Exercises = () => {
             <Exercise key={exercise._id} exercise={exercise} />
           ))}
 
-        {user?.role === "admin" && (
+        {(user?.role === "admin" || user?.role === "teacher") && (
           <>
             <MdAdd size={50} onClick={handleAdd} />
             <Outlet context={{ refetch }} />

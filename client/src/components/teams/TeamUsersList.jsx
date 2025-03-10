@@ -20,7 +20,6 @@ const TeamUsersList = () => {
     <Section>
       <h3>{team.team}</h3>
 
-      {/* Studerende */}
       {students.length > 0 && (
         <>
           <h4>Studerende</h4>
@@ -43,7 +42,6 @@ const TeamUsersList = () => {
         </>
       )}
 
-      {/* Lærere */}
       {teachers.length > 0 && (
         <>
           <h4>Lærere</h4>

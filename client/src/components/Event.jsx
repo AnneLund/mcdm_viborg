@@ -45,7 +45,8 @@ const Event = ({ event }) => {
         {event.time && <p>Kl. {event.time}</p>}
       </EventTitle>
       {event.event}
-      {user.role === "admin" && (
+
+      {(user.role === "admin" || user.role === "teacher") && (
         <div>
           {event.presentation && !event.file && (
             <div>

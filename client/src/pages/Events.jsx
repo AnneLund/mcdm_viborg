@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import styled from "styled-components";
+import { useMemo } from "react";
 import useFetchEvents from "../hooks/useFetchEvents";
 import { useAuthContext } from "../context/useAuthContext";
 import { MdAdd } from "react-icons/md";
@@ -44,7 +43,7 @@ const Events = () => {
           <p className='noEvents'>Ingen kommende begivenheder.</p>
         )}
 
-        {user?.role === "admin" && (
+        {(user?.role === "admin" || user?.role === "teacher") && (
           <EventListItem>
             <div className='addnewEvent'>
               <MdAdd size={50} onClick={handleAdd} />
