@@ -119,7 +119,7 @@ function App() {
           element: <ChangePassword />,
         },
         {
-          path: "studentpanel/:id",
+          path: "studentpanel/:userId",
           element: <StudentPanel />,
         },
       ],

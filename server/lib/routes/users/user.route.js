@@ -190,53 +190,99 @@ userRouter.put("/:id", auth, upload.single("picture"), async (req, res) => {
 // UPDATE USER FEEDBACK
 userRouter.put("/:id/feedback", async (req, res) => {
   try {
-    const { id } = req.params; // Bruger-ID
-    const { feedbackId, feedback } = req.body;
+    const { id } = req.params;
+    const {
+      feedbackId,
+      project,
+      exercise,
+      projectComments,
+      focusPoints,
+      date,
+    } = req.body;
 
-    if (!feedback || typeof feedback !== "object") {
-      return res.status(400).json({ message: "Feedback skal være et objekt" });
+    if (!feedbackId) {
+      return res
+        .status(400)
+        .json({ message: "FeedbackId er påkrævet for at opdatere feedback" });
     }
 
-    let updatedUser;
-
-    if (feedbackId) {
-      // **Opdater eksisterende feedback**
-      updatedUser = await userModel.findOneAndUpdate(
-        { _id: id, "feedback._id": feedbackId },
-        {
-          $set: {
-            "feedback.$.project": feedback.project || null,
-            "feedback.$.exercise": feedback.exercise || null,
-            "feedback.$.projectComments": feedback.projectComments || [],
-            "feedback.$.focusPoints": feedback.focusPoints || [],
-            "feedback.$.date": new Date(),
-          },
+    // Opdater feedback korrekt
+    let updatedUser = await userModel.findOneAndUpdate(
+      { _id: id, "feedback._id": feedbackId },
+      {
+        $set: {
+          "feedback.$.project": project || null,
+          "feedback.$.exercise": exercise || null,
+          "feedback.$.projectComments": projectComments || [],
+          "feedback.$.focusPoints": focusPoints || [],
+          "feedback.$.date": date || new Date(),
         },
-        { new: true }
-      );
+      },
+      { new: true }
+    );
 
-      if (!updatedUser) {
-        return res.status(404).json({ message: "Feedback ikke fundet" });
-      }
-
-      res.json({ message: "Feedback opdateret", user: updatedUser });
-    } else {
-      // **Tilføj ny feedback**
-      updatedUser = await userModel.findByIdAndUpdate(
-        id,
-        { $push: { feedback } },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        return res.status(404).json({ message: "Bruger ikke fundet" });
-      }
-
-      res.json({ message: "Feedback tilføjet", user: updatedUser });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Feedback ikke fundet" });
     }
+
+    res.json({ message: "Feedback opdateret", user: updatedUser });
   } catch (error) {
-    console.error("Fejl ved tilføjelse/opdatering af feedback:", error);
-    res.status(500).json({ message: "Serverfejl ved håndtering af feedback" });
+    console.error("Fejl ved opdatering af feedback:", error);
+    res.status(500).json({ message: "Serverfejl ved opdatering af feedback" });
+  }
+});
+
+// CREATE USER FEEDBACK
+userRouter.post("/:id/feedback/new", async (req, res) => {
+  try {
+    console.log("Received feedback request body:", req.body);
+
+    const { id } = req.params;
+    const {
+      createdBy,
+      project,
+      exercise,
+      projectComments,
+      comments,
+      focusPoints,
+      isVisible,
+    } = req.body;
+
+    if (
+      !focusPoints ||
+      !Array.isArray(focusPoints) ||
+      focusPoints.length === 0
+    ) {
+      return res.status(400).json({
+        message: "FocusPoints skal være en liste med mindst ét element.",
+      });
+    }
+
+    const newFeedback = {
+      createdBy,
+      project: project || null,
+      exercise: exercise || null,
+      projectComments: projectComments || [],
+      comments: comments || "",
+      focusPoints: focusPoints,
+      isVisible: isVisible ?? false,
+      date: new Date(),
+    };
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { $push: { feedback: newFeedback } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Bruger ikke fundet" });
+    }
+
+    res.json({ message: "Feedback tilføjet", user: updatedUser });
+  } catch (error) {
+    console.error("Fejl ved tilføjelse af feedback:", error);
+    res.status(500).json({ message: "Serverfejl ved oprettelse af feedback" });
   }
 });
 

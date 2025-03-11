@@ -1,9 +1,5 @@
 import { useParams } from "react-router-dom";
-import {
-  Section,
-  FeedbackContainer,
-  ColumnContainer,
-} from "../styles/containerStyles";
+import { Section, ColumnContainer } from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
 import ActionButton from "../components/button/ActionButton";

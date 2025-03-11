@@ -19,23 +19,26 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
   const { userId } = useParams();
   const user = users?.find((p) => p._id === userId);
   const loggedInUser = useAuthContext();
-  console.log(userId);
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      feedback: user?.feedback || [],
-      project: user?.feedback?.[0]?.project || "",
-      exercise: user?.feedback?.[0]?.exercise || "",
-      projectComments: user?.feedback?.[0]?.comments || "",
-      presentationComments: user?.feedback?.[0]?.comments || "",
-      comments: user?.feedback?.[0]?.comments || "",
-      createdBy: user?.feedback?.[0]?.createdBy || "",
-      focusPoints: user?.feedback?.[0]?.focusPoints?.join(", ") || "",
-    },
+    defaultValues:
+      isEditMode && existingFeedback
+        ? {
+            project: existingFeedback.project || "",
+            exercise: existingFeedback.exercise || "",
+            projectComments: existingFeedback.projectComments || "",
+            focusPoints: existingFeedback.focusPoints?.join(", ") || "",
+          }
+        : {
+            project: "",
+            exercise: "",
+            projectComments: "",
+            focusPoints: "",
+          },
   });
 
   useEffect(() => {
@@ -88,6 +91,7 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
         showSuccess("Feedback opdateret!");
       } else {
         // **Opret ny feedback**
+        console.log("prøver at oprette");
         await updateUserFeedback(userId, null, feedbackData);
         showSuccess("Feedback tilføjet!");
       }

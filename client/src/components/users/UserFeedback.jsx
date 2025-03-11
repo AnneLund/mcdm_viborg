@@ -89,10 +89,6 @@ const UserFeedBack = ({ feedback }) => {
             </ProjectTitle>
           )}
           <DateText>{formatDate(feedback.date)}</DateText>
-          {/* <CommentText>Kommentarer</CommentText>
-          <List>
-            <ListItem>{feedback.comments}</ListItem>
-          </List> */}
 
           {projectComments.length > 0 && (
             <>
@@ -133,13 +129,16 @@ const UserFeedBack = ({ feedback }) => {
               </List>
             </>
           )}
-          <div className='buttons'>
-            <ActionButton
-              buttonText='Redigér feedback'
-              background='blue'
-              onClick={handleEditClick}
-            />
-          </div>
+
+          {user.role === "teacher" && (
+            <div className='buttons'>
+              <ActionButton
+                buttonText='Redigér feedback'
+                background='blue'
+                onClick={handleEditClick}
+              />
+            </div>
+          )}
         </>
       )}
 

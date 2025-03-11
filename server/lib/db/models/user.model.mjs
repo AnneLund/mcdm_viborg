@@ -11,7 +11,7 @@ const feedbackSchema = new Schema({
   date: { type: Date, default: Date.now },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   projectComments: { type: [commentSchema], default: [] },
-  comments: { type: String, required: true },
+  comments: { type: String },
   project: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
   exercise: { type: mongoose.Schema.Types.ObjectId, ref: "exercise" },
   focusPoints: { type: [String], required: true },

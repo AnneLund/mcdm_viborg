@@ -73,8 +73,6 @@ const useFetchUsers = () => {
         body: userData,
       });
 
-      console.log(response);
-
       if (!response.ok) {
         throw new Error("Fejl ved opdatering af user");
       }
@@ -96,7 +94,7 @@ const useFetchUsers = () => {
     try {
       const url = feedbackId
         ? `${apiUrl}/user/${userId}/feedback`
-        : `${apiUrl}/user/${userId}/feedback`;
+        : `${apiUrl}/user/${userId}/feedback/new`;
 
       const method = feedbackId ? "PUT" : "POST";
 
@@ -108,9 +106,11 @@ const useFetchUsers = () => {
         },
         body: JSON.stringify({
           feedbackId: feedbackId,
-          feedback: feedbackData,
+          ...feedbackData,
         }),
       });
+
+      console.log(response);
 
       if (!response.ok) {
         throw new Error(
