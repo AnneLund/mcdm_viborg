@@ -162,7 +162,10 @@ function App() {
             { path: "edit/:id", element: <EventForm isEditMode={true} /> },
           ],
         },
-        { path: "/backoffice/team/:id/user/:id", element: <StudentPanel /> },
+        {
+          path: "/backoffice/team/:id/user/:userId",
+          element: <StudentPanel />,
+        },
       ],
     },
   ]);

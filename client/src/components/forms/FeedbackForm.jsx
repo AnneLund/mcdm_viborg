@@ -16,10 +16,10 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
   const { projects } = useFetchProjects();
   const { exercises } = useFetchExercises();
   const { showSuccess, showError } = useAlert();
-  const { id } = useParams();
-  const user = users?.find((p) => p._id === id);
+  const { userId } = useParams();
+  const user = users?.find((p) => p._id === userId);
   const loggedInUser = useAuthContext();
-
+  console.log(userId);
   const {
     register,
     handleSubmit,
@@ -84,11 +84,11 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
     try {
       if (isEditMode && existingFeedback) {
         // **Opdater eksisterende feedback**
-        await updateUserFeedback(id, existingFeedback._id, feedbackData);
+        await updateUserFeedback(userId, existingFeedback._id, feedbackData);
         showSuccess("Feedback opdateret!");
       } else {
         // **Opret ny feedback**
-        await updateUserFeedback(id, null, feedbackData);
+        await updateUserFeedback(userId, null, feedbackData);
         showSuccess("Feedback tilføjet!");
       }
       refetch();

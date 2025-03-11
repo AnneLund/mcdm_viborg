@@ -13,7 +13,7 @@ import UserFeedBack from "../components/users/UserFeedback";
 import { List, ListItem } from "../styles/listStyles";
 
 const StudentPanel = () => {
-  const { id } = useParams();
+  const { userId } = useParams();
   const { fetchUserById, isLoading, error } = useFetchUsers();
   const [student, setStudent] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -21,14 +21,14 @@ const StudentPanel = () => {
   const { user } = useAuthContext();
 
   useEffect(() => {
-    if (id) {
-      fetchUserById(id)
+    if (userId) {
+      fetchUserById(userId)
         .then((data) => {
           if (data) setStudent(data);
         })
         .catch((error) => console.error("Fejl ved hentning af bruger:", error));
     }
-  }, [id]);
+  }, [userId]);
 
   const handleShowForm = () => {
     setShowForm((prev) => !prev);

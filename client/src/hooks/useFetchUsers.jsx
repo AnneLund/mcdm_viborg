@@ -95,10 +95,10 @@ const useFetchUsers = () => {
   ) => {
     try {
       const url = feedbackId
-        ? `${apiUrl}/user/${userId}/feedback` // PUT: Opdater feedback
-        : `${apiUrl}/user/${userId}/feedback`; // POST: Opret ny feedback
+        ? `${apiUrl}/user/${userId}/feedback`
+        : `${apiUrl}/user/${userId}/feedback`;
 
-      const method = feedbackId ? "PUT" : "POST"; // Bestem HTTP-metoden
+      const method = feedbackId ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method: method,
@@ -107,7 +107,7 @@ const useFetchUsers = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          feedbackId: feedbackId, // Send kun hvis vi opdaterer
+          feedbackId: feedbackId,
           feedback: feedbackData,
         }),
       });

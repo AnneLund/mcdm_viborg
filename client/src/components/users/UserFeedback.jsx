@@ -13,8 +13,16 @@ import { MdVisibilityOff, MdVisibility } from "react-icons/md";
 const UserFeedBack = ({ feedback }) => {
   const [showForm, setShowForm] = useState(false);
   const [isVisible, setIsVisible] = useState(feedback.isVisible);
-  const { id } = useParams();
+  const { userId } = useParams();
   const { user } = useAuthContext();
+
+  const projectComments = feedback.projectComments.filter(
+    (comment) => comment.type === "project"
+  );
+
+  const presentationComments = feedback.projectComments.filter(
+    (comment) => comment.type === "presentation"
+  );
 
   const handleEditClick = () => {
     setShowForm(true);
@@ -23,7 +31,7 @@ const UserFeedBack = ({ feedback }) => {
   const toggleVisibility = async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/user/${id}/feedback/${feedback._id}/visibility`,
+        `${apiUrl}/user/${userId}/feedback/${feedback._id}/visibility`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -81,26 +89,46 @@ const UserFeedBack = ({ feedback }) => {
             </ProjectTitle>
           )}
           <DateText>{formatDate(feedback.date)}</DateText>
-          <CommentText>Kommentarer</CommentText>
+          {/* <CommentText>Kommentarer</CommentText>
           <List>
             <ListItem>{feedback.comments}</ListItem>
-          </List>
+          </List> */}
+
+          {projectComments.length > 0 && (
+            <>
+              <CommentText>Projektet</CommentText>
+              <List>
+                {projectComments && (
+                  <>
+                    {projectComments.map((pc, index) => (
+                      <ListItem key={index}>{pc.content}</ListItem>
+                    ))}
+                  </>
+                )}
+              </List>
+            </>
+          )}
+
+          {presentationComments.length > 0 && (
+            <>
+              <CommentText>Mundtlig præstation</CommentText>
+              <List>
+                {presentationComments && (
+                  <>
+                    {presentationComments.map((pc, index) => (
+                      <ListItem key={index}>{pc.content}</ListItem>
+                    ))}
+                  </>
+                )}
+              </List>
+            </>
+          )}
           {feedback.focusPoints && (
             <>
               <CommentText>Fokuspunkter</CommentText>
               <List>
                 {feedback.focusPoints.map((focusPoint, index) => (
                   <ListItem key={index}>{focusPoint}</ListItem>
-                ))}
-              </List>
-            </>
-          )}
-          {feedback.projectComments.length > 0 && (
-            <>
-              <CommentText>Mundtlig præstation</CommentText>
-              <List>
-                {feedback.projectComments.map((pc, index) => (
-                  <ListItem key={index}>{pc.content}</ListItem>
                 ))}
               </List>
             </>
