@@ -18,7 +18,15 @@
   margin: auto;
   padding: 1em;
   font-family: "Titillium Web", sans-serif;
+
+  img {
+    margin: 20px 0;
+  }
 }
+
+/* .main {
+  display: flex;
+} */
 
 a,
 h1,
@@ -98,20 +106,16 @@ h2 {
   gap: 15px;
   padding-top: 10px;
   justify-content: center;
-
-  #text {
-    color: white;
-  }
 }
 
 .button {
   display: flex;
   justify-content: center;
   padding: 10px;
+}
 
-  #text {
-    color: white;
-  }
+#text {
+  color: white;
 }
 
 .form {

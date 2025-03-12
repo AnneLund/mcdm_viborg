@@ -69,3 +69,8 @@
     background: #6fb7ff;
   }
 }
+
+.backArrow {
+  cursor: pointer;
+  width: fit-content;
+}

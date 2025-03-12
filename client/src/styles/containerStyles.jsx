@@ -6,10 +6,8 @@ export const Article = styled.article`
   align-items: center;
   width: 100%;
   margin: 20px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+  position: relative;
 
   .studentImg {
     width: 50px;
@@ -19,16 +17,11 @@ export const Article = styled.article`
 
 export const Section = styled.div`
   width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
+  margin: 20px 0;
   border-radius: 8px;
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 
   header {
     text-align: center;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #f0f0f0;
   }
 
   h1 {
@@ -112,19 +105,18 @@ export const ColumnContainer = styled.div`
   text-align: center;
   margin-top: 20px;
   padding: 20px;
-  background: white;
+  background: #4ca2af16;
   border-radius: 8px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 
   h3 {
     margin: 20px;
     font-size: 20px;
-    font-weight: bold;
     color: #333;
   }
 
   h4 {
-    font-size: 18px;
+    font-size: 20px;
     color: #555;
     margin-bottom: 15px;
   }
@@ -159,5 +151,15 @@ export const FeedbackContainer = styled.div`
     span {
       display: block;
     }
+  }
+`;
+
+export const BackofficeContainer = styled.article`
+  width: 100%;
+  margin: auto;
+  padding: 20px 0;
+
+  h2 {
+    text-align: center;
   }
 `;

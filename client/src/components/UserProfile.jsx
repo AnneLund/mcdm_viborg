@@ -10,7 +10,7 @@ const UserProfile = ({ user, signOut }) => {
       <p>Logget ind som:</p>
 
       <Link to={`/studentpanel/${user._id}`}>
-        {user.picture && <img src={user?.picture} alt={user?.name} />}
+        {/* {user.picture && <img src={user?.picture} alt={user?.name} />} */}
         <h4> {user?.name} </h4>
       </Link>
 
@@ -32,6 +32,7 @@ export default UserProfile;
 
 const StyledUserInfo = styled.div`
   width: fit-content;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,7 +40,7 @@ const StyledUserInfo = styled.div`
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 
   a {
     display: flex;
@@ -47,7 +48,6 @@ const StyledUserInfo = styled.div`
     align-items: center;
     margin: 10px;
     text-decoration: none;
-    color: #0077b6;
     text-decoration: underline;
   }
 

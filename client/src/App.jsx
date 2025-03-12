@@ -27,8 +27,16 @@ import Teams from "./components/teams/Teams";
 import TeamForm from "./components/forms/TeamForm";
 import TeamUsersList from "./components/teams/TeamUsersList";
 import StudentPanel from "./pages/StudentPanel";
+import UserProfile from "./components/UserProfile";
+import { useMemo } from "react";
+import BackArrow from "./components/button/BackArrow";
 function App() {
-  const { signedIn, user } = useAuthContext();
+  const { signedIn, user, signOut } = useAuthContext();
+  const showBackArrow = useMemo(
+    () => location.pathname !== "/" && location.pathname !== "/login",
+    [location.pathname]
+  );
+
   const routes = useRoutes([
     {
       path: "/",
@@ -175,8 +183,11 @@ function App() {
       <Link to='/'>
         <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
       </Link>
-      {location.pathname.includes("backoffice") && <Navigation />}
-      {routes}
+      <Navigation />
+      {signedIn && <UserProfile signOut={signOut} user={user} />}
+
+      {showBackArrow && <BackArrow />}
+      <div className='main'>{routes}</div>
     </article>
   );
 }

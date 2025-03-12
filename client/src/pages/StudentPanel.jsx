@@ -45,7 +45,6 @@ const StudentPanel = () => {
     <Section>
       <header>
         <h1>{student.name}</h1>
-        <img src={student.picture} alt={student.name} className='studentImg' />
         <p>
           <strong>Email:</strong> {student.email}
         </p>
