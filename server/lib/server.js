@@ -103,7 +103,7 @@ app.use("/api/team", teamRouter);
 // Håndter SPA-routing
 app.get("*", (req, res) => {
   if (req.accepts("html")) {
-    res.status(404).sendFile(path.resolve(clientDistPath, "index.html"));
+    res.status(200).sendFile(path.resolve(clientDistPath, "index.html"));
   } else {
     res.status(404).json({ message: "Ruten blev ikke fundet" });
   }
