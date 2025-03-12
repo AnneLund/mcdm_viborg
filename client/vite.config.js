@@ -47,6 +47,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+    headers: {
+      "Service-Worker-Allowed": "/",
+    },
   },
   define: {
     "process.env": import.meta.env,
