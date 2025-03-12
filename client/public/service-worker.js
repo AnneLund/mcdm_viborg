@@ -1,18 +1,17 @@
-const CACHE_NAME = "app-cache-v2";
-const ASSETS_TO_CACHE = ["/", "/index.html", "/styles.css", "/app.js"];
+const CACHE_NAME = `vite-react-cache-v${new Date().getTime()}`;
+const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installing...");
 
   event.waitUntil(
-    caches
-      .open(CACHE_NAME)
-      .then((cache) => {
-        console.log("[Service Worker] Caching assets...");
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
-      .catch((error) => console.error("[Service Worker] Cache error:", error))
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("[Service Worker] Caching static assets...");
+      return cache.addAll(STATIC_ASSETS);
+    })
   );
+
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
@@ -35,6 +34,8 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
@@ -43,13 +44,16 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(event.request)
         .then((networkResponse) => {
-          return caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          });
+          if (!event.request.url.includes("/api/")) {
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
+            });
+          }
+          return networkResponse;
         })
         .catch(() => {
-          return new Response("Offline", {
+          return new Response("Offline - og ikke i cache", {
             status: 503,
             statusText: "Offline",
           });
