@@ -286,6 +286,7 @@ userRouter.post("/:id/feedback/new", async (req, res) => {
   }
 });
 
+// HANDLE FEEDBACK VISIBILITY
 userRouter.put("/:id/feedback/:feedbackId/visibility", async (req, res) => {
   try {
     const { id, feedbackId } = req.params;

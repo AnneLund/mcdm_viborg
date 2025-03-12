@@ -34,7 +34,7 @@ const useFetchTerms = () => {
       const response = await fetch(`${apiUrl}/term`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Fortæller serveren, at vi sender JSON
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(termData),

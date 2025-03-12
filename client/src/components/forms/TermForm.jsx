@@ -37,7 +37,6 @@ const TermForm = ({ isEditMode }) => {
   const handleSubmitTerm = async (event) => {
     event.preventDefault();
 
-    // Send data som JSON i stedet for FormData
     const termData = {
       term,
       definition,

@@ -1,10 +1,6 @@
 import { Outlet } from "react-router-dom";
 import AdminNavigation from "../components/AdminNavigation";
-import {
-  Article,
-  BackofficeContainer,
-  Section,
-} from "../styles/containerStyles";
+import { BackofficeContainer } from "../styles/containerStyles";
 
 const Backoffice = () => {
   return (

@@ -23,7 +23,7 @@ termRouter.post("/", auth, async (req, res) => {
   try {
     const { term, definition } = req.body;
 
-    if (!term || !definition) {
+    if (!term) {
       return res.status(400).send({
         status: "error",
         message: "Please provide all required fields",

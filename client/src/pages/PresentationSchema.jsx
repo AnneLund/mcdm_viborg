@@ -54,6 +54,23 @@ const PresentationSchema = ({ event }) => {
         ]
   );
 
+  // Inddel i grupper
+  const [groups, setGroups] = useState([]);
+
+  const divideIntoGroups = () => {
+    if (students.length === 0) return;
+
+    const shuffledStudents = [...students].sort(() => Math.random() - 0.5);
+    const groupSize = 3;
+    const newGroups = [];
+
+    for (let i = 0; i < shuffledStudents.length; i += groupSize) {
+      newGroups.push(shuffledStudents.slice(i, i + groupSize));
+    }
+
+    setGroups(newGroups);
+  };
+
   useEffect(() => {
     if (isDownloadingPDF && pdfRef.current) {
       setTimeout(
@@ -244,6 +261,10 @@ const PresentationSchema = ({ event }) => {
             </ListItem>
           </List>
           <ActionButton
+            onClick={divideIntoGroups}
+            buttonText='👥 Opdel i grupper'
+          />
+          <ActionButton
             onClick={handleButtonClicked}
             buttonText='📅 Lav fremlæggelsesplan'
           />
@@ -325,6 +346,22 @@ const PresentationSchema = ({ event }) => {
             </>
           )}
         </>
+      )}
+
+      {groups.length > 0 && (
+        <Section>
+          <h3>Grupper</h3>
+          {groups.map((group, index) => (
+            <div key={index}>
+              <h4>Gruppe {index + 1}</h4>
+              <List>
+                {group.map((student, i) => (
+                  <ListItem key={i}>{student}</ListItem>
+                ))}
+              </List>
+            </div>
+          ))}
+        </Section>
       )}
     </Article>
   );

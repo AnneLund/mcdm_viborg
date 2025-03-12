@@ -30,6 +30,7 @@ import StudentPanel from "./pages/StudentPanel";
 import UserProfile from "./components/UserProfile";
 import { useMemo } from "react";
 import BackArrow from "./components/button/BackArrow";
+import GroupGenerator from "./pages/GroupGenerator";
 function App() {
   const { signedIn, user, signOut } = useAuthContext();
   const showBackArrow = useMemo(
@@ -159,8 +160,8 @@ function App() {
           ],
         },
         {
-          path: "schema",
-          element: <PresentationSchema />,
+          path: "groups",
+          element: <GroupGenerator />,
         },
         {
           path: "events",

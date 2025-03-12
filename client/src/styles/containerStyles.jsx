@@ -65,6 +65,10 @@ export const Section = styled.div`
     cursor: pointer;
   }
 
+  button {
+    margin-left: 20px;
+  }
+
   @media (max-width: 600px) {
     max-width: 90%;
     padding: 15px;
@@ -86,9 +90,8 @@ export const Section = styled.div`
 
 export const Container = styled.section`
   width: 100%;
-  max-width: 800px;
   margin: auto;
-  padding: 20px;
+  padding: 20px 40px;
   background: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
