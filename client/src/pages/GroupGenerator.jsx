@@ -83,16 +83,14 @@ const GroupGenerator = () => {
   return (
     <Article>
       <Section>
-        <h3>Tilføj elever</h3>
+        <h3>Tilføj/fjern elever</h3>
         <List>
           {students.map((student, index) => (
             <ListItem key={index}>
-              {student}{" "}
-              <ActionButton
-                onClick={() => removeStudent(student)}
-                actionType='delete'
-                background='red'
-              />
+              {student}
+              <button className='remove' onClick={() => removeStudent(student)}>
+                x
+              </button>
             </ListItem>
           ))}
           <ListItem>
@@ -103,25 +101,26 @@ const GroupGenerator = () => {
                 onChange={(e) => setNewStudent(e.target.value)}
                 placeholder='Tilføj elevens navn'
               />
-              <ActionButton
-                onClick={addStudent}
-                actionType='add'
-                background='green'
-              />
+              <button className='add' onClick={addStudent}>
+                +
+              </button>
             </InputContainer>
           </ListItem>
+          <ListItem>
+            <ActionButton
+              onClick={divideIntoGroups}
+              buttonText='👥 Opdel i grupper'
+            />
+          </ListItem>
         </List>
-        <ActionButton
-          onClick={divideIntoGroups}
-          buttonText='👥 Opdel i grupper'
-        />
+
         {groups.length > 0 && (
           <>
             <h3>Grupper</h3>
             {groups.map((group, index) => (
               <div key={index}>
-                <h4>Gruppe {index + 1}</h4>
                 <List>
+                  <h4>Gruppe {index + 1}</h4>
                   {group.map((student, i) => (
                     <ListItem key={i}>{student}</ListItem>
                   ))}

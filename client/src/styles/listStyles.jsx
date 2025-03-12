@@ -2,18 +2,22 @@ import styled from "styled-components";
 
 export const List = styled.ul`
   list-style: none;
-  padding: 0;
-  margin-top: 8px;
+  padding: 10px;
+  margin-top: 5px;
+
+  h4 {
+    padding-left: 0;
+    margin-left: 0;
+  }
 `;
 
 export const ListItem = styled.li`
   display: flex;
   justify-content: space-between;
-  padding: 12px;
-  margin: 10px;
+  padding: 5px 0;
+  margin: 5px 0;
   border-bottom: 1px solid #eee;
   font-size: 16px;
-  cursor: pointer;
 
   &:last-child {
     border-bottom: none;
@@ -21,6 +25,24 @@ export const ListItem = styled.li`
 
   strong {
     display: block;
+  }
+
+  button {
+    padding: 2px 5px;
+    margin: 0;
+    cursor: pointer;
+    border: none;
+    box-shadow: grey 1px 1px 2px;
+    color: white;
+    font-size: 20px;
+  }
+
+  .add {
+    background-color: #00800071;
+  }
+
+  .remove {
+    background-color: #ff000061;
   }
 `;
 
