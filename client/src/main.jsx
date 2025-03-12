@@ -7,19 +7,31 @@ import { AuthContextProvider } from "./context/authContext.jsx";
 import { AlertProvider } from "./context/Alert.jsx";
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((registration) => {
-        console.log(
-          "Service Worker registered with scope:",
-          registration.scope
-        );
-      })
-      .catch((error) => {
-        console.log("Service Worker registration failed:", error);
+  navigator.serviceWorker
+    .register("/service-worker.js")
+    .then((registration) => {
+      console.log("[App] Service worker registered:", registration);
+
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        console.log("[App] New service worker detected...");
+
+        newWorker.addEventListener("statechange", () => {
+          if (
+            newWorker.state === "installed" &&
+            navigator.serviceWorker.controller
+          ) {
+            console.log("[App] New version available. Reloading...");
+            if (confirm("En ny version er tilgængelig. Vil du opdatere?")) {
+              newWorker.postMessage("skipWaiting");
+            }
+          }
+        });
       });
-  });
+    })
+    .catch((error) =>
+      console.error("[App] Service Worker registration failed:", error)
+    );
 }
 
 createRoot(document.getElementById("root")).render(
