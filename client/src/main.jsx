@@ -10,12 +10,8 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("/service-worker.js")
     .then((registration) => {
-      console.log("[App] Service worker registered:", registration);
-
       registration.addEventListener("updatefound", () => {
         const newWorker = registration.installing;
-        console.log("[App] New service worker detected...");
-
         newWorker.addEventListener("statechange", () => {
           if (
             newWorker.state === "installed" &&
