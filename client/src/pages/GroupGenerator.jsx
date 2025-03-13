@@ -1,20 +1,22 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import ActionButton from "../components/button/ActionButton";
 import { useAlert } from "../context/Alert";
 import Loading from "../components/Loading/Loading";
-import useFetchEvents from "../hooks/useFetchEvents";
-import { useLocalStorage } from "@uidotdev/usehooks";
-import { downloadPDF } from "../helpers/downloadPdf.js";
 import { InputContainer } from "../styles/formStyles.jsx";
-import { Article, Section } from "../styles/containerStyles.jsx";
+import {
+  Article,
+  ColumnContainer,
+  Section,
+} from "../styles/containerStyles.jsx";
 import { List, ListItem } from "../styles/listStyles.jsx";
-import { ButtonContainer } from "../styles/buttonStyles.jsx";
+import TaskAssignment from "../components/taskAssignment/TaskAssignment.jsx";
 
 const GroupGenerator = () => {
   const [newStudent, setNewStudent] = useState("");
+  const [showAssignment, setShowAssignment] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const { showSuccess } = useAlert();
+  const { showSucces, showError } = useAlert();
 
   const [students, setStudents] = useState([
     "Laura",
@@ -32,12 +34,10 @@ const GroupGenerator = () => {
     "Gabriel",
   ]);
 
-  // Inddel i grupper
+  // Gruppedannelse
   const [groups, setGroups] = useState([]);
-
   const divideIntoGroups = () => {
     if (students.length === 0) return;
-
     const shuffledStudents = [...students].sort(() => Math.random() - 0.5);
     let groupSize = 3;
     let newGroups = [];
@@ -61,10 +61,10 @@ const GroupGenerator = () => {
         newGroups[0].push(lastStudent);
       }
     }
-
     setGroups(newGroups);
   };
 
+  // Tilføj elev
   const addStudent = () => {
     if (newStudent.trim() !== "" && !students.includes(newStudent)) {
       setStudents([...students, newStudent]);
@@ -72,8 +72,18 @@ const GroupGenerator = () => {
     }
   };
 
+  // Slet elev
   const removeStudent = (name) => {
     setStudents(students.filter((student) => student !== name));
+  };
+
+  // Opgavetildeling
+  const handleAssignmentButtonClick = () => {
+    if (groups.length === 0) {
+      showError("Ingen grupper fundet. Opret grupper først.");
+      return;
+    }
+    setShowAssignment(true);
   };
 
   if (isLoading) {
@@ -115,19 +125,32 @@ const GroupGenerator = () => {
         </List>
 
         {groups.length > 0 && (
-          <>
-            <h3>Grupper</h3>
-            {groups.map((group, index) => (
-              <div key={index}>
-                <List>
-                  <h4>Gruppe {index + 1}</h4>
-                  {group.map((student, i) => (
-                    <ListItem key={i}>{student}</ListItem>
-                  ))}
-                </List>
-              </div>
-            ))}
-          </>
+          <ColumnContainer>
+            <header>
+              <h3>Grupper</h3>
+              <ActionButton
+                buttonText='Tildel opgaver'
+                background='blue'
+                onClick={handleAssignmentButtonClick}
+              />
+            </header>
+            {showAssignment ? (
+              <TaskAssignment groups={groups} />
+            ) : (
+              <>
+                {groups.map((group, index) => (
+                  <div key={index}>
+                    <List>
+                      <h4>Gruppe {index + 1}</h4>
+                      {group.map((student, i) => (
+                        <ListItem key={i}>{student}</ListItem>
+                      ))}
+                    </List>
+                  </div>
+                ))}
+              </>
+            )}
+          </ColumnContainer>
         )}
       </Section>
     </Article>

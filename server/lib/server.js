@@ -35,7 +35,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: [
-      "http://localhost:5173",
+      "http://localhost:5176",
       "https://mcd-viborg-om232.ondigitalocean.app",
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
@@ -49,7 +49,7 @@ const clientDistPath = path.join(__dirname, "../../client/dist");
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
+      "http://localhost:5176",
       "https://mcd-viborg-om232.ondigitalocean.app",
       "https://mcd-viborg-om232.ondigitalocean.app/api",
     ],

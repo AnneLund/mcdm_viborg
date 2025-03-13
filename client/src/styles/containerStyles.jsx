@@ -55,7 +55,6 @@ export const Section = styled.div`
   }
   h4 {
     font-size: 18px;
-    margin: 20px;
     text-align: left;
     width: 100%;
     border-bottom: 2px solid #ddd;
@@ -99,6 +98,11 @@ export const Container = styled.section`
   svg {
     cursor: pointer;
   }
+
+  .groupsWithTasks {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 export const ColumnContainer = styled.div`
@@ -111,6 +115,12 @@ export const ColumnContainer = styled.div`
   background: #4ca2af16;
   border-radius: 8px;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   h3 {
     margin: 20px;

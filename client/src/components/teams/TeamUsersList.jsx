@@ -6,6 +6,7 @@ import { Section } from "../../styles/containerStyles";
 import { List, ListItem } from "../../styles/listStyles";
 import FocusPointComponent from "../GeneralFocusPoints";
 import ActionButton from "../button/ActionButton";
+import { StyledNavLink } from "../../styles/navigationStyles";
 
 const ToggleButton = styled.h4`
   cursor: pointer;
@@ -60,10 +61,9 @@ const TeamUsersList = () => {
           )}
         </>
       )}
-      <ActionButton
-        buttonText='Gruppegenerator'
-        onClick={() => navigate("/backoffice/groups")}
-      />
+      <ListItem onClick={() => navigate("/backoffice/groups")}>
+        <StyledNavLink>Gruppegenerator</StyledNavLink>
+      </ListItem>
 
       {teachers.length > 0 && (
         <>
@@ -122,9 +122,9 @@ const TeamUsersList = () => {
           Projekter {showProjects ? "▲" : "▼"}
         </ToggleButton>
         {showProjects && (
-          <List>
+          <>
             <FocusPointComponent users={users} />
-          </List>
+          </>
         )}
       </>
     </Section>

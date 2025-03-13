@@ -12,19 +12,18 @@ export default defineConfig({
       "/api": {
         target: "https://mcd-viborg-om232.ondigitalocean.app",
         changeOrigin: true,
-        secure: false,
+        secure: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+    },
+    host: "localhost",
+    port: 5176,
+    hmr: {
+      protocol: "ws",
+      clientPort: 5176,
     },
     headers: {
       "Service-Worker-Allowed": "/",
     },
-  },
-  define: {
-    "process.env": import.meta.env,
-  },
-  rules: {
-    "react/prop-types": "off",
-    "no-unused-vars": "warn",
   },
 });

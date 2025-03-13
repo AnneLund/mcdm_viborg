@@ -52,6 +52,7 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin: 10px 0;
+  margin-left: 0;
   padding: 5px 10px;
   border: none;
   box-shadow: black 2px 2px 5px;

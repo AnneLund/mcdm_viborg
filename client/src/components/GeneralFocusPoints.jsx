@@ -3,6 +3,8 @@ import useFetchProjects from "../hooks/useFetchProjects";
 import { ListItem } from "../styles/listStyles";
 import { Container } from "../styles/containerStyles";
 import stringSimilarity from "string-similarity";
+import { StyledNavLink } from "../styles/navigationStyles";
+import { ButtonContainer } from "../styles/buttonStyles";
 
 const FocusPointComponent = ({ users }) => {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -65,12 +67,15 @@ const FocusPointComponent = ({ users }) => {
 
   return (
     <>
-      {teamProjects.map((project) => (
-        <ListItem key={project} onClick={() => handleProjectClick(project)}>
-          {getProjectName(project)}
-        </ListItem>
-      ))}
-
+      <ButtonContainer>
+        {teamProjects.map((project) => (
+          <StyledNavLink
+            key={project}
+            onClick={() => handleProjectClick(project)}>
+            {getProjectName(project)}
+          </StyledNavLink>
+        ))}
+      </ButtonContainer>
       {selectedProject && (
         <Container>
           <h3>Focus Points for {getProjectName(selectedProject)}</h3>
