@@ -1,8 +1,10 @@
-const CACHE_NAME = "vite-react-cache-v2";
+const CACHE_NAME = "vite-react-cache-v3";
 const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installerer...");
+
+  self.skipWaiting(); // Sørger for at den nye service worker straks aktiveres
 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -27,6 +29,8 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
+  self.clients.claim(); // Sikrer at den nye service worker straks overtager eksisterende faner
 });
 
 self.addEventListener("fetch", (event) => {
@@ -58,7 +62,7 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Håndter beskeder fra klienter
+// Håndter beskeder fra klienter for at springe ventetid over
 self.addEventListener("message", (event) => {
   if (event.data?.type === "SKIP_WAITING") {
     console.log("[Service Worker] Springer ventetid over...");
