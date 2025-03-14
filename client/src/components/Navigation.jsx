@@ -51,7 +51,7 @@ const Navigation = () => {
           <MainStyledNavLink to='/events' onClick={closeMenu}>
             Vigtige datoer
           </MainStyledNavLink>
-          {user.role === "student" && (
+          {user.role !== "admin" && (
             <MainStyledNavLink
               to={`/studentpanel/${user._id}`}
               onClick={closeMenu}>

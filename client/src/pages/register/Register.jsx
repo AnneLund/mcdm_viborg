@@ -3,6 +3,7 @@ import { useFetchTerms } from "../../hooks/useFetchTerms";
 import styled from "styled-components";
 import { Outlet, useNavigate } from "react-router-dom";
 import ActionButton from "../../components/button/ActionButton";
+import { Article, ColumnContainer } from "../../styles/containerStyles";
 
 // Styling for alfabet-navigation
 const AlphabetContainer = styled.div`
@@ -103,8 +104,9 @@ const Register = () => {
     .sort((a, b) => a.term.localeCompare(b.term));
 
   return (
-    <article>
+    <article className='register'>
       <h1>Stikordsregister</h1>
+
       <SearchInput
         type='text'
         placeholder='Søg blandt termer...'

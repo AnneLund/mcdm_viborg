@@ -16,6 +16,18 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (!auth.token) return;
 
+    // Decode token to check expiration
+    const decodedToken = jwtDecode(auth.token);
+    const currentTime = Date.now() / 1000;
+
+    if (decodedToken.exp < currentTime) {
+      console.log("Token er udløbet. Logger brugeren ud...");
+      saveAuth({});
+      setUser({});
+      navigate("/login");
+      return;
+    }
+
     const checkUser = async () => {
       if (
         location.pathname.includes("backoffice") &&
@@ -48,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
     };
 
     checkUser();
-  }, [auth.token]);
+  }, [auth.token, location.pathname, navigate]);
 
   const token = auth.token ? auth.token : "";
 
@@ -78,7 +90,7 @@ export const AuthContextProvider = ({ children }) => {
       const user = jwtDecode(result.data.token);
       saveAuth({ token: result.data.token });
       setUser(user);
-      navigate("/");
+      navigate("/events");
 
       return { status: "ok", user };
     } catch (error) {

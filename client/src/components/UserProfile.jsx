@@ -25,7 +25,7 @@ const UserProfile = ({ user, signOut }) => {
     <ProfileWrapper $isMobile={isMobile}>
       {isMobile && ( // Kun vis pilen på mobil
         <ProfileToggle onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
+          {isOpen ? <FaChevronRight /> : <FaChevronLeft />}
         </ProfileToggle>
       )}
 
@@ -63,8 +63,8 @@ export default UserProfile;
 
 const ProfileWrapper = styled.div`
   position: fixed;
-  right: ${({ $isMobile }) => ($isMobile ? "0" : "10px")};
-  bottom: ${({ $isMobile }) => ($isMobile ? "5%" : "auto")};
+  right: ${({ $isMobile }) => ($isMobile ? "50px" : "10px")};
+  bottom: ${({ $isMobile }) => ($isMobile ? "22%" : "auto")};
   top: ${({ $isMobile }) => ($isMobile ? "auto" : "10px")};
   z-index: 2000;
   display: flex;
@@ -84,7 +84,7 @@ const ProfileToggle = styled.button`
   z-index: 2100;
   position: fixed;
   right: 10px;
-  bottom: 5%;
+  bottom: 7%;
   transform: translateY(50%);
 
   @media (min-width: 768px) {
@@ -94,8 +94,10 @@ const ProfileToggle = styled.button`
 
 // Dropdown-menu med glide-animation mod venstre/højre
 const DropdownMenu = styled.div`
-  background: #6487a918;
+  background: linear-gradient(135deg, #2c3e50, #4ca1af);
+  height: fit-content;
   padding: 10px;
+  color: white;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 180px;
@@ -115,8 +117,11 @@ const DropdownMenu = styled.div`
         ? "translateX(0) translateY(50%)"
         : "translateX(110%) translateY(50%)"
       : "none"};
-
+  h4 {
+    color: white;
+  }
   @media (min-width: 768px) {
+    background: linear-gradient(135deg, #2c3e507b, #4ca2af8d);
     opacity: 1; // Altid synlig på desktop
     transform: none;
     pointer-events: auto;
