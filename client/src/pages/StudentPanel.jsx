@@ -55,41 +55,39 @@ const StudentPanel = () => {
         )}
       </header>
 
-      <>
-        {(user.role === "teacher" || user.role === "admin") && (
-          <>
-            {showForm ? (
-              <FeedbackForm isEditMode={true} setShowForm={setShowForm} />
-            ) : (
-              <div className='button'>
-                <ActionButton
-                  onClick={handleShowForm}
-                  buttonText='Tilføj feedback på en opgave'
-                  background='green'
-                />
-              </div>
-            )}
-          </>
-        )}
-        {student.feedback.length > 0 && (
-          <ColumnContainer>
-            <h3>Feedback på opgaver</h3>
-            {student.feedback.map((feedback, index) => (
-              <div key={index}>
-                <List>
-                  <ListItem>
-                    {feedback.project.title}
-                    <p onClick={() => handleToggleFeedback(index)}>
-                      {openFeedbacks[index] ? "Skjul feedback" : "Vis feedback"}
-                    </p>
-                  </ListItem>
-                </List>
-                {openFeedbacks[index] && <UserFeedBack feedback={feedback} />}
-              </div>
-            ))}
-          </ColumnContainer>
-        )}
-      </>
+      {(user.role === "teacher" || user.role === "admin") && (
+        <>
+          {showForm ? (
+            <FeedbackForm isEditMode={true} setShowForm={setShowForm} />
+          ) : (
+            <div className='button'>
+              <ActionButton
+                onClick={handleShowForm}
+                buttonText='Tilføj feedback på en opgave'
+                background='green'
+              />
+            </div>
+          )}
+        </>
+      )}
+      {student.feedback.length > 0 && (
+        <ColumnContainer>
+          <h3>Feedback på opgaver</h3>
+          {student.feedback.map((feedback, index) => (
+            <div key={index}>
+              <List>
+                <ListItem>
+                  {feedback.project.title}
+                  <p onClick={() => handleToggleFeedback(index)}>
+                    {openFeedbacks[index] ? "Skjul feedback" : "Vis feedback"}
+                  </p>
+                </ListItem>
+              </List>
+              {openFeedbacks[index] && <UserFeedBack feedback={feedback} />}
+            </div>
+          ))}
+        </ColumnContainer>
+      )}
     </Section>
   );
 };

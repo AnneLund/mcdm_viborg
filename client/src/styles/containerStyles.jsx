@@ -16,8 +16,7 @@ export const Article = styled.article`
 `;
 
 export const Section = styled.div`
-  width: 100%;
-  margin: 20px 0;
+  margin: 20px auto;
   border-radius: 8px;
 
   header {

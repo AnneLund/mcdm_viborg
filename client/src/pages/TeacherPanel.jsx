@@ -2,18 +2,12 @@ import { Link, useParams } from "react-router-dom";
 import { Section, ColumnContainer } from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
-import ActionButton from "../components/button/ActionButton";
-import FeedbackForm from "../components/forms/FeedbackForm";
-import { useAuthContext } from "../context/useAuthContext";
 import { formatDate } from "../helpers/formatDate";
 
 const TeacherPanel = () => {
   const { userId } = useParams();
   const { fetchUserById, isLoading, error } = useFetchUsers();
   const [teacher, setTeacher] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const { user } = useAuthContext();
-
   useEffect(() => {
     if (userId) {
       fetchUserById(userId)
@@ -23,10 +17,6 @@ const TeacherPanel = () => {
         .catch((error) => console.error("Fejl ved hentning af bruger:", error));
     }
   }, [userId]);
-
-  const handleShowForm = () => {
-    setShowForm((prev) => !prev);
-  };
 
   if (isLoading) return <p>Indlæser bruger...</p>;
   if (error) return <p>Fejl: {error}</p>;

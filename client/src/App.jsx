@@ -198,7 +198,7 @@ function App() {
 
   return (
     <article className='app'>
-      {signedIn && <UserProfile signOut={signOut} user={user} />}
+      {/* {signedIn && <UserProfile signOut={signOut} user={user} />} */}
       <Link to='/'>
         <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
       </Link>

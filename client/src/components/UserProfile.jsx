@@ -1,69 +1,126 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // Pile-ikoner
 import { ButtonContainer } from "../styles/buttonStyles";
 import ActionButton from "./button/ActionButton";
-import { Link, useNavigate } from "react-router-dom";
 
 const UserProfile = ({ user, signOut }) => {
   const navigate = useNavigate();
-  return (
-    <StyledUserInfo>
-      <p>Logget ind som:</p>
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768); // Altid åben på desktop
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-      {user.role === "student" ? (
-        <Link to={`/studentpanel/${user._id}`}>
-          <h4> {user?.name} </h4>
-        </Link>
-      ) : (
-        <Link to={`/teacherpanel/${user._id}`}>
-          <h4> {user?.name} </h4>
-        </Link>
+  useEffect(() => {
+    const handleResize = () => {
+      const mobileView = window.innerWidth < 768;
+      setIsMobile(mobileView);
+      setIsOpen(!mobileView); // Åben på desktop, lukket på mobil
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <ProfileWrapper $isMobile={isMobile}>
+      {isMobile && ( // Kun vis pilen på mobil
+        <ProfileToggle onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
+        </ProfileToggle>
       )}
 
-      <ButtonContainer>
-        {user.role === "student" && (
+      <DropdownMenu $isOpen={isOpen} $isMobile={isMobile}>
+        <p>Logget ind som:</p>
+        <Link
+          to={
+            user.role === "student"
+              ? `/studentpanel/${user._id}`
+              : `/teacherpanel/${user._id}`
+          }>
+          <h4>{user?.name}</h4>
+        </Link>
+
+        <ButtonContainer>
+          {user.role === "student" && (
+            <ActionButton
+              buttonText='Skift kode'
+              background='blue'
+              onClick={() => navigate("/change-password")}
+            />
+          )}
           <ActionButton
-            buttonText='Skift kode'
-            background='blue'
-            onClick={() => navigate("/change-password")}
+            buttonText='Log ud'
+            background='red'
+            onClick={signOut}
           />
-        )}
-        <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
-      </ButtonContainer>
-    </StyledUserInfo>
+        </ButtonContainer>
+      </DropdownMenu>
+    </ProfileWrapper>
   );
 };
 
 export default UserProfile;
 
-const StyledUserInfo = styled.div`
-  width: fit-content;
-  height: fit-content;
+const ProfileWrapper = styled.div`
+  position: fixed;
+  right: ${({ $isMobile }) => ($isMobile ? "0" : "10px")};
+  bottom: ${({ $isMobile }) => ($isMobile ? "5%" : "auto")};
+  top: ${({ $isMobile }) => ($isMobile ? "auto" : "10px")};
+  z-index: 2000;
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ $isMobile }) => ($isMobile ? "row-reverse" : "column")};
   align-items: center;
+`;
+
+// Chevron-knap til at åbne/lukke profilen (kun på mobil)
+const ProfileToggle = styled.button`
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 10px;
+  z-index: 2100;
+  position: fixed;
+  right: 10px;
+  bottom: 5%;
+  transform: translateY(50%);
+
+  @media (min-width: 768px) {
+    display: none; // Skjules på desktop
+  }
+`;
+
+// Dropdown-menu med glide-animation mod venstre/højre
+const DropdownMenu = styled.div`
   background: #6487a918;
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 1rem 0;
-  position: fixed;
-  right: 10px;
-  top: 0;
-  z-index: 2000;
+  width: 180px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
+  transform: ${({ $isOpen, $isMobile }) =>
+    $isOpen ? "translateX(0)" : $isMobile ? "translateX(110%)" : "none"};
+  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
+  position: absolute;
+  top: ${({ $isMobile }) => ($isMobile ? "50%" : "50px")};
+  bottom: ${({ $isMobile }) => ($isMobile ? "5%" : "auto")};
+  right: ${({ $isMobile }) => ($isMobile ? "100%" : "0")};
+  transform: ${({ $isMobile, $isOpen }) =>
+    $isMobile
+      ? $isOpen
+        ? "translateX(0) translateY(50%)"
+        : "translateX(110%) translateY(50%)"
+      : "none"};
 
-  a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5px;
-    text-decoration: none;
-    text-decoration: underline;
-  }
-
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin: 5px;
+  @media (min-width: 768px) {
+    opacity: 1; // Altid synlig på desktop
+    transform: none;
+    pointer-events: auto;
+    position: static;
+    width: fit-content;
   }
 `;

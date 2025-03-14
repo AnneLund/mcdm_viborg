@@ -73,7 +73,7 @@ const TeamUsersList = () => {
       {teachers.length > 0 && (
         <>
           <ToggleButton onClick={() => setShowTeachers(!showTeachers)}>
-            Lærere {showTeachers ? "▲" : "▼"}
+            Undervisere {showTeachers ? "▲" : "▼"}
           </ToggleButton>
           {showTeachers && (
             <List>
