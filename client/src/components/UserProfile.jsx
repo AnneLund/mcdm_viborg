@@ -9,10 +9,15 @@ const UserProfile = ({ user, signOut }) => {
     <StyledUserInfo>
       <p>Logget ind som:</p>
 
-      <Link to={`/studentpanel/${user._id}`}>
-        {/* {user.picture && <img src={user?.picture} alt={user?.name} />} */}
-        <h4> {user?.name} </h4>
-      </Link>
+      {user.role === "student" ? (
+        <Link to={`/studentpanel/${user._id}`}>
+          <h4> {user?.name} </h4>
+        </Link>
+      ) : (
+        <Link to={`/teacherpanel/${user._id}`}>
+          <h4> {user?.name} </h4>
+        </Link>
+      )}
 
       <ButtonContainer>
         {user.role === "student" && (
@@ -41,12 +46,16 @@ const StyledUserInfo = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin: 1rem 0;
+  position: fixed;
+  right: 10px;
+  top: 0;
+  z-index: 2000;
 
   a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
+    margin: 5px;
     text-decoration: none;
     text-decoration: underline;
   }

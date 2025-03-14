@@ -5,8 +5,6 @@ import { useAlert } from "../context/Alert";
 
 const useFetchUsers = () => {
   const [users, setUsers] = useState([]);
-  const [students, setStudents] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const [user, setUser] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

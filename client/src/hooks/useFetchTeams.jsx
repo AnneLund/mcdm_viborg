@@ -6,6 +6,7 @@ import { useAlert } from "../context/Alert";
 
 const useFetchTeams = () => {
   const [teams, setTeams] = useState([]);
+  const [team, setTeam] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
@@ -112,7 +113,28 @@ const useFetchTeams = () => {
     }
   };
 
+  // HENT TEAM BY ID
+  const fetchTeamById = useCallback(async (teamId) => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${apiUrl}/team/${teamId}`);
+      if (!response.ok) {
+        throw new Error("Team ikke fundet");
+      }
+      const data = await response.json();
+      setTeam(data.data); // Sæt det hentede team i state
+    } catch (error) {
+      setError(error.message);
+      console.error("Error fetching team by ID:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return {
+    team,
+    fetchTeamById,
     teams,
     createTeam,
     updateTeam,

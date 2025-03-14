@@ -19,13 +19,24 @@ const TaskAssignment = ({ groups }) => {
   };
 
   // Fordel opgaverne ligeligt mellem grupperne
+  const shuffleArray = (array) => {
+    const shuffled = [...array]; // Kopi af array for at undgå mutation
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Fordel opgaverne ligeligt mellem grupperne
   const assignTasksToGroups = () => {
     if (selectedExercises.length === 0) return;
 
+    const shuffledExercises = shuffleArray(selectedExercises);
     let distributedTasks = {};
     const groupCount = groups.length;
 
-    selectedExercises.forEach((exercise, index) => {
+    shuffledExercises.forEach((exercise, index) => {
       const groupIndex = index % groupCount;
       if (!distributedTasks[groupIndex]) {
         distributedTasks[groupIndex] = [];

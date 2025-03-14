@@ -1,40 +1,32 @@
-const CACHE_NAME = `vite-react-cache-v${new Date().getTime()}`;
+const CACHE_NAME = "vite-react-cache-v2";
 const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
-  console.log("[Service Worker] Installing...");
+  console.log("[Service Worker] Installerer...");
 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Caching static assets...");
+      console.log("[Service Worker] Cacher statiske assets...");
       return cache.addAll(STATIC_ASSETS);
     })
   );
-
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("[Service Worker] Activating...");
+  console.log("[Service Worker] Aktiverer...");
 
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log("[Service Worker] Deleting old cache:", cache);
+            console.log("[Service Worker] Sletter gammel cache:", cache);
             return caches.delete(cache);
           }
         })
-      );
-    })
+      )
+    )
   );
-
-  return self.clients.claim().then(() => {
-    self.clients.matchAll().then((clients) => {
-      clients.forEach((client) => client.postMessage({ type: "SW_UPDATED" }));
-    });
-  });
 });
 
 self.addEventListener("fetch", (event) => {
@@ -66,8 +58,10 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
+// Håndter beskeder fra klienter
 self.addEventListener("message", (event) => {
-  if (event.data === "skipWaiting") {
+  if (event.data?.type === "SKIP_WAITING") {
+    console.log("[Service Worker] Springer ventetid over...");
     self.skipWaiting();
   }
 });

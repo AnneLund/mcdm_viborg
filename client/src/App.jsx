@@ -16,9 +16,7 @@ import Project from "./pages/project/Project";
 import Exercises from "./pages/Exercises";
 import ExerciseForm from "./components/forms/ExerciseForm";
 import Backoffice from "./pages/Backoffice";
-import UserForm from "./components/forms/UserForm";
 import Users from "./components/users/Users";
-import PresentationSchema from "./pages/PresentationSchema";
 import Events from "./pages/Events";
 import EventForm from "./components/forms/EventForm";
 import Navigation from "./components/Navigation";
@@ -31,6 +29,9 @@ import UserProfile from "./components/UserProfile";
 import { useMemo } from "react";
 import BackArrow from "./components/button/BackArrow";
 import GroupGenerator from "./pages/GroupGenerator";
+import ExamSchedule from "./pages/ExamSchedule";
+import Team from "./pages/Team";
+import TeacherPanel from "./pages/TeacherPanel";
 function App() {
   const { signedIn, user, signOut } = useAuthContext();
   const showBackArrow = useMemo(
@@ -131,6 +132,18 @@ function App() {
           path: "studentpanel/:userId",
           element: <StudentPanel />,
         },
+        {
+          path: "teacherpanel/:userId",
+          element: <TeacherPanel />,
+        },
+        {
+          path: "studentpanel/:userId/team/:id",
+          element: <Team />,
+        },
+        {
+          path: "teacherpanel/:userId/team/:id",
+          element: <Team />,
+        },
       ],
     },
     {
@@ -164,6 +177,10 @@ function App() {
           element: <GroupGenerator />,
         },
         {
+          path: "examSchedule",
+          element: <ExamSchedule />,
+        },
+        {
           path: "events",
           element: <Events />,
           children: [
@@ -181,11 +198,11 @@ function App() {
 
   return (
     <article className='app'>
+      {signedIn && <UserProfile signOut={signOut} user={user} />}
       <Link to='/'>
         <img src='/assets/mcdm_logo.png' alt='logo' className='logo' />
       </Link>
       <Navigation />
-      {signedIn && <UserProfile signOut={signOut} user={user} />}
 
       {showBackArrow && <BackArrow />}
       <div className='main'>{routes}</div>

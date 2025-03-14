@@ -235,8 +235,6 @@ userRouter.put("/:id/feedback", async (req, res) => {
 // CREATE USER FEEDBACK
 userRouter.post("/:id/feedback/new", async (req, res) => {
   try {
-    console.log("Received feedback request body:", req.body);
-
     const { id } = req.params;
     const {
       createdBy,
@@ -248,13 +246,14 @@ userRouter.post("/:id/feedback/new", async (req, res) => {
       isVisible,
     } = req.body;
 
+    // Feedback skal som minimum have comments eller focusPoints
     if (
-      !focusPoints ||
-      !Array.isArray(focusPoints) ||
-      focusPoints.length === 0
+      !comments &&
+      (!focusPoints || !Array.isArray(focusPoints) || focusPoints.length === 0)
     ) {
       return res.status(400).json({
-        message: "FocusPoints skal være en liste med mindst ét element.",
+        message:
+          "Feedback skal indeholde enten 'comments' eller mindst ét 'focusPoint'.",
       });
     }
 
@@ -264,7 +263,7 @@ userRouter.post("/:id/feedback/new", async (req, res) => {
       exercise: exercise || null,
       projectComments: projectComments || [],
       comments: comments || "",
-      focusPoints: focusPoints,
+      focusPoints: focusPoints || [],
       isVisible: isVisible ?? false,
       date: new Date(),
     };

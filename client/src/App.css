@@ -18,6 +18,7 @@
   margin: auto;
   padding: 1em;
   font-family: "Titillium Web", sans-serif;
+  position: relative;
 
   img {
     margin: 20px 0;

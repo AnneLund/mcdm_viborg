@@ -10,24 +10,37 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("/service-worker.js")
     .then((registration) => {
+      console.log("[App] Service Worker registreret:", registration);
+
       registration.addEventListener("updatefound", () => {
+        if (!registration.installing) return;
         const newWorker = registration.installing;
+        console.log("[App] Ny Service Worker fundet!");
+
         newWorker.addEventListener("statechange", () => {
           if (
             newWorker.state === "installed" &&
             navigator.serviceWorker.controller
           ) {
-            console.log("[App] New version available. Reloading...");
-            if (confirm("En ny version er tilgængelig. Vil du opdatere?")) {
-              newWorker.postMessage("skipWaiting");
-            }
+            console.log("[App] Ny version er tilgængelig!");
+
+            // Viser en besked i stedet for at tvinge en reload
+            alert(
+              "En ny version er tilgængelig! Genindlæs siden for at opdatere."
+            );
           }
         });
       });
     })
-    .catch((error) =>
-      console.error("[App] Service Worker registration failed:", error)
-    );
+    .catch((error) => console.error("[App] Service Worker fejlede:", error));
+
+  // Lyt efter beskeder fra Service Worker
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data?.type === "RELOAD_PAGE") {
+      console.log("[App] Ny version tilgængelig, men kræver genindlæsning.");
+      alert("En ny version er tilgængelig! Genindlæs siden for at opdatere.");
+    }
+  });
 }
 
 createRoot(document.getElementById("root")).render(

@@ -1,11 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist",
+    rollupOptions: {
+      input: "index.html",
+    },
   },
   server: {
     proxy: {
@@ -24,6 +26,8 @@ export default defineConfig({
     },
     headers: {
       "Service-Worker-Allowed": "/",
+      "Cache-Control": "no-store",
     },
   },
+  publicDir: "public",
 });

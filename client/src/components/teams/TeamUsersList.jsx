@@ -61,9 +61,14 @@ const TeamUsersList = () => {
           )}
         </>
       )}
-      <ListItem onClick={() => navigate("/backoffice/groups")}>
-        <StyledNavLink>Gruppegenerator</StyledNavLink>
-      </ListItem>
+      <div id='buttons'>
+        <ListItem onClick={() => navigate("/backoffice/groups")}>
+          <StyledNavLink>Gruppegenerator</StyledNavLink>
+        </ListItem>
+        <ListItem onClick={() => navigate("/backoffice/examSchedule")}>
+          <StyledNavLink>EksamensplansGenerator</StyledNavLink>
+        </ListItem>
+      </div>
 
       {teachers.length > 0 && (
         <>

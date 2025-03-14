@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 mongoose.set("runValidators", true);
 
 const commentSchema = new Schema({
-  type: { type: String, enum: ["project", "presentation"], required: true },
-  content: { type: String, required: true },
+  type: { type: String, enum: ["project", "presentation"] },
+  content: { type: String },
   date: { type: Date, default: Date.now },
 });
 
@@ -14,7 +14,7 @@ const feedbackSchema = new Schema({
   comments: { type: String },
   project: { type: mongoose.Schema.Types.ObjectId, ref: "project" },
   exercise: { type: mongoose.Schema.Types.ObjectId, ref: "exercise" },
-  focusPoints: { type: [String], required: true },
+  focusPoints: { type: [String] },
   isVisible: { type: Boolean, default: false },
 });
 

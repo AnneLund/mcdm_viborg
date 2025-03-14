@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Section, ColumnContainer } from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
@@ -49,9 +49,9 @@ const StudentPanel = () => {
           <strong>Email:</strong> {student.email}
         </p>
         {student.team && (
-          <p>
+          <Link to={`/studentpanel/${student._id}/team/${student.team._id}`}>
             <strong>Hold:</strong> {student.team.team}
-          </p>
+          </Link>
         )}
       </header>
 
