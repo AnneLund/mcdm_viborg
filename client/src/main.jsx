@@ -13,21 +13,24 @@ if ("serviceWorker" in navigator) {
       console.log("[App] Service Worker registreret:", registration);
 
       registration.addEventListener("updatefound", () => {
-        if (!registration.installing) return;
         const newWorker = registration.installing;
+        if (!newWorker) return;
         console.log("[App] Ny Service Worker fundet!");
 
         newWorker.addEventListener("statechange", () => {
-          if (
-            newWorker.state === "installed" &&
-            navigator.serviceWorker.controller
-          ) {
-            console.log("[App] Ny version er tilgængelig!");
+          if (newWorker.state === "installed") {
+            if (navigator.serviceWorker.controller) {
+              console.log("[App] Ny version er tilgængelig!");
 
-            // Viser en besked i stedet for at tvinge en reload
-            alert(
-              "En ny version er tilgængelig! Genindlæs siden for at opdatere."
-            );
+              // Fortæl den nye service worker at springe ventestadiet over
+              newWorker.postMessage({ type: "SKIP_WAITING" });
+
+              alert(
+                "En ny version er tilgængelig! Genindlæs siden for at opdatere."
+              );
+            } else {
+              console.log("[App] Service Worker installeret for første gang.");
+            }
           }
         });
       });
