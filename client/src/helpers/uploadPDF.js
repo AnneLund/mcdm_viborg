@@ -6,14 +6,14 @@ export const uploadPDF = async ({
   setFileUrl,
   fileUrl,
   showSuccess,
-  isLoading,
   setIsLoading,
   event,
 }) => {
   const formData = new FormData();
-  formData.append("file", pdfBlob, "presentation.pdf");
+  formData.append("file", pdfBlob, "exam.pdf");
 
   try {
+    setIsLoading(true);
     const response = await fetch(`${apiUrl}/upload`, {
       method: "POST",
       body: formData,
@@ -34,5 +34,6 @@ export const uploadPDF = async ({
     console.error("Fejl ved upload:", error);
   } finally {
     showSuccess("Gemt!", "PDF blev gemt med succes");
+    setIsLoading(false);
   }
 };

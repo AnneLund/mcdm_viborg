@@ -3,8 +3,9 @@ import styled from "styled-components";
 import ActionButton from "./button/ActionButton";
 import { useAuthContext } from "../context/useAuthContext";
 import PresentationSchema from "../pages/PresentationSchema";
+import ExamSchedule from "../pages/ExamSchedule";
 
-const Event = ({ event }) => {
+const Event = ({ event, refetch }) => {
   const { user } = useAuthContext();
   const todayMidnight = new Date();
   todayMidnight.setHours(0, 0, 0, 0);
@@ -62,6 +63,22 @@ const Event = ({ event }) => {
               )}
             </div>
           )}
+
+          {event.exam && !event.file && (
+            <div>
+              <ActionButton
+                onClick={handleUploadClick}
+                buttonText='Upload eksamensplan'
+              />
+              {showSchema && (
+                <ExamSchedule
+                  event={event}
+                  setShowSchema={setShowSchema}
+                  refetch={refetch}
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
       {event.description && <Description>{event.description}</Description>}
@@ -70,6 +87,13 @@ const Event = ({ event }) => {
         <div>
           <a href={event.file} target='_blank'>
             Se fremlæggelsesplan
+          </a>
+        </div>
+      )}
+      {event.exam && event.file && (
+        <div>
+          <a href={event.file} target='_blank'>
+            Se eksamensplan
           </a>
         </div>
       )}

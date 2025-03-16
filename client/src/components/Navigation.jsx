@@ -51,9 +51,17 @@ const Navigation = () => {
           <MainStyledNavLink to='/events' onClick={closeMenu}>
             Vigtige datoer
           </MainStyledNavLink>
-          {user.role !== "admin" && (
+          {user.role === "student" && (
             <MainStyledNavLink
               to={`/studentpanel/${user._id}`}
+              onClick={closeMenu}>
+              Min profil
+            </MainStyledNavLink>
+          )}
+
+          {user.role === "teacher" && (
+            <MainStyledNavLink
+              to={`/teacherpanel/${user._id}`}
               onClick={closeMenu}>
               Min profil
             </MainStyledNavLink>

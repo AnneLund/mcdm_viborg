@@ -118,6 +118,7 @@ export const MainBurgerMenu = styled.div`
 export const MainNavContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 20px;
   width: 100%;
   transition: all 0.3s ease-in-out;
@@ -150,6 +151,7 @@ export const MainStyledNavLink = styled(NavLink)`
   padding: 10px 15px;
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
+  text-align: center;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);

@@ -5,8 +5,6 @@ export const InputContainer = styled.div`
   align-items: center;
   gap: 10px;
   margin-bottom: 15px;
-  width: 100%;
-
   input {
     flex: 1;
     padding: 8px;
@@ -14,6 +12,7 @@ export const InputContainer = styled.div`
     border-radius: 5px;
     font-size: 16px;
     outline: none;
+    width: 50%;
   }
 
   input:focus {

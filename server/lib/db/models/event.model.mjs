@@ -8,6 +8,7 @@ const eventScheme = new Schema({
   time: { type: String },
   file: { type: String },
   presentation: { type: Boolean, default: false },
+  exam: { type: Boolean, default: false },
   created: { type: Date, default: new Date() },
 });
 

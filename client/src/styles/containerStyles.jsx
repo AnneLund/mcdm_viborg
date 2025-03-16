@@ -5,7 +5,7 @@ export const Article = styled.article`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin: 20px auto;
+  margin: 50px auto;
   padding: 20px 0;
   position: relative;
 

@@ -28,6 +28,7 @@ const EventForm = ({ isEditMode }) => {
       description: event?.description || "",
       date: event?.date || "",
       presentation: event?.presentation || false,
+      exam: event?.exam || false,
       file: event?.file || "",
     },
   });
@@ -42,8 +43,11 @@ const EventForm = ({ isEditMode }) => {
     }
   }, [event, setValue]);
 
-  const handleSelectChange = (event) => {
+  const handleSelectPresentation = (event) => {
     setValue("presentation", event.target.value === "true");
+  };
+  const handleSelectExam = (event) => {
+    setValue("exam", event.target.value === "true");
   };
 
   const onSubmit = async (formData) => {
@@ -56,6 +60,7 @@ const EventForm = ({ isEditMode }) => {
       data.append("date", formData.date);
       data.append("time", formData.time);
       data.append("presentation", formData.presentation ? "true" : "false");
+      data.append("exam", formData.exam ? "true" : "false");
 
       if (isEditMode && id) {
         data.append("id", id);
@@ -126,7 +131,7 @@ const EventForm = ({ isEditMode }) => {
         <label>
           <h3>Fremlæggelse</h3>
           <select
-            onChange={handleSelectChange}
+            onChange={handleSelectPresentation}
             defaultValue={event?.presentation ? "true" : "false"}>
             {isEditMode ? (
               <>
@@ -145,9 +150,38 @@ const EventForm = ({ isEditMode }) => {
           </select>
         </label>
 
+        <label>
+          <h3>Eksamen</h3>
+          <select
+            onChange={handleSelectExam}
+            defaultValue={event?.exam ? "true" : "false"}>
+            {isEditMode ? (
+              <>
+                <option value={event?.exam.toString()} disabled>
+                  {event?.exam ? "Ja" : "Nej"}
+                </option>
+                {!event?.exam && <option value='true'>Ja</option>}
+                {event?.exam && <option value='false'>Nej</option>}
+              </>
+            ) : (
+              <>
+                <option value='false'>Nej</option>
+                <option value='true'>Ja</option>
+              </>
+            )}
+          </select>
+        </label>
+
         {event?.presentation && (
           <label>
             <h3>Fremlæggelsesplan</h3>
+            <input type='file' onChange={(e) => setFile(e.target.files[0])} />
+          </label>
+        )}
+
+        {event?.exam && (
+          <label>
+            <h3>Eksamensplan</h3>
             <input type='file' onChange={(e) => setFile(e.target.files[0])} />
           </label>
         )}

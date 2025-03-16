@@ -19,18 +19,17 @@ const useFetchEvents = () => {
     try {
       const response = await fetch(`${apiUrl}/events`);
       const data = await response.json();
-      setEvents(data.data);
+      setEvents(data.data); // Sørg for at opdatere en useState!
     } catch (error) {
       setError(error.message);
       console.error("Error fetching events:", error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [setEvents]);
 
-  // Refetch-funktion, der blot kalder fetchTerms
-  const refetch = useCallback(() => {
-    fetchEvents();
+  const refetch = useCallback(async () => {
+    await fetchEvents();
   }, [fetchEvents]);
 
   useEffect(() => {
@@ -79,6 +78,11 @@ const useFetchEvents = () => {
       }
 
       const result = await response.json();
+
+      if (result.status === "ok") {
+        await refetch();
+        console.log("henter nye data..");
+      }
 
       return result.data;
     } catch (error) {

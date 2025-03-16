@@ -2,16 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { useAlert } from "../context/Alert";
 import useFetchEvents from "../hooks/useFetchEvents";
-import { downloadExamPDF } from "../helpers/downloadExamPdf";
-
-const ExamSchedule = ({ event }) => {
+import { downloadPDF } from "../helpers/downloadPdf.js";
+import { Section } from "../styles/containerStyles";
+import { List, ListItem } from "../styles/listStyles";
+import ActionButton from "../components/button/ActionButton";
+import { InputContainer } from "../styles/formStyles";
+import { ButtonContainer } from "../styles/buttonStyles";
+import { formatDateWithDay } from "../helpers/formatDate.js";
+import Loading from "../components/Loading/Loading.jsx";
+// import useFetchTeamUsers from "../hooks/useFetchTeamUsers.jsx";
+const ExamSchedule = ({ event, setShowSchema }) => {
   const [newStudent, setNewStudent] = useState("");
+  // const {students} = useFetchTeamUsers()
   const [students, setStudents] = useState([
     "Laura",
     "Adi",
     "Serhii",
     "Nureddin",
-    "Thomas",
     "Elsbet",
     "Mark",
     "Mathias",
@@ -22,9 +29,12 @@ const ExamSchedule = ({ event }) => {
     "Gabriel",
   ]);
   const [schedule, setSchedule] = useState([]);
-  const [numDays, setNumDays] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [planGenerated, setPlanGenerated] = useState(false);
   const [isDownloadingPDF, setIsDownloadingPDF] = useState(false);
+  const [fileUrl, setFileUrl] = useState("");
+  // const [selectedDays, setSelectedDays] = useState([]); // Valgte eksamensdage
+  // const [selectedDayForPDF, setSelectedDayForPDF] = useState(""); // Dag til PDF
   const [remainingStudents, setRemainingStudents] = useLocalStorage(
     "remainingStudents",
     []
@@ -33,27 +43,37 @@ const ExamSchedule = ({ event }) => {
   const { showSuccess } = useAlert();
   const { updateEvent } = useFetchEvents();
 
+  const handleDownloadPDF = () => {
+    if (schedule.length === 0) {
+      alert("Der er ingen eksamensplan at downloade!");
+      return;
+    }
+
+    setIsDownloadingPDF(true);
+  };
+
   useEffect(() => {
     if (isDownloadingPDF && pdfRef.current) {
-      setTimeout(
-        () =>
-          downloadExamPDF({
-            pdfRef,
-            updateEvent,
-            showSuccess,
-            event,
-          }),
-        300
-      );
+      (async () => {
+        const success = await downloadPDF({
+          pdfRef,
+          updateEvent,
+          setFileUrl,
+          fileUrl,
+          showSuccess,
+          isLoading,
+          setIsLoading,
+          event,
+        });
+
+        if (success) {
+          setTimeout(() => {
+            setShowSchema(false);
+          }, 100);
+        }
+      })();
     }
   }, [isDownloadingPDF]);
-  const dayNames = {
-    1: "Mandag",
-    2: "Tirsdag",
-    3: "Onsdag",
-    4: "Torsdag",
-    5: "Fredag",
-  };
 
   const addStudent = () => {
     if (newStudent.trim() !== "" && !students.includes(newStudent)) {
@@ -67,33 +87,32 @@ const ExamSchedule = ({ event }) => {
   };
 
   const generateSchedule = () => {
-    const shuffledStudents = [...students].sort(() => Math.random() - 0.5);
-    const studentsPerDay = Math.ceil(shuffledStudents.length / numDays);
-    let currentDay = 1;
-    let currentHour = 9;
+    const activeStudents =
+      remainingStudents.length > 0 ? remainingStudents : students;
+    const shuffledStudents = [...activeStudents].sort(
+      () => Math.random() - 0.5
+    );
+
     let currentSchedule = [];
+    let remaining = [];
+    let currentHour = 9;
 
-    shuffledStudents.forEach((student, index) => {
+    shuffledStudents.forEach((student) => {
       if (currentHour === 12) currentHour = 13; // Spring frokostpausen over
-      if (index % studentsPerDay === 0 && index !== 0) {
-        currentDay++;
-        currentHour = 9;
+
+      if (currentHour >= 16) {
+        remaining.push(student); // Elever der ikke kan få en tid
+      } else {
+        currentSchedule.push({
+          name: student,
+          day: formatDateWithDay(event.date),
+          time: `${currentHour}:00`,
+        });
+        currentHour++;
       }
-
-      if (currentDay > numDays) return;
-
-      currentSchedule.push({
-        name: student,
-        day: dayNames[currentDay],
-        time: `${currentHour}:00`,
-      });
-
-      currentHour++;
     });
-
-    console.log("Plan genereret:", currentSchedule.length > 0);
-
     setSchedule(currentSchedule);
+    setRemainingStudents(remaining); // Opdater remaining students
     setPlanGenerated(true);
   };
 
@@ -103,54 +122,86 @@ const ExamSchedule = ({ event }) => {
     setRemainingStudents([]);
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
-    <div>
+    <Section>
       <h3>Tilføj elever</h3>
-      <ul>
-        {students.map((student, index) => (
-          <li key={index}>
-            {student}{" "}
-            <button onClick={() => removeStudent(student)}>Fjern</button>
-          </li>
-        ))}
-      </ul>
-      <input
-        type='text'
-        value={newStudent}
-        onChange={(e) => setNewStudent(e.target.value)}
-        placeholder='Tilføj elev'
-      />
-      <button onClick={addStudent}>Tilføj</button>
+      <List>
+        {(remainingStudents.length > 0 ? remainingStudents : students).map(
+          (student, index) => (
+            <ListItem key={index}>
+              {student}{" "}
+              <ActionButton
+                onClick={() => removeStudent(student)}
+                buttonText='Fjern'
+                background='red'
+              />
+            </ListItem>
+          )
+        )}
+      </List>
 
-      <h3>Vælg antal eksamensdage</h3>
-      <input
-        type='number'
-        min='1'
-        max='5'
-        value={numDays}
-        onChange={(e) => setNumDays(Number(e.target.value))}
-      />
+      <InputContainer>
+        <input
+          type='text'
+          value={newStudent}
+          onChange={(e) => setNewStudent(e.target.value)}
+          placeholder='Tilføj elev'
+        />
+        <ActionButton
+          onClick={addStudent}
+          buttonText='Tilføj'
+          background='green'
+        />
+      </InputContainer>
 
-      <button onClick={generateSchedule}>Generer eksamensplan</button>
+      <ActionButton
+        onClick={generateSchedule}
+        buttonText='Generer eksamensplan'
+        background='green'
+      />
 
       {planGenerated && (
         <>
-          <h3>Eksamensplan</h3>
-          <ul>
-            {schedule.map((item, index) => (
-              <li key={index}>
-                {item.day} kl. {item.time} - {item.name}
-              </li>
+          <Section>
+            <header>
+              <h1>Eksamensplan</h1>
+            </header>
+
+            {Object.entries(
+              schedule.reduce((acc, item) => {
+                if (!acc[item.day]) acc[item.day] = [];
+                acc[item.day].push(item);
+                return acc;
+              }, {})
+            ).map(([day, students]) => (
+              <div key={day}>
+                <h3>{day}</h3>
+                <List>
+                  {students.map((student, index) => (
+                    <ListItem key={index}>
+                      Kl. {student.time} - {student.name}
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
             ))}
-          </ul>
 
-          <button onClick={resetSchedule}>Nulstil plan</button>
-          <button onClick={() => setIsDownloadingPDF(true)}>
-            Download PDF
-          </button>
+            <ButtonContainer>
+              <ActionButton onClick={resetSchedule} buttonText='Nulstil plan' />
+              <ActionButton
+                onClick={handleDownloadPDF}
+                buttonText='Upload PDF'
+                background='green'
+              />
+            </ButtonContainer>
+          </Section>
 
-          {/* Skjult PDF-generering */}
-          <div
+          {/* Skjult PDF-generering kun for første dag */}
+          <Section
             ref={pdfRef}
             style={{
               position: "absolute",
@@ -158,20 +209,28 @@ const ExamSchedule = ({ event }) => {
               top: "-9999px",
               width: "100%",
               backgroundColor: "#fff",
+              fontSize: "10px",
               fontFamily: "Arial, sans-serif",
             }}>
-            <h2>Eksamensplan</h2>
-            <ul>
-              {schedule.map((item, index) => (
-                <li key={index}>
-                  {item.day} kl. {item.time} - {item.name}
-                </li>
-              ))}
-            </ul>
-          </div>
+            <h3 style={{ fontSize: "15px" }}>Eksamensplan</h3>
+            {schedule.length > 0 && (
+              <div>
+                <h3 style={{ fontSize: "10px" }}>
+                  {formatDateWithDay(event.date)}
+                </h3>
+                <List>
+                  {schedule.map((student, index) => (
+                    <ListItem style={{ fontSize: "8px" }} key={index}>
+                      Kl. {student.time} - {student.name}
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+            )}
+          </Section>
         </>
       )}
-    </div>
+    </Section>
   );
 };
 

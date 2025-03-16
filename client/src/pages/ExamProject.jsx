@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import { Article } from "../styles/containerStyles";
 
 const ExamProject = () => {
   return (
-    <Container>
+    <Article>
       <Section>
         <Title>Eksamensprojektet</Title>
         <List>
@@ -121,7 +122,7 @@ const ExamProject = () => {
           </ExternalLink>
         </List>
       </Section>
-    </Container>
+    </Article>
   );
 };
 

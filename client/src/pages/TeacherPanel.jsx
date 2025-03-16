@@ -1,12 +1,17 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Section, ColumnContainer } from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
 import { formatDate } from "../helpers/formatDate";
+import { ButtonContainer } from "../styles/buttonStyles";
+import ActionButton from "../components/button/ActionButton";
+import { useAuthContext } from "../context/useAuthContext";
 
 const TeacherPanel = () => {
   const { userId } = useParams();
   const { fetchUserById, isLoading, error } = useFetchUsers();
+  const navigate = useNavigate();
+  const { signOut } = useAuthContext();
   const [teacher, setTeacher] = useState(null);
   useEffect(() => {
     if (userId) {
@@ -35,6 +40,15 @@ const TeacherPanel = () => {
           </Link>
         )}
       </header>
+      <ButtonContainer>
+        <ActionButton
+          buttonText='Skift kode'
+          background='blue'
+          onClick={() => navigate("/change-password")}
+        />
+
+        <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
+      </ButtonContainer>
 
       <>
         {teacher.feedback.length > 0 && (

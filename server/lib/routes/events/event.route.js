@@ -14,7 +14,8 @@ const eventRouter = express.Router();
 // CREATE EVENT
 eventRouter.post("/", upload.none(), async (req, res) => {
   try {
-    const { event, description, presentation, date, time, file } = req.body;
+    const { event, description, presentation, exam, date, time, file } =
+      req.body;
 
     if (!event) {
       return res.status(400).json({
@@ -26,6 +27,7 @@ eventRouter.post("/", upload.none(), async (req, res) => {
       event,
       description,
       presentation,
+      exam,
       date,
       time,
       file,
@@ -54,7 +56,8 @@ eventRouter.post("/", upload.none(), async (req, res) => {
 // UPDATE EVENT
 eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
   try {
-    const { event, description, presentation, date, time, file } = req.body;
+    const { event, description, presentation, exam, date, time, file } =
+      req.body;
     const { id } = req.params;
 
     if (!id) {
@@ -68,6 +71,7 @@ eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
       event,
       description,
       presentation,
+      exam,
       date,
       time,
       file,

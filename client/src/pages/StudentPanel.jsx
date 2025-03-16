@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Section, ColumnContainer } from "../styles/containerStyles";
 import { useFetchUsers } from "../hooks/useFetchUsers";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import FeedbackForm from "../components/forms/FeedbackForm";
 import { useAuthContext } from "../context/useAuthContext";
 import UserFeedBack from "../components/users/UserFeedback";
 import { List, ListItem } from "../styles/listStyles";
+import { ButtonContainer } from "../styles/buttonStyles";
 
 const StudentPanel = () => {
   const { userId } = useParams();
@@ -14,7 +15,8 @@ const StudentPanel = () => {
   const [student, setStudent] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [openFeedbacks, setOpenFeedbacks] = useState({});
-  const { user } = useAuthContext();
+  const { user, signOut } = useAuthContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userId) {
@@ -40,7 +42,7 @@ const StudentPanel = () => {
   if (isLoading) return <p>Indlæser bruger...</p>;
   if (error) return <p>Fejl: {error}</p>;
   if (!student) return <p>Ingen bruger fundet.</p>;
-
+  console.log(student);
   return (
     <Section>
       <header>
@@ -54,6 +56,16 @@ const StudentPanel = () => {
           </Link>
         )}
       </header>
+
+      <ButtonContainer>
+        <ActionButton
+          buttonText='Skift kode'
+          background='blue'
+          onClick={() => navigate("/change-password")}
+        />
+
+        <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
+      </ButtonContainer>
 
       {(user.role === "teacher" || user.role === "admin") && (
         <>
@@ -78,9 +90,13 @@ const StudentPanel = () => {
               <List>
                 <ListItem>
                   {feedback.project.title}
-                  <p onClick={() => handleToggleFeedback(index)}>
-                    {openFeedbacks[index] ? "Skjul feedback" : "Vis feedback"}
-                  </p>
+                  <ActionButton
+                    background='green'
+                    onClick={() => handleToggleFeedback(index)}
+                    buttonText={
+                      openFeedbacks[index] ? "Skjul feedback" : "Vis feedback"
+                    }
+                  />
                 </ListItem>
               </List>
               {openFeedbacks[index] && <UserFeedBack feedback={feedback} />}

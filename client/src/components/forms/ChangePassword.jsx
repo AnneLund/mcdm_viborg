@@ -5,14 +5,13 @@ import ActionButton from "../button/ActionButton";
 import styles from "../forms/form.module.css";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../context/Alert";
+import { Article } from "../../styles/containerStyles";
 
 const ChangePassword = () => {
-  const { token, signOut } = useAuthContext();
+  const { token } = useAuthContext();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const { showError, showSuccess } = useAlert();
 
@@ -40,19 +39,18 @@ const ChangePassword = () => {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        setError("");
       } else {
         showError(data.message || "Fejl ved ændring af adgangskode");
       }
     } catch (error) {
-      setError("Noget gik galt");
+      showError("Noget gik galt", error);
     } finally {
       navigate(-1);
     }
   };
 
   return (
-    <>
+    <Article>
       <form onSubmit={handleSubmit} className={styles.form}>
         <h2>Skift Adgangskode</h2>
         <label>
@@ -85,7 +83,7 @@ const ChangePassword = () => {
 
         <ActionButton type='submit' buttonText='Skift Adgangskode' />
       </form>
-    </>
+    </Article>
   );
 };
 
