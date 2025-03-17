@@ -1,14 +1,20 @@
-const CACHE_NAME = "vite-react-cache-v5";
+const CACHE_NAME = "vite-react-cache-v6"; // Skift versionsnummer ved opdateringer
 const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installerer...");
 
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("[Service Worker] Cacher statiske assets...");
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => {
+        console.log("[Service Worker] Cacher statiske assets...");
+        return cache.addAll(STATIC_ASSETS);
+      })
+      .then(() => {
+        console.log("[Service Worker] Springer ventetid over...");
+        return self.skipWaiting();
+      })
   );
 });
 
@@ -29,12 +35,13 @@ self.addEventListener("activate", (event) => {
         )
       )
       .then(() => {
-        return self.clients.claim();
+        console.log("[Service Worker] Tager kontrol over alle klienter...");
+        return self.clients.claim(); // Tvinger alle åbne faner til at bruge den nye SW
       })
       .then(() => {
         self.clients.matchAll().then((clients) => {
-          clients.forEach((client) =>
-            client.postMessage({ type: "RELOAD_PAGE" })
+          clients.forEach(
+            (client) => client.postMessage({ type: "RELOAD_PAGE" }) // Beder klienten genindlæse siden
           );
         });
       })
