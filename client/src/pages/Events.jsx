@@ -29,12 +29,23 @@ const Events = () => {
 
   const handleAdd = () => {
     navigate("/backoffice/events/add");
+    setTimeout(() => {
+      document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   return (
     <Article>
       <Title>Vigtige datoer</Title>
       <EventList>
+        {(user?.role === "admin" || user?.role === "teacher") && (
+          <EventListItem>
+            <div className='addnewEvent'>
+              <MdAdd size={50} onClick={handleAdd} />
+              <Outlet context={{ refetch }} />
+            </div>
+          </EventListItem>
+        )}
         {sortedDates.length > 0 ? (
           sortedDates.map((event) => {
             return <Event key={event._id} event={event} />;

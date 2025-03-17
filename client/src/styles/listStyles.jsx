@@ -75,5 +75,6 @@ export const EventListItem = styled.li`
 
   .addnewEvent {
     text-align: center;
+    cursor: pointer;
   }
 `;

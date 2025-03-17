@@ -29,7 +29,7 @@
 
 .form label {
   display: block;
-  font-size: 20px;
+  font-size: 15px;
   color: #555;
   margin-bottom: 5px;
 }
@@ -49,7 +49,7 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 20px;
+  font-size: 15px;
   box-sizing: border-box;
 }
 

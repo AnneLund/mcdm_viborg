@@ -17,6 +17,12 @@ const EventForm = ({ isEditMode }) => {
   const event = events?.find((e) => e._id === id);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (window.location.hash === "#form") {
+      document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -94,9 +100,9 @@ const EventForm = ({ isEditMode }) => {
   }
 
   return (
-    <div>
-      <h2>{isEditMode ? "Rediger Event" : "Opret nyt Event"}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form} id='form'>
+        <h2>{isEditMode ? "Rediger Event" : "Opret nyt Event"}</h2>
         <label>
           <input
             type='text'
@@ -201,7 +207,7 @@ const EventForm = ({ isEditMode }) => {
           />
         </div>
       </form>
-    </div>
+    </>
   );
 };
 
