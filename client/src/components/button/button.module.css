@@ -75,7 +75,7 @@
   width: fit-content;
   margin-top: 20px;
   position: relative;
-  z-index: 3000;
+  z-index: 1;
 
   svg {
     position: fixed;

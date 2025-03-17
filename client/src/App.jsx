@@ -32,6 +32,7 @@ import GroupGenerator from "./pages/GroupGenerator";
 import ExamSchedule from "./pages/ExamSchedule";
 import Team from "./pages/Team";
 import TeacherPanel from "./pages/TeacherPanel";
+import Materials from "./pages/Materials";
 function App() {
   const { signedIn, user, signOut } = useAuthContext();
   const showBackArrow = useMemo(
@@ -127,6 +128,10 @@ function App() {
         {
           path: "change-password",
           element: <ChangePassword />,
+        },
+        {
+          path: "materials",
+          element: <Materials />,
         },
         {
           path: "studentpanel/:userId",

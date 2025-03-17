@@ -6,19 +6,20 @@ import {
   MainNavContainer,
   MainNavWrapper,
   MainStyledNavLink,
+  DropdownContainer,
+  DropdownContent,
+  DropdownToggle,
 } from "../styles/navigationStyles";
 
 const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(null);
   const { user } = useAuthContext();
 
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = () => setMenuOpen(false);
+  const toggleDropdown = (menu) =>
+    setDropdownOpen(dropdownOpen === menu ? null : menu);
 
   return (
     <MainNav>
@@ -30,27 +31,53 @@ const Navigation = () => {
         </MainBurgerMenu>
 
         <MainNavContainer $menuOpen={menuOpen}>
+          {/* Projekter */}
           <MainStyledNavLink to='/projects' onClick={closeMenu}>
             Projekter
           </MainStyledNavLink>
-          <MainStyledNavLink to='/exercises' onClick={closeMenu}>
-            Opgaver
-          </MainStyledNavLink>
-          <MainStyledNavLink to='/register' onClick={closeMenu}>
-            Stikordsregister
-          </MainStyledNavLink>
-          <MainStyledNavLink to='/faqs' onClick={closeMenu}>
-            FAQ
-          </MainStyledNavLink>
-          <MainStyledNavLink to='/examproject' onClick={closeMenu}>
-            Eksamensprojektet
-          </MainStyledNavLink>
-          <MainStyledNavLink to='/exam' onClick={closeMenu}>
-            Eksamen
-          </MainStyledNavLink>
+
+          {/* Dropdown - Ressourcer */}
+          <DropdownContainer>
+            <DropdownToggle onClick={() => toggleDropdown("resources")}>
+              Ressourcer ▼
+            </DropdownToggle>
+            {dropdownOpen === "resources" && (
+              <DropdownContent onClick={() => toggleDropdown("")}>
+                <MainStyledNavLink to='/exercises'>Opgaver</MainStyledNavLink>
+                <MainStyledNavLink to='/materials' onClick={closeMenu}>
+                  Materialer
+                </MainStyledNavLink>
+                <MainStyledNavLink to='/faqs' onClick={closeMenu}>
+                  FAQ
+                </MainStyledNavLink>
+                <MainStyledNavLink to='/register' onClick={closeMenu}>
+                  Stikordsregister
+                </MainStyledNavLink>
+              </DropdownContent>
+            )}
+          </DropdownContainer>
+
+          {/* Dropdown - Eksamen */}
+          <DropdownContainer>
+            <DropdownToggle onClick={() => toggleDropdown("exam")}>
+              Eksamen ▼
+            </DropdownToggle>
+            {dropdownOpen === "exam" && (
+              <DropdownContent onClick={() => toggleDropdown("")}>
+                <MainStyledNavLink to='/examproject' onClick={closeMenu}>
+                  Eksamensprojektet
+                </MainStyledNavLink>
+                <MainStyledNavLink to='/exam' onClick={closeMenu}>
+                  Eksamen
+                </MainStyledNavLink>
+              </DropdownContent>
+            )}
+          </DropdownContainer>
+
           <MainStyledNavLink to='/events' onClick={closeMenu}>
             Vigtige datoer
           </MainStyledNavLink>
+          {/* Profiler og Backoffice */}
           {user.role === "student" && (
             <MainStyledNavLink
               to={`/studentpanel/${user._id}`}

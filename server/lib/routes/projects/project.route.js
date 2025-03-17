@@ -9,6 +9,7 @@ import auth from "../../middleware/auth.middleware.js";
 import mongoose from "mongoose";
 import multer from "multer";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import projectModel from "../../db/models/project.model.mjs";
 
 const projectRouter = express.Router();
 
@@ -32,9 +33,9 @@ const s3Client = new S3Client({
 const upload = multer({ storage: multer.memoryStorage() });
 
 const uploadFileToS3 = async (file, folder) => {
-  if (!file) return null; // Hvis ingen fil er valgt, returnér null
+  if (!file) return null;
 
-  const fileName = `${Date.now()}-${file.originalname}`; // Unikt filnavn
+  const fileName = `${Date.now()}-${file.originalname}`;
   const filePath = `${folder}/${fileName}`;
 
   const params = {
@@ -50,7 +51,7 @@ const uploadFileToS3 = async (file, folder) => {
     return `https://keeperzone.nyc3.cdn.digitaloceanspaces.com/${filePath}`;
   } catch (error) {
     console.error("Fejl ved upload til S3:", error);
-    return null; // Hvis upload fejler, returnér null
+    return null;
   }
 };
 
@@ -169,6 +170,33 @@ projectRouter.put(
     }
   }
 );
+
+// HANDLE PROJECT VISIBILITY
+projectRouter.put("/:id/visibility", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isVisible } = req.body;
+
+    if (!isValidObjectId(id)) return;
+
+    const project = await projectModel.findByIdAndUpdate(
+      id,
+      { isVisible: isVisible },
+      { new: true, runValidators: true }
+    );
+
+    if (!project) {
+      return res.status(404).json({ message: "Projekt ikke fundet" });
+    }
+
+    return res.status(200).json({ status: "ok", data: project });
+  } catch (error) {
+    res.status(500).json({
+      message: "Fejl ved opdatering af synlighed",
+      error: error.message,
+    });
+  }
+});
 
 // DELETE PROJECT
 projectRouter.delete("/:id", auth, async (req, res) => {

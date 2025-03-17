@@ -5,8 +5,15 @@ import Login from "../../components/login/Login";
 import useFetchProjects from "../../hooks/useFetchProjects";
 import Loading from "../../components/Loading/Loading";
 import { FaExclamationTriangle } from "react-icons/fa";
-import { MdDelete, MdOutlineEditNote } from "react-icons/md";
+import {
+  MdDelete,
+  MdOutlineEditNote,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
 import { useAlert } from "../../context/Alert";
+import { useState } from "react";
+import { apiUrl } from "../../apiUrl";
 
 const ResourceList = styled.ol`
   list-style: none;
@@ -51,6 +58,8 @@ const Project = () => {
   const project = projects?.find((p) => p._id === id);
   const { user, token } = useAuthContext();
   const { showConfirmation } = useAlert();
+  const [isVisible, setIsVisible] = useState(project?.isVisible);
+  const isTeacher = user?.role === "teacher";
   const navigate = useNavigate();
 
   const handleConfirmation = () => {
@@ -63,6 +72,25 @@ const Project = () => {
 
   const handleEdit = () => {
     navigate(`/projects/${id}/edit/${id}`);
+  };
+
+  const toggleVisibility = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/project/${id}/visibility`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isVisible: !isVisible }),
+      });
+
+      console.log(response);
+
+      if (response.ok) {
+        setIsVisible(!isVisible);
+        refetch();
+      }
+    } catch (error) {
+      console.error("Fejl ved opdatering af synlighed", error);
+    }
   };
 
   if (isLoading) {
@@ -95,6 +123,22 @@ const Project = () => {
               <span> kun synligt for underviseren.</span>
             )}
           </p>
+        )}
+
+        {/* Kun lærere kan ændre synlighed */}
+        {isTeacher && (
+          <>
+            {project.isVisible ? (
+              <div className='visibility'>
+                <MdVisibility size={30} onClick={toggleVisibility} />
+                <p>(Synlig for elev)</p>
+              </div>
+            ) : (
+              <div className='visibility'>
+                <MdVisibilityOff size={30} onClick={toggleVisibility} />
+              </div>
+            )}
+          </>
         )}
       </header>
       {project.description == !null && (

@@ -173,3 +173,57 @@ export const MainStyledNavLink = styled(NavLink)`
     padding: 10px 15px;
   }
 `;
+
+// Dropdown container
+export const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+// Dropdown-knap
+export const DropdownToggle = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+`;
+
+// Dropdown-indhold
+export const DropdownContent = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+
+  a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+`;

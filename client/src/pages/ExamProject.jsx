@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { Article } from "../styles/containerStyles";
 
 const ExamProject = () => {
   return (
-    <Article>
+    <Container>
       <Section>
         <Title>Eksamensprojektet</Title>
         <List>
@@ -122,7 +121,7 @@ const ExamProject = () => {
           </ExternalLink>
         </List>
       </Section>
-    </Article>
+    </Container>
   );
 };
 
@@ -131,8 +130,7 @@ export default ExamProject;
 // ---------------- STYLED COMPONENTS ----------------
 
 const Container = styled.article`
-  max-width: 800px;
-  margin: auto;
+  margin: 70px auto;
   padding: 20px;
   background: #f9f9f9;
   border-radius: 10px;
@@ -152,6 +150,7 @@ const Title = styled.h2`
   border-bottom: 2px solid #4ca1af;
   padding-bottom: 5px;
   margin-bottom: 15px;
+  font-size: 20px;
 `;
 
 const List = styled.ul`
