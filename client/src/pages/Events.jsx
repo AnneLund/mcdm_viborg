@@ -1,18 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import useFetchEvents from "../hooks/useFetchEvents";
 import { useAuthContext } from "../context/useAuthContext";
 import { MdAdd } from "react-icons/md";
-import { Outlet, useNavigate } from "react-router-dom";
 import Event from "../components/Event";
 import { Article } from "../styles/containerStyles";
 import { Title } from "../styles/textStyles";
 import { EventList, EventListItem } from "../styles/listStyles";
+import EventForm from "../components/forms/EventForm";
 
 const Events = () => {
   const { user } = useAuthContext();
   const { events, refetch } = useFetchEvents();
-
-  const navigate = useNavigate();
+  const [showEventForm, setShowEventForm] = useState();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -27,11 +26,11 @@ const Events = () => {
       .sort((a, b) => a.eventObj - b.eventObj);
   }, [events]);
 
+  const [eventData, setEventData] = useState(null);
+
   const handleAdd = () => {
-    navigate("/backoffice/events/add");
-    setTimeout(() => {
-      document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    setEventData(null);
+    setShowEventForm(true);
   };
 
   return (
@@ -42,25 +41,22 @@ const Events = () => {
           <EventListItem>
             <div className='addnewEvent'>
               <MdAdd size={50} onClick={handleAdd} />
-              <Outlet context={{ refetch }} />
+              {showEventForm && (
+                <EventForm
+                  event={eventData}
+                  setShowEventForm={setShowEventForm}
+                  refetch={refetch}
+                />
+              )}
             </div>
           </EventListItem>
         )}
         {sortedDates.length > 0 ? (
-          sortedDates.map((event) => {
-            return <Event key={event._id} event={event} />;
-          })
+          sortedDates.map((event) => (
+            <Event key={event._id} event={event} refetch={refetch} />
+          ))
         ) : (
           <p className='noEvents'>Ingen kommende begivenheder.</p>
-        )}
-
-        {(user?.role === "admin" || user?.role === "teacher") && (
-          <EventListItem>
-            <div className='addnewEvent'>
-              <MdAdd size={50} onClick={handleAdd} />
-              <Outlet context={{ refetch }} />
-            </div>
-          </EventListItem>
         )}
       </EventList>
     </Article>

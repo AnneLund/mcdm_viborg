@@ -3,6 +3,8 @@ import useFetchExercises from "../../hooks/useFetchExercises";
 import ActionButton from "../button/ActionButton";
 import Exercise from "../Exercise";
 import styles from "./taskAssignment.module.css";
+import { List, ListItem } from "../../styles/listStyles";
+import { Section } from "../../styles/containerStyles";
 
 const TaskAssignment = ({ groups }) => {
   const { exercises } = useFetchExercises();
@@ -20,7 +22,7 @@ const TaskAssignment = ({ groups }) => {
 
   // Fordel opgaverne ligeligt mellem grupperne
   const shuffleArray = (array) => {
-    const shuffled = [...array]; // Kopi af array for at undgå mutation
+    const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -28,7 +30,6 @@ const TaskAssignment = ({ groups }) => {
     return shuffled;
   };
 
-  // Fordel opgaverne ligeligt mellem grupperne
   const assignTasksToGroups = () => {
     if (selectedExercises.length === 0) return;
 
@@ -48,11 +49,11 @@ const TaskAssignment = ({ groups }) => {
   };
 
   return (
-    <div>
+    <Section>
       <h3>Vælg opgaver</h3>
-      <ul>
+      <List>
         {exercises.map((exercise, index) => (
-          <li key={index}>
+          <ListItem key={index}>
             <label>
               <input
                 type='checkbox'
@@ -61,15 +62,15 @@ const TaskAssignment = ({ groups }) => {
               />
               {exercise.title}
             </label>
-          </li>
+          </ListItem>
         ))}
-      </ul>
 
-      <ActionButton
-        onClick={assignTasksToGroups}
-        background='green'
-        buttonText='Tildel opgaver'
-      />
+        <ActionButton
+          onClick={assignTasksToGroups}
+          background='green'
+          buttonText='Tildel opgaver'
+        />
+      </List>
 
       {Object.keys(assignedTasks).length > 0 && (
         <>
@@ -78,26 +79,26 @@ const TaskAssignment = ({ groups }) => {
             <div className={styles.groupBox} key={index}>
               <div className='group-info'>
                 <h4>Gruppe {index + 1}</h4>
-                <ul>
+                <List>
                   {group.map((student, i) => (
-                    <li key={i}>{student}</li>
+                    <ListItem key={i}>{student.name}</ListItem>
                   ))}
-                </ul>
+                </List>
               </div>
 
               <div className='task-info'>
                 <strong>Opgaver:</strong>
-                <ul>
+                <List>
                   {(assignedTasks[index] || []).map((task, i) => (
                     <Exercise key={task._id} exercise={task} />
                   ))}
-                </ul>
+                </List>
               </div>
             </div>
           ))}
         </>
       )}
-    </div>
+    </Section>
   );
 };
 

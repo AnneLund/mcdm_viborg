@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 export const List = styled.ul`
   list-style: none;
-  padding: 10px;
-  margin-top: 5px;
+  padding: 10px 0;
+  margin: 5px auto;
+  text-align: center;
+  max-width: fit-content;
 
   h4 {
     padding-left: 0;
@@ -14,6 +16,7 @@ export const List = styled.ul`
 export const ListItem = styled.li`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 5px 0;
   margin: 5px 0;
   border-bottom: 1px solid #eee;
@@ -43,6 +46,14 @@ export const ListItem = styled.li`
 
   .remove {
     background-color: #ff000061;
+  }
+
+  input {
+    margin: 0 5px;
+  }
+
+  label {
+    font-size: 20px;
   }
 `;
 

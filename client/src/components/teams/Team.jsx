@@ -1,7 +1,7 @@
 import { useAlert } from "../../context/Alert";
 import { useNavigate } from "react-router-dom";
-import { MdDelete, MdOutlineEditNote } from "react-icons/md";
 import useFetchTeams from "../../hooks/useFetchTeams";
+import { Edit, Remove } from "../icons/Icons";
 
 const Team = ({ team }) => {
   const { showConfirmation } = useAlert();
@@ -25,14 +25,15 @@ const Team = ({ team }) => {
   return (
     <tr
       key={team._id}
-      onClick={() => navigate(`/backoffice/teams/team/${team._id}`)}
-      style={{ cursor: "pointer" }}>
-      <td data-label='Hold'>{team.team}</td>
-      <td data-label='Beskrivelse'>{team.description}</td>
+      onClick={() => navigate(`/backoffice/teams/team/${team._id}`)}>
+      <td data-label='Hold' className='link'>
+        {team.team}
+      </td>
+      {team.description && <td data-label='Beskrivelse'>{team.description}</td>}
       <td data-label='Handlinger' className='teamActions'>
-        <div>
-          <MdDelete size={30} onClick={handleDelete} />
-          <MdOutlineEditNote size={30} onClick={() => handleEdit(team._id)} />
+        <div className='buttons'>
+          <Remove onClick={() => handleDelete(team.id)} />
+          <Edit onClick={() => handleEdit(team._id)} />
         </div>
       </td>
     </tr>

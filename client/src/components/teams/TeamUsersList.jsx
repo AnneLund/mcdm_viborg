@@ -1,21 +1,13 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetchTeamUsers from "../../hooks/useFetchTeamUsers";
-import styled from "styled-components";
 import { Section } from "../../styles/containerStyles";
 import { List, ListItem } from "../../styles/listStyles";
 import FocusPointComponent from "../GeneralFocusPoints";
-import ActionButton from "../button/ActionButton";
 import { StyledNavLink } from "../../styles/navigationStyles";
-
-const ToggleButton = styled.h4`
-  cursor: pointer;
-  background: #f4f4f4;
-  padding: 10px;
-  border: 1px solid #ddd;
-  margin: 5px 0;
-  user-select: none;
-`;
+import { IoIosArrowDown } from "react-icons/io";
+import { ArrowIcon, StudentList, ToggleButton } from "./Teams.styled";
+import TeamUser from "./TeamUser";
 
 const TeamUsersList = () => {
   const { id } = useParams();
@@ -39,41 +31,46 @@ const TeamUsersList = () => {
       {students.length > 0 && (
         <>
           <ToggleButton onClick={() => setShowStudents(!showStudents)}>
-            Studerende {showStudents ? "▲" : "▼"}
+            Studerende
+            <ArrowIcon $isOpen={showStudents}>
+              <IoIosArrowDown size={30} />
+            </ArrowIcon>
           </ToggleButton>
-          {showStudents && (
-            <List>
-              {students.map((user) => (
-                <ListItem
+
+          <StudentList className={showStudents ? "show" : ""}>
+            <ListItem>
+              <div id='buttons'>
+                <p
                   onClick={() =>
-                    navigate(`/backoffice/team/${id}/user/${user._id}`)
-                  }
-                  key={user._id}>
-                  <div className='teams-list'>
-                    <strong>{user.name}</strong>
-                    <p>
-                      {user.email} ({user.role})
-                    </p>
-                  </div>
-                </ListItem>
-              ))}
-            </List>
-          )}
+                    navigate(`/backoffice/teams/team/${id}/groups`)
+                  }>
+                  <StyledNavLink>Gruppegenerator</StyledNavLink>
+                </p>
+                <p onClick={() => navigate("/backoffice/examSchedule")}>
+                  <StyledNavLink>EksamensplansGenerator</StyledNavLink>
+                </p>
+              </div>
+            </ListItem>
+            {students.map((user) => (
+              <TeamUser
+                user={user}
+                onClick={() =>
+                  navigate(`/backoffice/team/${id}/user/${user._id}`)
+                }
+                key={user._id}
+              />
+            ))}
+          </StudentList>
         </>
       )}
-      <div id='buttons'>
-        <ListItem onClick={() => navigate("/backoffice/groups")}>
-          <StyledNavLink>Gruppegenerator</StyledNavLink>
-        </ListItem>
-        <ListItem onClick={() => navigate("/backoffice/examSchedule")}>
-          <StyledNavLink>EksamensplansGenerator</StyledNavLink>
-        </ListItem>
-      </div>
 
       {teachers.length > 0 && (
         <>
           <ToggleButton onClick={() => setShowTeachers(!showTeachers)}>
-            Undervisere {showTeachers ? "▲" : "▼"}
+            Undervisere{" "}
+            <ArrowIcon $isOpen={showTeachers}>
+              <IoIosArrowDown size={30} />
+            </ArrowIcon>
           </ToggleButton>
           {showTeachers && (
             <List>
@@ -99,7 +96,10 @@ const TeamUsersList = () => {
       {guests.length > 0 && (
         <>
           <ToggleButton onClick={() => setShowGuests(!showGuests)}>
-            Gæster {showGuests ? "▲" : "▼"}
+            Gæster
+            <ArrowIcon $isOpen={showGuests}>
+              <IoIosArrowDown size={30} />
+            </ArrowIcon>
           </ToggleButton>
           {showGuests && (
             <List>
@@ -124,7 +124,10 @@ const TeamUsersList = () => {
 
       <>
         <ToggleButton onClick={() => setShowProjects(!showProjects)}>
-          Projekter {showProjects ? "▲" : "▼"}
+          Projekter
+          <ArrowIcon $isOpen={showProjects}>
+            <IoIosArrowDown size={30} />
+          </ArrowIcon>
         </ToggleButton>
         {showProjects && (
           <>

@@ -18,8 +18,7 @@ const ListItem = styled.li`
 `;
 
 const DownloadLink = styled.a`
-  display: inline-flex;
-  align-items: center;
+  display: flex;
   gap: 8px;
   padding: 10px 15px;
   font-size: 16px;

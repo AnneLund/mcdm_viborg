@@ -11,6 +11,7 @@ import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
 import { useAlert } from "../../context/Alert";
 import useFetchTeams from "../../hooks/useFetchTeams";
+import { Section } from "../../styles/containerStyles";
 
 const TeamForm = ({ isEditMode }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +22,6 @@ const TeamForm = ({ isEditMode }) => {
   const team = teams?.find((e) => e._id === id);
   const navigate = useNavigate();
   const formRef = useRef();
-  const location = useLocation();
-
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({ top: formRef.current?.offsetTop, behavior: "smooth" });
@@ -83,7 +82,7 @@ const TeamForm = ({ isEditMode }) => {
   }
 
   return (
-    <div ref={formRef}>
+    <Section ref={formRef}>
       <h2>{isEditMode ? "Rediger team" : "Opret nyt team"}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <label>
@@ -119,7 +118,7 @@ const TeamForm = ({ isEditMode }) => {
           />
         </div>
       </form>
-    </div>
+    </Section>
   );
 };
 

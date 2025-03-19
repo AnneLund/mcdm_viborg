@@ -175,12 +175,13 @@ function App() {
             { path: "add", element: <TeamForm /> },
             { path: "edit/:id", element: <TeamForm isEditMode={true} /> },
             { path: "team/:id", element: <TeamUsersList /> },
+            {
+              path: "team/:id/groups",
+              element: <GroupGenerator />,
+            },
           ],
         },
-        {
-          path: "groups",
-          element: <GroupGenerator />,
-        },
+
         {
           path: "examSchedule",
           element: <ExamSchedule />,

@@ -65,28 +65,20 @@ const useFetchEvents = () => {
       const response = await fetch(`${apiUrl}/event/${eventId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
+        body: data,
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("🚨 Fejl fra server:", errorText);
+        showError("Fejl fra server:", errorText);
         throw new Error("Fejl ved opdatering af event");
       }
 
       const result = await response.json();
-
-      if (result.status === "ok") {
-        await refetch();
-        console.log("henter nye data..");
-      }
-
-      return result.data;
+      return result;
     } catch (error) {
-      console.error("Fejl i updateEvent:", error.message);
       showError("Der skete en fejl:", error.message);
       throw error;
     } finally {
@@ -97,22 +89,26 @@ const useFetchEvents = () => {
   /* Delete Event */
   const deleteEvent = async (eventId) => {
     setIsLoading(true);
-    const response = await fetch(`${apiUrl}/event/${eventId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`${apiUrl}/event/${eventId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    const result = await response.json();
-    if (response.ok) {
-      refetch();
+      const result = await response.json();
+
+      if (response.ok) {
+        showSuccess("Event slettet!");
+        return result;
+      } else {
+        throw new Error(result.message || "Fejl ved sletning af event");
+      }
+    } catch (error) {
+      showError("Fejl:", error.message);
+    } finally {
       setIsLoading(false);
-      showSuccess("Projektet slettet!");
-      navigate("/events");
-      return result;
-    } else {
-      throw new Error(result.message || "Fejl ved sletning af klub");
     }
   };
 
@@ -123,6 +119,7 @@ const useFetchEvents = () => {
     deleteEvent,
     isLoading,
     refetch,
+    fetchEvents,
   };
 };
 

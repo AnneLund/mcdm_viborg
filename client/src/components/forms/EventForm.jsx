@@ -3,19 +3,15 @@ import { useForm } from "react-hook-form";
 import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
 import styles from "./form.module.css";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useAlert } from "../../context/Alert";
 import useFetchEvents from "../../hooks/useFetchEvents";
 
-const EventForm = ({ isEditMode }) => {
+const EventForm = ({ isEditMode, event, setShowEventForm, refetch }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
-  const { createEvent, events, editEvent } = useFetchEvents();
+  const { createEvent, updateEvent } = useFetchEvents();
   const { showSuccess, showError } = useAlert();
-  const { refetch } = useOutletContext();
-  const { id } = useParams();
-  const event = events?.find((e) => e._id === id);
-  const navigate = useNavigate();
+  const eventId = event?._id;
 
   useEffect(() => {
     if (window.location.hash === "#form") {
@@ -68,8 +64,8 @@ const EventForm = ({ isEditMode }) => {
       data.append("presentation", formData.presentation ? "true" : "false");
       data.append("exam", formData.exam ? "true" : "false");
 
-      if (isEditMode && id) {
-        data.append("id", id);
+      if (isEditMode && eventId) {
+        data.append("id", eventId);
       }
 
       if (file) {
@@ -77,12 +73,12 @@ const EventForm = ({ isEditMode }) => {
       }
 
       const response = isEditMode
-        ? await editEvent(data)
+        ? await updateEvent(eventId, data)
         : await createEvent(data);
 
       if (response.status === "ok") {
-        showSuccess(isEditMode ? "Event opdateret!" : "Event oprettet!");
         await refetch();
+        showSuccess(isEditMode ? "Event opdateret!" : "Event oprettet!");
       } else {
         showError("Fejl ved oprettelse af event:");
         console.error("Error:", response.error);
@@ -90,8 +86,8 @@ const EventForm = ({ isEditMode }) => {
     } catch (error) {
       console.error("Fejl ved tilføjelse af event:", error);
     } finally {
+      setShowEventForm((prev) => !prev);
       setIsLoading(false);
-      navigate(-1);
     }
   };
 
@@ -104,11 +100,7 @@ const EventForm = ({ isEditMode }) => {
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form} id='form'>
         <h2>{isEditMode ? "Rediger Event" : "Opret nyt Event"}</h2>
         <label>
-          <input
-            type='text'
-            placeholder='Titel'
-            {...register("event", { required: "Eventet skal have en titel" })}
-          />
+          <input type='text' placeholder='Titel' {...register("event")} />
           {errors.event && <p>{errors.event.message}</p>}
         </label>
 
@@ -195,7 +187,7 @@ const EventForm = ({ isEditMode }) => {
         <div id='buttons'>
           <ActionButton
             onClick={() => {
-              navigate(-1);
+              setShowEventForm(false);
             }}
             buttonText='Annuller'
             cancel={true}

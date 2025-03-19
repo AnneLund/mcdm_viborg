@@ -43,7 +43,9 @@ const Navigation = () => {
             </DropdownToggle>
             {dropdownOpen === "resources" && (
               <DropdownContent onClick={() => toggleDropdown("")}>
-                <MainStyledNavLink to='/exercises'>Opgaver</MainStyledNavLink>
+                <MainStyledNavLink to='/exercises' onClick={closeMenu}>
+                  Opgaver
+                </MainStyledNavLink>
                 <MainStyledNavLink to='/materials' onClick={closeMenu}>
                   Materialer
                 </MainStyledNavLink>

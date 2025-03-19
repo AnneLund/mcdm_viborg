@@ -34,7 +34,7 @@ const Users = () => {
             <thead>
               <tr>
                 <th>Navn</th>
-                <th>Billede</th>
+                {/* <th>Billede</th> */}
                 <th>Email</th>
                 <th>Rolle</th>
                 <th>Handlinger</th>

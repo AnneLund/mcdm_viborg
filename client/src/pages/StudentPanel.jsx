@@ -6,7 +6,7 @@ import ActionButton from "../components/button/ActionButton";
 import FeedbackForm from "../components/forms/FeedbackForm";
 import { useAuthContext } from "../context/useAuthContext";
 import UserFeedBack from "../components/users/UserFeedback";
-import { List, ListItem } from "../styles/listStyles";
+import { ListItem } from "../styles/listStyles";
 import { ButtonContainer } from "../styles/buttonStyles";
 
 const StudentPanel = () => {
@@ -42,7 +42,7 @@ const StudentPanel = () => {
   if (isLoading) return <p>Indlæser bruger...</p>;
   if (error) return <p>Fejl: {error}</p>;
   if (!student) return <p>Ingen bruger fundet.</p>;
-  console.log(student);
+
   return (
     <Section>
       <header>
@@ -56,16 +56,21 @@ const StudentPanel = () => {
           </Link>
         )}
       </header>
+      {user._id === userId && (
+        <ButtonContainer>
+          <ActionButton
+            buttonText='Skift kode'
+            background='blue'
+            onClick={() => navigate("/change-password")}
+          />
 
-      <ButtonContainer>
-        <ActionButton
-          buttonText='Skift kode'
-          background='blue'
-          onClick={() => navigate("/change-password")}
-        />
-
-        <ActionButton buttonText='Log ud' background='red' onClick={signOut} />
-      </ButtonContainer>
+          <ActionButton
+            buttonText='Log ud'
+            background='red'
+            onClick={signOut}
+          />
+        </ButtonContainer>
+      )}
 
       {(user.role === "teacher" || user.role === "admin") && (
         <>
@@ -87,9 +92,9 @@ const StudentPanel = () => {
           <h3>Feedback på opgaver</h3>
           {student.feedback.map((feedback, index) => (
             <div key={index}>
-              <List>
+              <ul>
                 <ListItem>
-                  {feedback.project.title}
+                  <h3>{feedback.project.title}</h3>
                   <ActionButton
                     background='green'
                     onClick={() => handleToggleFeedback(index)}
@@ -98,7 +103,7 @@ const StudentPanel = () => {
                     }
                   />
                 </ListItem>
-              </List>
+              </ul>
               {openFeedbacks[index] && <UserFeedBack feedback={feedback} />}
             </div>
           ))}

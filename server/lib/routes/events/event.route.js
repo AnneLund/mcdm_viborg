@@ -8,6 +8,7 @@ import {
 import auth from "../../middleware/auth.middleware.js";
 import { isValidObjectId } from "../../helpers/isValidObjectId.js";
 import { upload } from "../../helpers/multerUpload.js";
+import mongoose from "mongoose";
 
 const eventRouter = express.Router();
 
@@ -54,18 +55,21 @@ eventRouter.post("/", upload.none(), async (req, res) => {
 });
 
 // UPDATE EVENT
-eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
+eventRouter.put("/:id", auth, upload.single("file"), async (req, res) => {
   try {
-    const { event, description, presentation, exam, date, time, file } =
-      req.body;
+    const { event, description, presentation, exam, date, time } = req.body;
     const { id } = req.params;
 
-    if (!id) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         status: "error",
-        message: "ID is missing",
+        message: "Invalid or missing ID",
       });
     }
+
+    const objectId = new mongoose.Types.ObjectId(id);
+
+    let file = req.file ? req.file.filename : null;
 
     const updateData = {
       event,
@@ -77,7 +81,7 @@ eventRouter.put("/:id", auth, upload.none(), async (req, res) => {
       file,
     };
 
-    const result = await updateEvent(id, updateData);
+    const result = await updateEvent(objectId, updateData);
 
     if (!result || result.status !== "ok") {
       return res.status(500).json({

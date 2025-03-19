@@ -163,6 +163,7 @@ const useFetchUsers = () => {
 
     try {
       const response = await fetch(`${apiUrl}/user/${id}`);
+      console.log(response);
 
       if (!response.ok) {
         const errorText = await response.text();

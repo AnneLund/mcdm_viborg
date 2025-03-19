@@ -1,10 +1,6 @@
 import { useAlert } from "../../context/Alert";
 import { useFetchUsers } from "../../hooks/useFetchUsers";
 import { MdDelete, MdOutlineEditNote } from "react-icons/md";
-import { GiTeacher } from "react-icons/gi";
-import { PiStudentFill } from "react-icons/pi";
-import { RiAdminFill } from "react-icons/ri";
-import { IoPersonOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
 import UserForm from "../forms/UserForm";
 
@@ -51,36 +47,12 @@ const User = ({ user }) => {
         </tr>
       ) : (
         <tr key={user._id}>
-          <td data-label='Navn'>
-            {user.role === "student" && (
-              <>
-                {user.name} <PiStudentFill />
-              </>
-            )}
-            {user.role === "admin" && (
-              <>
-                {user.name}
-                <RiAdminFill />
-              </>
-            )}
-            {user.role === "guest" && (
-              <>
-                {user.name}
-                <IoPersonOutline />
-              </>
-            )}
-            {user.role === "teacher" && (
-              <>
-                {user.name}
-                <GiTeacher />
-              </>
-            )}
-          </td>
-          <td data-label='Billede'>
+          <td data-label='Navn'>{user.name}</td>
+          {/* <td data-label='Billede'>
             {user.picture && (
               <img src={user.picture} alt={user.name} width='50' height='50' />
             )}
-          </td>
+          </td> */}
           <td data-label='Email'>{user.email}</td>
           <td data-label='Rolle'>{user.role}</td>
           <td data-label='Handlinger' className='actions'>

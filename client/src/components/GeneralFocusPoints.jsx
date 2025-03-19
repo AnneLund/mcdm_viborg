@@ -1,6 +1,5 @@
 import { useState } from "react";
 import useFetchProjects from "../hooks/useFetchProjects";
-import { ListItem } from "../styles/listStyles";
 import { Container } from "../styles/containerStyles";
 import stringSimilarity from "string-similarity";
 import { StyledNavLink } from "../styles/navigationStyles";
@@ -25,7 +24,7 @@ const FocusPointComponent = ({ users }) => {
 
   const getProjectName = (projectId) => {
     const project = projects.find((p) => p._id === projectId);
-    return project ? project.title : "Ukendt projekt";
+    return project ? project.title : "";
   };
 
   const normalizeText = (text) => {
@@ -68,13 +67,15 @@ const FocusPointComponent = ({ users }) => {
   return (
     <>
       <ButtonContainer>
-        {teamProjects.map((project) => (
-          <StyledNavLink
-            key={project}
-            onClick={() => handleProjectClick(project)}>
-            {getProjectName(project)}
-          </StyledNavLink>
-        ))}
+        {teamProjects
+          .filter((project) => getProjectName(project).trim() !== "") // Filtrerer tomme navne fra
+          .map((project) => (
+            <StyledNavLink
+              key={project}
+              onClick={() => handleProjectClick(project)}>
+              {getProjectName(project)}
+            </StyledNavLink>
+          ))}
       </ButtonContainer>
       {selectedProject && (
         <Container>

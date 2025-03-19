@@ -1,9 +1,9 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { MdAdd } from "react-icons/md";
 import Team from "./Team";
 import Loading from "../Loading/Loading";
 import { Table } from "../../styles/tableStyles";
 import useFetchTeams from "../../hooks/useFetchTeams";
+import { Add } from "../icons/Icons";
 
 const Teams = () => {
   const { teams, refetch, isLoading } = useFetchTeams();
@@ -24,7 +24,6 @@ const Teams = () => {
         <thead>
           <tr>
             <th>Hold</th>
-            <th>Beskrivelse</th>
             <td>Handlinger</td>
           </tr>
         </thead>
@@ -32,9 +31,14 @@ const Teams = () => {
           {teams?.map((team) => (
             <Team key={team._id} team={team} />
           ))}
+          <tr>
+            <td data-label='Hold'>
+              <Add onClick={handleAdd} />
+            </td>
+          </tr>
         </tbody>
       </Table>
-      <MdAdd size={40} onClick={handleAdd} />
+
       <Outlet context={{ refetch }} />
     </>
   );

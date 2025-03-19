@@ -350,20 +350,15 @@ userRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ message: "No ID provided" });
-    }
-
-    const userId = isValidObjectId(id);
-    if (!userId) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         status: "error",
-        message: "Invalid user ID",
+        message: "Invalid or missing user ID",
         data: [],
       });
     }
 
-    const result = await getUserById(userId);
+    const result = await getUserById(id);
 
     if (result.status === "ok") {
       return res
