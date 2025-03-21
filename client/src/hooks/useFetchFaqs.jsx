@@ -54,14 +54,16 @@ const useFetchFaqs = () => {
 
   // OPDATER FAQ
   const updateFaq = async (faqData) => {
+    const { faqId, ...rest } = faqData;
+
     try {
-      const response = await fetch(`${apiUrl}/faq`, {
+      const response = await fetch(`${apiUrl}/faq/${faqId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(faqData),
+        body: JSON.stringify(rest),
       });
 
       if (!response.ok) {
@@ -71,7 +73,7 @@ const useFetchFaqs = () => {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error("Fejl ved oprettelse:", error);
+      console.error("Fejl ved opdatering:", error);
       throw error;
     }
   };

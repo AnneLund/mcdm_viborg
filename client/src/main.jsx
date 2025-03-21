@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/authContext.jsx";
 import { AlertProvider } from "./context/Alert.jsx";
 
-if ("serviceWorker" in navigator) {
+if (import.meta.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
   navigator.serviceWorker
     .register("/service-worker.js")
     .then((registration) => {
@@ -19,6 +19,14 @@ if ("serviceWorker" in navigator) {
         }
       });
     });
+}
+
+if (import.meta.env.NODE_ENV !== "production" && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      registration.unregister();
+    }
+  });
 }
 
 createRoot(document.getElementById("root")).render(

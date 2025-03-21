@@ -55,9 +55,10 @@ faqRouter.post("/", auth, async (req, res) => {
 });
 
 // PUT TERM
-faqRouter.put("/", auth, async (req, res) => {
+faqRouter.put("/:id", auth, async (req, res) => {
   try {
-    const { id, question, answer, link } = req.body;
+    const { question, answer, link } = req.body;
+    const { id } = req.params;
 
     if (!id) {
       return res.status(400).send({
