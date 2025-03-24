@@ -7,6 +7,7 @@ import { Article } from "../styles/containerStyles";
 import { Title } from "../styles/textStyles";
 import { EventList, EventListItem } from "../styles/listStyles";
 import EventForm from "../components/forms/EventForm";
+import { Add } from "../components/icons/Icons";
 
 const Events = () => {
   const { user } = useAuthContext();
@@ -40,7 +41,7 @@ const Events = () => {
         {(user?.role === "admin" || user?.role === "teacher") && (
           <EventListItem>
             <div className='addnewEvent'>
-              <MdAdd size={50} onClick={handleAdd} />
+              <Add onClick={handleAdd} />
               {showEventForm && (
                 <EventForm
                   event={eventData}

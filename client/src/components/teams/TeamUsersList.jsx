@@ -10,9 +10,9 @@ import { ArrowIcon, StudentList, ToggleButton } from "./Teams.styled";
 import TeamUser from "./TeamUser";
 
 const TeamUsersList = () => {
-  const { id } = useParams();
+  const { teamId } = useParams();
   const { users, students, teachers, guests, team, isLoading, error } =
-    useFetchTeamUsers(id);
+    useFetchTeamUsers(teamId);
   const navigate = useNavigate();
 
   const [showStudents, setShowStudents] = useState(false);
@@ -42,7 +42,7 @@ const TeamUsersList = () => {
               <div id='buttons'>
                 <p
                   onClick={() =>
-                    navigate(`/backoffice/teams/team/${id}/groups`)
+                    navigate(`/backoffice/teams/team/${teamId}/groups`)
                   }>
                   <StyledNavLink>Gruppegenerator</StyledNavLink>
                 </p>
@@ -55,7 +55,7 @@ const TeamUsersList = () => {
               <TeamUser
                 user={user}
                 onClick={() =>
-                  navigate(`/backoffice/team/${id}/user/${user._id}`)
+                  navigate(`/backoffice/team/${teamId}/user/${user._id}`)
                 }
                 key={user._id}
               />
@@ -77,7 +77,9 @@ const TeamUsersList = () => {
               {teachers.map((user) => (
                 <ListItem
                   onClick={() =>
-                    navigate(`/backoffice/teams/team/${id}/user/${user._id}`)
+                    navigate(
+                      `/backoffice/teams/team/${teamId}/user/${user._id}`
+                    )
                   }
                   key={user._id}>
                   <div className='teams-list'>
@@ -106,7 +108,9 @@ const TeamUsersList = () => {
               {guests.map((user) => (
                 <ListItem
                   onClick={() =>
-                    navigate(`/backoffice/teams/team/${id}/user/${user._id}`)
+                    navigate(
+                      `/backoffice/teams/team/${teamId}/user/${user._id}`
+                    )
                   }
                   key={user._id}>
                   <div className='teams-list'>

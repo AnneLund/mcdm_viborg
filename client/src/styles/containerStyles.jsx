@@ -153,6 +153,7 @@ export const FeedbackContainer = styled.div`
   padding: 16px;
   margin: 16px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 
   .visibility {
     display: flex;
@@ -163,6 +164,12 @@ export const FeedbackContainer = styled.div`
     span {
       display: block;
     }
+  }
+
+  .editButton {
+    position: absolute;
+    top: 20px;
+    right: 30px;
   }
 `;
 

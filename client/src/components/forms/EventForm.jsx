@@ -195,7 +195,7 @@ const EventForm = ({ isEditMode, event, setShowEventForm, refetch }) => {
           <ActionButton
             buttonText={event ? "Opdater Event" : "Tilføj Event"}
             type='submit'
-            background={isEditMode ? "orange" : "green"}
+            background='green'
           />
         </div>
       </form>

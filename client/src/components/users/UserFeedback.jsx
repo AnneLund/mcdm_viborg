@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useAuthContext } from "../../context/useAuthContext";
 import { apiUrl } from "../../apiUrl";
 import { MdVisibilityOff, MdVisibility } from "react-icons/md";
+import { Edit } from "../icons/Icons";
 
 const UserFeedBack = ({ feedback }) => {
   const [showForm, setShowForm] = useState(false);
@@ -54,6 +55,10 @@ const UserFeedBack = ({ feedback }) => {
       {/* Kun lærere kan ændre synlighed */}
       {isTeacher && (
         <>
+          <div className='editButton'>
+            <Edit onClick={handleEditClick} />
+          </div>
+
           {isVisible ? (
             <div className='visibility'>
               <MdVisibility size={30} onClick={toggleVisibility} />
@@ -128,16 +133,6 @@ const UserFeedBack = ({ feedback }) => {
                 ))}
               </List>
             </>
-          )}
-
-          {user.role === "teacher" && (
-            <div className='buttons'>
-              <ActionButton
-                buttonText='Redigér feedback'
-                background='blue'
-                onClick={handleEditClick}
-              />
-            </div>
           )}
         </>
       )}

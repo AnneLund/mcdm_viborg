@@ -7,6 +7,7 @@ import ExamSchedule from "../pages/ExamSchedule";
 import useFetchEvents from "../hooks/useFetchEvents";
 import { useAlert } from "../context/Alert";
 import EventForm from "./forms/EventForm";
+import { Edit, Remove } from "./icons/Icons";
 
 const Event = ({ event, refetch }) => {
   const { user } = useAuthContext();
@@ -117,15 +118,8 @@ const Event = ({ event, refetch }) => {
 
           {(user.role === "admin" || user.role === "teacher") && (
             <div className='buttons'>
-              <ActionButton
-                onClick={handleDeleteClick}
-                buttonText='Slet'
-                background='red'
-              />
-              <ActionButton
-                onClick={() => handleEditClick(event)}
-                buttonText='Redigér'
-              />
+              <Remove onClick={handleDeleteClick} />
+              <Edit onClick={() => handleEditClick(event)} />
             </div>
           )}
 

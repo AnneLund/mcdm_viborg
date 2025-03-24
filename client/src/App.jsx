@@ -174,7 +174,7 @@ function App() {
           children: [
             { path: "add", element: <TeamForm /> },
             { path: "edit/:id", element: <TeamForm isEditMode={true} /> },
-            { path: "team/:id", element: <TeamUsersList /> },
+            { path: "team/:teamId", element: <TeamUsersList /> },
             {
               path: "team/:id/groups",
               element: <GroupGenerator />,

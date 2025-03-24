@@ -75,7 +75,7 @@ const StudentPanel = () => {
       {(user.role === "teacher" || user.role === "admin") && (
         <>
           {showForm ? (
-            <FeedbackForm isEditMode={true} setShowForm={setShowForm} />
+            <FeedbackForm setShowForm={setShowForm} />
           ) : (
             <div className='button'>
               <ActionButton

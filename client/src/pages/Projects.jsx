@@ -24,7 +24,6 @@ const Projects = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { projects, refetch } = useFetchProjects();
-
   const handleSelectChange = (event) => {
     const selectedValue = event.target.value;
     setSelectedProject(selectedValue);

@@ -10,9 +10,6 @@ const FaqForm = ({ faq, isEditMode }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [link, setLink] = useState("");
-  // const { refetch } = useOutletContext();
-  const navigate = useNavigate();
-  const { id } = useParams();
   const faqId = faq?._id;
   const formRef = useRef(null);
   const answerRef = useRef(null);
@@ -44,7 +41,6 @@ const FaqForm = ({ faq, isEditMode }) => {
             setLink(response.link);
             formRef.current?.scrollIntoView({ behavior: "smooth" });
 
-            // Autoresize efter data er loaded
             setTimeout(() => {
               if (answerRef.current) {
                 answerRef.current.style.height = "auto";
@@ -61,7 +57,6 @@ const FaqForm = ({ faq, isEditMode }) => {
     }
   }, [faqId, isEditMode]);
 
-  // Håndter indsendelse af formular
   const handleSubmitFaq = async (event) => {
     event.preventDefault();
 

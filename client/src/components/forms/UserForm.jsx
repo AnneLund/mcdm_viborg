@@ -10,6 +10,7 @@ import useFetchTeams from "../../hooks/useFetchTeams";
 
 const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   const [image, setImage] = useState(null);
+  const teamId = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("");
@@ -17,7 +18,9 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   const { createUser, users, updateUser } = useFetchUsers();
   const { teams } = useFetchTeams();
   const { showSuccess, showError } = useAlert();
+  const team = teams.find((team) => team._id === teamId);
 
+  console.log(team);
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
   };
@@ -117,69 +120,68 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   }
 
   return (
-    <div className='form'>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <h2>{isEditMode ? `Rediger ${user?.name}` : "Opret ny bruger"}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <label>
-          <h3>Billede</h3>
-          <img src={image} alt='' width='100' />
-          <input type='file' name='image' onChange={onImageChange} />
-        </label>
-        <label>
-          <input
-            type='text'
-            name='name'
-            placeholder='Navn'
-            {...register("name", { required: "Brugeren skal have et navn" })}
-          />
-          {errors.name && <p>{errors.name?.message}</p>}
-        </label>
-        <label>
-          <input
-            type='text'
-            name='email'
-            placeholder='Email'
-            {...register("email", {
-              required: "Brugeren skal have en email",
-            })}
-          />
-          {errors.email && <p>{errors.email?.message}</p>}
-        </label>
-        <label>
-          <input
-            type='password'
-            name='password'
-            placeholder='Password'
-            {...register("password", { required: "Password er påkrævet" })}
-          />
-          {errors.password && <p>{errors.password?.message}</p>}
-        </label>
-        <label>
-          <select name='team' {...register("team")} onChange={handleTeamChange}>
-            <option value=''>Vælg hold</option>
-            {teams.map((team) => (
-              <option value={team.team} key={team._id}>
-                {team.team}
-              </option>
-            ))}
-          </select>
-          {errors.role && <p>{errors.role?.message}</p>}
-        </label>
+      <label>
+        <h3>Billede</h3>
+        <img src={image} alt='' width='100' />
+        <input type='file' name='image' onChange={onImageChange} />
+      </label>
+      <label>
+        <input
+          type='text'
+          name='name'
+          placeholder='Navn'
+          {...register("name", { required: "Brugeren skal have et navn" })}
+        />
+        {errors.name && <p>{errors.name?.message}</p>}
+      </label>
+      <label>
+        <input
+          type='text'
+          name='email'
+          placeholder='Email'
+          {...register("email", {
+            required: "Brugeren skal have en email",
+          })}
+        />
+        {errors.email && <p>{errors.email?.message}</p>}
+      </label>
+      <label>
+        <input
+          type='password'
+          name='password'
+          placeholder='Password'
+          {...register("password", { required: "Password er påkrævet" })}
+        />
+        {errors.password && <p>{errors.password?.message}</p>}
+      </label>
+      <label>
+        <select name='team' {...register("team")} onChange={handleTeamChange}>
+          <option value=''>Vælg hold</option>
+          {teams.map((team) => (
+            <option value={team.team} key={team._id}>
+              {team.team}
+            </option>
+          ))}
+        </select>
+        {errors.role && <p>{errors.role?.message}</p>}
+      </label>
 
-        <label>
-          <select
-            name='role'
-            {...register("role", { required: "Brugeren skal have en rolle" })}
-            onChange={handleRoleChange}>
-            <option value=''>Vælg rolle</option>
-            <option value='student'>Studerende</option>
-            <option value='admin'>Admin</option>
-            <option value='teacher'>Underviser</option>
-            <option value='guest'>Gæst</option>
-          </select>
-          {errors.role && <p>{errors.role?.message}</p>}
-        </label>
-        {/* {isEditMode && (
+      <label>
+        <select
+          name='role'
+          {...register("role", { required: "Brugeren skal have en rolle" })}
+          onChange={handleRoleChange}>
+          <option value=''>Vælg rolle</option>
+          <option value='student'>Studerende</option>
+          <option value='admin'>Admin</option>
+          <option value='teacher'>Underviser</option>
+          <option value='guest'>Gæst</option>
+        </select>
+        {errors.role && <p>{errors.role?.message}</p>}
+      </label>
+      {/* {isEditMode && (
           <>
             <label>
               <h3>Feedback</h3>
@@ -202,22 +204,21 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
           </>
         )} */}
 
-        <div id='buttons'>
-          <ActionButton
-            onClick={() => {
-              setShowForm(false);
-            }}
-            buttonText='Annuller'
-            cancel={true}
-          />
-          <ActionButton
-            buttonText={isEditMode ? "Opdater bruger" : "Tilføj ny bruger"}
-            type='submit'
-            background={isEditMode ? "orange" : "green"}
-          />
-        </div>
-      </form>
-    </div>
+      <div id='buttons'>
+        <ActionButton
+          onClick={() => {
+            setShowForm(false);
+          }}
+          buttonText='Annuller'
+          cancel={true}
+        />
+        <ActionButton
+          buttonText={isEditMode ? "Opdater bruger" : "Tilføj ny bruger"}
+          type='submit'
+          background={isEditMode ? "orange" : "green"}
+        />
+      </div>
+    </form>
   );
 };
 

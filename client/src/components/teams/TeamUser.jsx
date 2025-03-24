@@ -50,13 +50,9 @@ const TeamUser = ({ user }) => {
         </div>
       ) : (
         <User key={user._id}>
-          <div>
-            <p
-              onClick={() =>
-                navigate(`/backoffice/team/${id}/user/${user._id}`)
-              }>
-              {user.name}
-            </p>
+          <div
+            onClick={() => navigate(`/backoffice/team/${id}/user/${user._id}`)}>
+            <p>{user.name}</p>
             {/* <td data-label='Billede'>
             {user.picture && (
               <img src={user.picture} alt={user.name} width='50' height='50' />

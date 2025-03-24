@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../Loading/Loading";
 import ActionButton from "../button/ActionButton";
@@ -12,12 +12,18 @@ import { useAuthContext } from "../../context/useAuthContext";
 
 const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { users, updateUserFeedback, refetch } = useFetchUsers();
+  const { updateUserFeedback, refetch } = useFetchUsers();
   const { projects } = useFetchProjects();
   const { exercises } = useFetchExercises();
   const { showSuccess, showError } = useAlert();
   const { userId } = useParams();
-  const user = users?.find((p) => p._id === userId);
+  const textareaRef = useRef();
+
+  const handleInput = () => {
+    const el = textareaRef.current;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  };
   const loggedInUser = useAuthContext();
   const {
     register,
@@ -42,25 +48,24 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
   });
 
   useEffect(() => {
-    if (user && user.feedback && user.feedback.length > 0) {
-      setValue("comments", user.feedback[0]?.comments || "");
+    if (isEditMode && existingFeedback) {
+      setValue("comments", existingFeedback.comments || "");
       setValue(
         "projectComments",
-        user.feedback[0]?.projectComments?.find((c) => c.type === "project")
+        existingFeedback.projectComments?.find((c) => c.type === "project")
           ?.content || ""
       );
       setValue(
         "presentationComments",
-        user.feedback[0]?.projectComments?.find(
-          (c) => c.type === "presentation"
-        )?.content || ""
+        existingFeedback.projectComments?.find((c) => c.type === "presentation")
+          ?.content || ""
       );
-      setValue("project", user.feedback[0]?.project || "");
-      setValue("createdBy", user.feedback[0]?.createdBy || "");
-      setValue("exercise", user.feedback[0]?.exercise || "");
-      setValue("focusPoints", user.feedback[0]?.focusPoints?.join(", ") || "");
+      setValue("project", existingFeedback.project || "");
+      setValue("createdBy", existingFeedback.createdBy || "");
+      setValue("exercise", existingFeedback.exercise || "");
+      setValue("focusPoints", existingFeedback.focusPoints?.join(", ") || "");
     }
-  }, [user, existingFeedback, setValue]);
+  }, [isEditMode, existingFeedback, setValue]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -142,6 +147,9 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
           name='projectComments'
           placeholder='Skriv skriftlig feedback her...'
           {...register("projectComments")}
+          ref={textareaRef}
+          onInput={handleInput}
+          style={{ overflow: "hidden", resize: "none" }}
         />
       </label>
 
@@ -151,6 +159,8 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
         <textarea
           name='presentationComments'
           placeholder='Skriv noter til projektet her...'
+          // ref={textareaRef}
+          // onInput={handleInput}
           {...register("presentationComments")}
         />
       </label>
