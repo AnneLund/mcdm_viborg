@@ -70,9 +70,13 @@ const Navigation = () => {
                 <MainStyledNavLink to='/examproject' onClick={closeMenu}>
                   Eksamensprojektet
                 </MainStyledNavLink>
-                <MainStyledNavLink to='/exam' onClick={closeMenu}>
+                <StyledExternalLink
+                  onClick={closeMenu}
+                  href='/assets/pdf/Eksamensinfo.pdf'
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   Eksamen
-                </MainStyledNavLink>
+                </StyledExternalLink>
 
                 <StyledExternalLink
                   onClick={closeMenu}
