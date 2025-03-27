@@ -81,6 +81,13 @@ const Navigation = () => {
                   rel='noopener noreferrer'>
                   Tjekliste
                 </StyledExternalLink>
+                <StyledExternalLink
+                  onClick={closeMenu}
+                  href='/assets/pdf/Vurderingsskemaer_Tabel_Webudvikler.pdf'
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  Karakterskala
+                </StyledExternalLink>
               </DropdownContent>
             )}
           </DropdownContainer>
