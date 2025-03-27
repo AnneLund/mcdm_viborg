@@ -30,39 +30,23 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm({
-    defaultValues:
-      isEditMode && existingFeedback
-        ? {
-            project: existingFeedback.project || "",
-            exercise: existingFeedback.exercise || "",
-            projectComments: existingFeedback.projectComments || "",
-            focusPoints: existingFeedback.focusPoints?.join(", ") || "",
-          }
-        : {
-            project: "",
-            exercise: "",
-            projectComments: "",
-            focusPoints: "",
-          },
-  });
+  } = useForm();
 
   useEffect(() => {
     if (isEditMode && existingFeedback) {
-      setValue("comments", existingFeedback.comments || "");
+      const projectComment = existingFeedback.projectComments[0].content;
+
+      const presentationComment = existingFeedback.projectComments?.find(
+        (c) => c.type === "presentation"
+      )?.content;
+
       setValue(
         "projectComments",
-        existingFeedback.projectComments?.find((c) => c.type === "project")
-          ?.content || ""
+        existingFeedback.projectComments?.[0]?.content || ""
       );
-      setValue(
-        "presentationComments",
-        existingFeedback.projectComments?.find((c) => c.type === "presentation")
-          ?.content || ""
-      );
-      setValue("project", existingFeedback.project || "");
-      setValue("createdBy", existingFeedback.createdBy || "");
-      setValue("exercise", existingFeedback.exercise || "");
+      setValue("presentationComments", presentationComment || "");
+      setValue("project", existingFeedback.project?._id || "");
+      setValue("exercise", existingFeedback.exercise?._id || "");
       setValue("focusPoints", existingFeedback.focusPoints?.join(", ") || "");
     }
   }, [isEditMode, existingFeedback, setValue]);
@@ -144,10 +128,11 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
       <label>
         <h5>Projekt</h5>
         <textarea
-          name='projectComments'
-          placeholder='Skriv skriftlig feedback her...'
           {...register("projectComments")}
-          ref={textareaRef}
+          placeholder='Skriv skriftlig feedback her...'
+          ref={(el) => {
+            textareaRef.current = el;
+          }}
           onInput={handleInput}
           style={{ overflow: "hidden", resize: "none" }}
         />

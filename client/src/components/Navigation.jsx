@@ -9,6 +9,7 @@ import {
   DropdownContainer,
   DropdownContent,
   DropdownToggle,
+  StyledExternalLink,
 } from "../styles/navigationStyles";
 
 const Navigation = () => {
@@ -72,6 +73,14 @@ const Navigation = () => {
                 <MainStyledNavLink to='/exam' onClick={closeMenu}>
                   Eksamen
                 </MainStyledNavLink>
+
+                <StyledExternalLink
+                  onClick={closeMenu}
+                  href='/assets/pdf/Tjekliste_eksamen_webudvikler.pdf'
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  Tjekliste
+                </StyledExternalLink>
               </DropdownContent>
             )}
           </DropdownContainer>

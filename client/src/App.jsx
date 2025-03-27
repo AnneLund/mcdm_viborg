@@ -33,6 +33,7 @@ import ExamSchedule from "./pages/ExamSchedule";
 import Team from "./pages/Team";
 import TeacherPanel from "./pages/TeacherPanel";
 import Materials from "./pages/Materials";
+import CheckList from "./pages/CheckList";
 function App() {
   const { signedIn, user, signOut } = useAuthContext();
   const showBackArrow = useMemo(

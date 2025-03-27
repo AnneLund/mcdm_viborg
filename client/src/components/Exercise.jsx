@@ -1,10 +1,17 @@
 import styled from "styled-components";
 
-const Exercise = ({ exercise }) => {
+const Exercise = ({ exercise, localExercise }) => {
+  const data = exercise || localExercise;
+
+  if (!data) return null;
+
   return (
     <ListItem>
-      <DownloadLink href={exercise.file} download>
-        📄 {exercise.title}
+      <DownloadLink
+        href={data.file || data.url}
+        target='_blank'
+        rel='noopener noreferrer'>
+        📄 {data.title || data.name}
       </DownloadLink>
     </ListItem>
   );

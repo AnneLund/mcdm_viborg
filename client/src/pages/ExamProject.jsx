@@ -72,6 +72,7 @@ const ExamProject = () => {
             Angivelse af URL-adresser, brugernavne og passwords, så lærer og
             censor kan se opgaven.
           </ListItem>
+          <ListItem>Dokumentation på daglig planlægning.</ListItem>
         </List>
 
         <h4>På forsiden af rapporten skal fremgå:</h4>

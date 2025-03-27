@@ -174,6 +174,32 @@ export const MainStyledNavLink = styled(NavLink)`
   }
 `;
 
+export const StyledExternalLink = styled.a`
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+`;
+
 // Dropdown container
 export const DropdownContainer = styled.div`
   position: relative;
