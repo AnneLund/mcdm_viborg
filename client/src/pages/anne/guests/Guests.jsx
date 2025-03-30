@@ -75,13 +75,10 @@ const Guests = ({ invitationId }) => {
               <GuestInfo>
                 <strong>{guest.name}</strong> –{" "}
                 {guest.isAttending === true
-                  ? "Deltager"
+                  ? `${guest.numberOfGuests} deltager`
                   : guest.isAttending === false
                   ? "Deltager ikke"
                   : "Har ikke svaret endnu"}
-                {guest.numberOfGuests > 1 && (
-                  <p>Antal: {guest.numberOfGuests}</p>
-                )}
               </GuestInfo>
 
               {guest.notes && (
