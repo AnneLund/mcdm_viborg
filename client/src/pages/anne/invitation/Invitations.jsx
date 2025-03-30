@@ -76,6 +76,7 @@ const Invitations = () => {
               deleteInvitation={handleDelete}
               setEditInvitation={setEditInvitation}
               editInvitation={editInvitation}
+              setIsFormOpen={setIsFormOpen}
             />
           ))}
         </InvitationGrid>

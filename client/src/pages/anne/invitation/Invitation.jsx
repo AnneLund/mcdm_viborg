@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiUrl } from "../../../apiUrl";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useFetchInvitations from "../hooks/useFetchInvitations";
 import { formatDateWithDay } from "../../../helpers/formatDate";
 
@@ -16,6 +16,19 @@ const Invitation = () => {
   const [error, setError] = useState("");
   const { fetchInvitationById } = useFetchInvitations();
   const [invitation, setInvitation] = useState(null);
+
+  const [currentImage, setCurrentImage] = useState(0);
+  const imageArray = invitation?.images || [];
+
+  useEffect(() => {
+    if (imageArray.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % imageArray.length);
+    }, 3000); // Skift hvert 3. sekund
+
+    return () => clearInterval(interval);
+  }, [imageArray]);
 
   const fetchGuest = async () => {
     try {
@@ -119,7 +132,7 @@ const Invitation = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}>
-      <Heading>Kære {guest.name} 👋</Heading>
+      <Heading>🎉 Kære {guest.name} 🎉</Heading>
       <Subheading>
         <p>
           {maxAllowedGuests > 1 ? <span>I </span> : <span>Du </span>}
@@ -132,11 +145,51 @@ const Invitation = () => {
         <img src={invitation?.image} alt={invitation.title} />
       )}
 
+      {imageArray.length > 0 && (
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            maxHeight: "400px",
+            overflow: "hidden",
+            borderRadius: "1rem",
+            marginBottom: "1.5rem",
+          }}>
+          <AnimatePresence mode='wait'>
+            <motion.img
+              key={imageArray[currentImage]}
+              src={imageArray[currentImage]}
+              alt={`Slide ${currentImage + 1}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              style={{
+                width: "100%",
+                height: "400px", // Fast højde på alle billeder
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+              }}
+            />
+          </AnimatePresence>
+        </div>
+      )}
+
       {invitation && (
         <InvitationCard>
           <div>
             <strong>Beskrivelse</strong>{" "}
-            <p> {invitation.description || "Ingen beskrivelse angivet."}</p>
+            <p>
+              {invitation.description
+                ? invitation.description.split("\n").map((line, idx) => (
+                    <span key={idx}>
+                      {line}
+                      <br />
+                    </span>
+                  ))
+                : "Ingen beskrivelse angivet."}
+            </p>
           </div>
           <div>
             <strong>Dato</strong>{" "}
@@ -235,7 +288,7 @@ const InvitationCard = styled.div`
 `;
 
 const Wrapper = styled.div`
-  max-width: 500px;
+  max-width: 600px;
   margin: 4rem auto;
   background: #fff;
   padding: 2rem 2.5rem;

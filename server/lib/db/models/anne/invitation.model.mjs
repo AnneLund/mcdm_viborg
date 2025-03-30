@@ -9,6 +9,7 @@ const invitationSchema = new Schema({
   location: { type: String },
   type: { type: String }, // fx: “Fødselsdag”, “Reception”, “Middag”
   image: { type: String }, // evt. URL eller path
+  images: [{ type: String }],
   created: { type: Date, default: Date.now },
 });
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ActionButton from "../../../components/button/ActionButton";
@@ -22,6 +22,7 @@ const InvitationForm = ({
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -32,8 +33,14 @@ const InvitationForm = ({
       location: invitation?.location || "",
       type: invitation?.type || "",
       image: invitation?.image || "",
+      images: [""],
       ...defaultValues,
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "images",
   });
 
   useEffect(() => {
@@ -44,6 +51,7 @@ const InvitationForm = ({
       setValue("time", invitation.time);
       setValue("location", invitation.location);
       setValue("type", invitation.type);
+      setValue("images", invitation.images?.length ? invitation.images : [""]);
       setValue("file", invitation.image);
     }
   }, [invitation, setValue]);
@@ -61,11 +69,18 @@ const InvitationForm = ({
       formData.append("time", data.time);
       formData.append("location", data.location);
       formData.append("type", data.type);
+      data.images.forEach((imageUrl) => {
+        formData.append("images", imageUrl);
+      });
 
       // Hvis der er en fil valgt
       const fileInput = data.image?.[0];
       if (fileInput) {
         formData.append("image", fileInput);
+      }
+
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
       }
 
       let response;
@@ -146,6 +161,26 @@ const InvitationForm = ({
         Billede (upload)
         <input type='file' accept='image/*' {...register("image")} />
       </Label>
+
+      <Label>Billede-URL&lsquo;er</Label>
+      {fields.map((field, index) => (
+        <div
+          key={field.id}
+          style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+          <input
+            {...register(`images.${index}`)}
+            placeholder='https://...'
+            style={{ flex: 1 }}
+          />
+          <button type='button' onClick={() => remove(index)}>
+            ❌
+          </button>
+        </div>
+      ))}
+
+      <button type='button' onClick={() => append("")}>
+        ➕ Tilføj billede
+      </button>
 
       <ButtonGroup>
         <ActionButton buttonText='Annuller' onClick={onClose} cancel={true} />

@@ -52,8 +52,22 @@ const uploadFileToS3 = async (file, folder) => {
 // POST INVITATION
 invitationRouter.post("/", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, location, type, date, time } = req.body;
+    const { title, description, location, type, date, time, images } = req.body;
     const file = req.file;
+
+    let parsedImages = [];
+
+    if (images) {
+      if (typeof images === "string") {
+        try {
+          parsedImages = JSON.parse(images);
+        } catch {
+          parsedImages = [images];
+        }
+      } else if (Array.isArray(images)) {
+        parsedImages = images;
+      }
+    }
 
     if (!title) {
       return res.status(400).json({
@@ -71,6 +85,7 @@ invitationRouter.post("/", upload.single("image"), async (req, res) => {
       title,
       description,
       image: fileUrl,
+      images: parsedImages,
       location,
       type,
       date,
@@ -100,8 +115,21 @@ invitationRouter.post("/", upload.single("image"), async (req, res) => {
 // Opdater eksisterende projekt
 invitationRouter.put("/:id", auth, upload.single("image"), async (req, res) => {
   try {
-    const { title, description, file, location, type, date, time } = req.body;
+    const { title, description, file, location, type, date, time, images } =
+      req.body;
     const { id } = req.params;
+
+    if (images) {
+      if (typeof images === "string") {
+        try {
+          parsedImages = JSON.parse(images);
+        } catch {
+          parsedImages = [images];
+        }
+      } else if (Array.isArray(images)) {
+        parsedImages = images;
+      }
+    }
 
     if (!title) {
       return res.status(400).json({
@@ -115,6 +143,7 @@ invitationRouter.put("/:id", auth, upload.single("image"), async (req, res) => {
       title,
       description,
       file,
+      images: parsedImages,
       location,
       type,
       date,

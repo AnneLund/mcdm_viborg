@@ -9,8 +9,7 @@ const useFetchInvitations = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
-  const navigate = useNavigate();
-  const { showSuccess, showError, showConfirmation } = useAlert();
+  const { showSuccess, showError } = useAlert();
 
   const fetchInvitations = useCallback(async () => {
     setError(null);
@@ -62,7 +61,7 @@ const useFetchInvitations = () => {
           method: "PUT",
           body: formData,
           headers: isMultipart
-            ? undefined // 👈 Lad browseren selv sætte boundary
+            ? undefined
             : { "Content-Type": "application/json" },
         }
       );
@@ -98,7 +97,6 @@ const useFetchInvitations = () => {
       );
 
       const result = await response.json();
-      console.log(result);
       if (result.status === "ok") {
         showSuccess("Invitation slettet!");
         return result;
