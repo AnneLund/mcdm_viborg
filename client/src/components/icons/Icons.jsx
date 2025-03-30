@@ -1,5 +1,6 @@
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { MdDelete, MdOutlineEditNote } from "react-icons/md";
+import { RiTeamLine } from "react-icons/ri";
 import styled from "styled-components";
 
 export const Close = ({ onClick }) => {
@@ -30,6 +31,14 @@ export const Add = ({ onClick }) => {
   return (
     <Icon>
       <IoMdAdd color='#004d00' size={40} onClick={onClick} />
+    </Icon>
+  );
+};
+
+export const Team = ({ onClick }) => {
+  return (
+    <Icon>
+      <RiTeamLine size={40} color='#2c3e50d6' onClick={onClick} />
     </Icon>
   );
 };

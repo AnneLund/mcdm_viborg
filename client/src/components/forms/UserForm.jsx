@@ -18,9 +18,7 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
   const { createUser, users, updateUser } = useFetchUsers();
   const { teams } = useFetchTeams();
   const { showSuccess, showError } = useAlert();
-  const team = teams.find((team) => team._id === teamId);
 
-  console.log(team);
   const handleRoleChange = (event) => {
     setSelectedRole(event.target.value);
   };
@@ -73,8 +71,6 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
     setIsLoading(true);
     const data = new FormData();
 
-    console.log("Form Data før tilføjelse:", formData);
-
     if (selectedFile) {
       data.append("picture", selectedFile);
     }
@@ -85,7 +81,7 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
       }
     });
 
-    console.log("FormData objekt:", Object.fromEntries(data.entries())); // Debugging af hvad der bliver sendt
+    // console.log("FormData objekt:", Object.fromEntries(data.entries())); // Debugging af hvad der bliver sendt
 
     if (formData.comments || formData.focusPoints) {
       data.append(
@@ -178,6 +174,7 @@ const UserForm = ({ isEditMode, refetch, user, setShowForm }) => {
           <option value='admin'>Admin</option>
           <option value='teacher'>Underviser</option>
           <option value='guest'>Gæst</option>
+          <option value='host'>Vært</option>
         </select>
         {errors.role && <p>{errors.role?.message}</p>}
       </label>

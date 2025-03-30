@@ -90,7 +90,12 @@ export const AuthContextProvider = ({ children }) => {
       const user = jwtDecode(result.data.token);
       saveAuth({ token: result.data.token });
       setUser(user);
-      navigate("/events");
+
+      if (user.role === "host") {
+        navigate("/admin/invitations");
+      } else {
+        navigate("/events");
+      }
 
       return { status: "ok", user };
     } catch (error) {
