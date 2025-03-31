@@ -7,7 +7,7 @@ const InviteLink = ({ guest }) => {
 
   if (!guest?.token) return null;
 
-  const inviteLink = `${baseUrl}/invitation/${guest.token}`;
+  const inviteLink = `${baseUrl}/invitation/${guest.token}?v=${Date.now()}`;
 
   const handleCopy = async () => {
     try {
