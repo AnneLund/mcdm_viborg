@@ -116,6 +116,7 @@ const Invitation = () => {
   if (hasSubmitted) {
     return (
       <Wrapper
+        key={invitation?._id || guest?.invitationId || token}
         as={motion.div}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}>
@@ -136,6 +137,7 @@ const Invitation = () => {
 
   return (
     <Wrapper
+      key={invitation?._id || guest?.invitationId || token}
       as={motion.div}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
