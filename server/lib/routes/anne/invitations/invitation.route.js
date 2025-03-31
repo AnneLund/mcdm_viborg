@@ -114,7 +114,7 @@ invitationRouter.post("/", upload.single("image"), async (req, res) => {
 });
 
 // Opdater eksisterende projekt
-invitationRouter.put("/:id", auth, upload.single("image"), async (req, res) => {
+invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { title, description, file, location, type, date, time, images } =
       req.body;
@@ -174,7 +174,7 @@ invitationRouter.put("/:id", auth, upload.single("image"), async (req, res) => {
 });
 
 // DELETE INVITATION
-invitationRouter.delete("/:id", auth, async (req, res) => {
+invitationRouter.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -210,7 +210,7 @@ invitationRouter.delete("/:id", auth, async (req, res) => {
 });
 
 // GET INVITATION BY ID
-invitationRouter.get("/:id", disableCache, async (req, res) => {
+invitationRouter.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -246,7 +246,7 @@ invitationRouter.get("/:id", disableCache, async (req, res) => {
 });
 
 // HENT EN GÆST VIA TOKEN (fx fra e-mail-link)
-invitationRouter.get("/guest/token/:token", disableCache, async (req, res) => {
+invitationRouter.get("/guest/token/:token", async (req, res) => {
   try {
     const { token } = req.params;
 
