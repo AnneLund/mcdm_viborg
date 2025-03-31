@@ -92,7 +92,7 @@ export const AuthContextProvider = ({ children }) => {
       setUser(user);
 
       if (user.role === "host") {
-        navigate("/admin/invitations");
+        navigate("/");
       } else {
         navigate("/events");
       }
