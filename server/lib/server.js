@@ -80,9 +80,29 @@ app.use("/public", (req, res, next) => {
   next();
 });
 
+app.disable("etag");
+
 // Statisk fil-servering
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "build")));
+
+app.use((req, res, next) => {
+  // Kun for HTML og JSON-svar (ikke billeder, fonts, etc.)
+  const acceptHeader = req.headers.accept || "";
+  if (
+    acceptHeader.includes("text/html") ||
+    acceptHeader.includes("application/json")
+  ) {
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+    res.setHeader("Surrogate-Control", "no-store");
+  }
+  next();
+});
 
 // Monter API-ruter
 app.use("/api", indexRouter);
