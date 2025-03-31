@@ -1,4 +1,4 @@
-const CACHE_NAME = "vite-react-cache-v6"; // Skift versionsnummer ved opdateringer
+const CACHE_NAME = "vite-react-cache-v7";
 const STATIC_ASSETS = ["/", "/index.html", "/manifest.json"];
 
 self.addEventListener("install", (event) => {
