@@ -6,6 +6,7 @@ import { useAlert } from "../../../context/Alert";
 import InvitationForm from "../forms/InvitationForm";
 import useFetchInvitations from "../hooks/useFetchInvitations";
 import InvitationCard from "./InvitationCard";
+import Loading from "../../../components/Loading/Loading";
 
 const Invitations = () => {
   const { showError, showSuccess, showConfirmation } = useAlert();
@@ -61,25 +62,29 @@ const Invitations = () => {
       )}
 
       {isLoading ? (
-        <p>Henter invitationer...</p>
-      ) : invitations.length === 0 ? (
-        <p>Ingen invitationer endnu.</p>
+        <Loading />
       ) : (
-        <InvitationGrid
-          as={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}>
-          {invitations.map((inv) => (
-            <InvitationCard
-              key={inv._id}
-              invitation={inv}
-              deleteInvitation={handleDelete}
-              setEditInvitation={setEditInvitation}
-              editInvitation={editInvitation}
-              setIsFormOpen={setIsFormOpen}
-            />
-          ))}
-        </InvitationGrid>
+        <>
+          {invitations.length === 0 ? (
+            <p>Ingen invitationer endnu..</p>
+          ) : (
+            <InvitationGrid
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}>
+              {invitations.map((inv) => (
+                <InvitationCard
+                  key={inv._id}
+                  invitation={inv}
+                  deleteInvitation={handleDelete}
+                  setEditInvitation={setEditInvitation}
+                  editInvitation={editInvitation}
+                  setIsFormOpen={setIsFormOpen}
+                />
+              ))}
+            </InvitationGrid>
+          )}
+        </>
       )}
     </Container>
   );
