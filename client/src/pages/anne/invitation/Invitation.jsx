@@ -54,12 +54,6 @@ const Invitation = () => {
       setIsAttending(guestData.isAttending);
       setNumberOfGuests(guestData.numberOfGuests || allowedGuests);
       setMaxAllowedGuests(allowedGuests);
-
-      if (guestData.invitationId) {
-        const invitation = await fetchInvitationById(guestData.invitationId);
-        console.log("Invitation data hentet fra server:", invitation); // 👈
-        setInvitation(invitation);
-      }
     } catch (err) {
       console.error("Fejl i fetchGuest:", err);
       setError(err.message);
@@ -71,15 +65,15 @@ const Invitation = () => {
   }, [token]);
 
   useEffect(() => {
-    const fetchInvitation = async () => {
+    const fetchLatestInvitation = async () => {
       if (guest?.invitationId) {
-        const data = await fetchInvitationById(guest.invitationId);
-        setInvitation(data);
-        console.log("🎯 Invitation hentet fra API:", data);
+        const updatedInvitation = await fetchInvitationById(guest.invitationId);
+        setInvitation(updatedInvitation);
+        console.log("🎯 Invitation hentet fra API:", updatedInvitation);
       }
     };
 
-    fetchInvitation();
+    fetchLatestInvitation();
   }, [guest?.invitationId]);
 
   const handleSubmit = async (e) => {
@@ -149,8 +143,8 @@ const Invitation = () => {
       <Heading>🎉 Kære {guest.name} 🎉</Heading>
       <Subheading>
         <p>
-          {maxAllowedGuests > 1 ? <span>I </span> : <span>Du </span>}
-          er inviteret til:
+          {maxAllowedGuests > 1 ? <span>I </span> : <span>Du </span>} er
+          inviteret til:
         </p>
         <h3>{invitation?.title || "Vores arrangement"}</h3>
       </Subheading>
@@ -207,17 +201,17 @@ const Invitation = () => {
           </div>
           <div>
             <strong>Dato</strong>{" "}
-            <p> {formatDateWithDay(invitation.date?.substring(0, 10))}</p>
+            <p>{formatDateWithDay(invitation.date?.substring(0, 10))}</p>
           </div>
           <div>
             <strong>Tidspunkt</strong>{" "}
-            <p> {invitation.time || "Intet tidspunkt angivet."}</p>
+            <p>{invitation.time || "Intet tidspunkt angivet."}</p>
           </div>
 
           {invitation.location && (
             <div>
               <strong>Sted</strong>
-              <p> {invitation.location}</p>
+              <p>{invitation.location}</p>
             </div>
           )}
           {invitation.created && (
