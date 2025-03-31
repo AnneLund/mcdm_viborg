@@ -58,13 +58,14 @@ const Invitation = () => {
       setMaxAllowedGuests(allowedGuests);
 
       if (guestData.invitationId) {
+        console.log("🔍 guestData:", guestData);
+        console.log("🔍 invitationId:", guestData.invitationId);
+
         const updatedInvitation = await fetchInvitationById(
           guestData.invitationId
         );
-        console.log(
-          "🎯 Invitation hentet direkte i fetchGuest:",
-          updatedInvitation
-        );
+        console.log("🎯 Invitation hentet:", updatedInvitation);
+
         setInvitation(updatedInvitation);
       }
       setIsLoading(false);
