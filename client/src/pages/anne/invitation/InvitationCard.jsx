@@ -11,7 +11,10 @@ const Card = ({
 }) => {
   return (
     <InvitationCard>
-      {invitation.img && <img src={invitation.image} alt={invitation.title} />}
+      {invitation.image && (
+        <img src={invitation.image} alt={invitation.title} />
+      )}
+      <pre>{JSON.stringify(invitation, null, 2)}</pre>
 
       <h3>{invitation.title}</h3>
       <p>

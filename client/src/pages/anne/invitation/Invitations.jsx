@@ -113,4 +113,7 @@ const InvitationGrid = styled.div`
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
