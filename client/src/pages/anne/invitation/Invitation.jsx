@@ -57,6 +57,7 @@ const Invitation = () => {
 
       if (guestData.invitationId) {
         const invitation = await fetchInvitationById(guestData.invitationId);
+        console.log("Invitation data hentet fra server:", invitation); // 👈
         setInvitation(invitation);
       }
     } catch (err) {
@@ -66,17 +67,20 @@ const Invitation = () => {
   };
 
   useEffect(() => {
-    const getInvitation = async () => {
-      if (!guest?.invitationId) return;
-      const data = await fetchInvitationById(guest.invitationId);
-      setInvitation(data);
-    };
-    getInvitation();
-  }, [guest]);
-
-  useEffect(() => {
     fetchGuest();
   }, [token]);
+
+  useEffect(() => {
+    const fetchInvitation = async () => {
+      if (guest?.invitationId) {
+        const data = await fetchInvitationById(guest.invitationId);
+        setInvitation(data);
+        console.log("🎯 Invitation hentet fra API:", data);
+      }
+    };
+
+    fetchInvitation();
+  }, [guest?.invitationId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -320,7 +324,7 @@ const Wrapper = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-size: 2rem;
+  font-size: 1.4rem;
   margin-bottom: 0.5rem;
 `;
 

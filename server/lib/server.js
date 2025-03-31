@@ -59,7 +59,7 @@ app.use(
       "https://mcd-viborg-om232.ondigitalocean.app/api",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cache-Control"],
     credentials: true,
   })
 );

@@ -123,6 +123,7 @@ const useFetchInvitations = () => {
       }
 
       const invitation = await response.json();
+      console.log("FETCHED INVITATION:", invitation);
       return invitation.data;
     } catch (error) {
       setError(error.message);
