@@ -4,6 +4,7 @@ import useFetchGuests from "../hooks/useFetchGuests";
 import GuestForm from "../forms/GuestForm";
 import InviteLink from "../invitation/InviteLink";
 import { Add, Edit, Remove } from "../../../components/icons/Icons";
+import { formatDateWithDay } from "../../../helpers/formatDate";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
@@ -26,7 +27,7 @@ const Guests = ({ invitationId }) => {
     guests
       ?.filter((g) => g.isAttending)
       .reduce((sum, g) => sum + (g.numberOfGuests || 1), 0) || 0;
-
+  console.log(guests);
   return (
     <Wrapper>
       <Header>
@@ -79,6 +80,7 @@ const Guests = ({ invitationId }) => {
                   : guest.isAttending === false
                   ? "Deltager ikke"
                   : "Har ikke svaret endnu"}
+                {/* <i>{formatDateWithDay(guest.dateResponded)}</i> */}
               </GuestInfo>
 
               {guest.notes && (

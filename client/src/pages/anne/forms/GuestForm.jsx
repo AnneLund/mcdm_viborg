@@ -47,6 +47,7 @@ const GuestForm = ({
 
     const payload = {
       ...formData,
+      dateResponded: new Date(formData.dateResponded),
       isAttending:
         formData.isAttending === "true"
           ? true

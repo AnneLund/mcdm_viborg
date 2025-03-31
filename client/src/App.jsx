@@ -57,7 +57,7 @@ function App() {
       element: withProtection(<Guests />, user?.role === "host"),
     },
     {
-      path: "/admin/invitations",
+      path: "/",
       element: withProtection(<Invitations />, user?.role === "host"),
     },
     {
