@@ -166,6 +166,10 @@ const Invitation = () => {
             overflow: "hidden",
             borderRadius: "1rem",
             marginBottom: "1.5rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#f0f0f0", // valgfrit, ser pænt ud omkring billedet
           }}>
           <AnimatePresence mode='wait'>
             <motion.img
@@ -177,9 +181,11 @@ const Invitation = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
               style={{
-                width: "100%",
-                height: "400px",
-                objectFit: "cover",
+                maxWidth: "100%",
+                maxHeight: "400px",
+                height: "auto",
+                width: "auto",
+                objectFit: "contain",
                 objectPosition: "center",
                 display: "block",
               }}
