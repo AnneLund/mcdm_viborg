@@ -58,14 +58,9 @@ const Invitation = () => {
       setMaxAllowedGuests(allowedGuests);
 
       if (guestData.invitationId) {
-        console.log("🔍 guestData:", guestData);
-        console.log("🔍 invitationId:", guestData.invitationId);
-
         const updatedInvitation = await fetchInvitationById(
           guestData.invitationId
         );
-        console.log("🎯 Invitation hentet:", updatedInvitation);
-
         setInvitation(updatedInvitation);
       }
       setIsLoading(false);
@@ -195,7 +190,18 @@ const Invitation = () => {
       {invitation && (
         <InvitationCard>
           <div>
-            <strong>Beskrivelse</strong>{" "}
+            <strong>Tid</strong>{" "}
+            <p>{formatDateWithDay(invitation.date?.substring(0, 10))}</p>
+            <p>Kl. {invitation.time || "Intet tidspunkt angivet."}</p>
+          </div>
+          {invitation.location && (
+            <div>
+              <strong>Sted</strong>
+              <p>{invitation.location}</p>
+            </div>
+          )}
+          <div>
+            <strong>Anledning</strong>{" "}
             <Description>
               {invitation.description
                 ? invitation.description.split("\n").map((line, idx) => (
@@ -207,27 +213,6 @@ const Invitation = () => {
                 : "Ingen beskrivelse angivet."}
             </Description>
           </div>
-          <div>
-            <strong>Dato</strong>{" "}
-            <p>{formatDateWithDay(invitation.date?.substring(0, 10))}</p>
-          </div>
-          <div>
-            <strong>Tidspunkt</strong>{" "}
-            <p>{invitation.time || "Intet tidspunkt angivet."}</p>
-          </div>
-
-          {invitation.location && (
-            <div>
-              <strong>Sted</strong>
-              <p>{invitation.location}</p>
-            </div>
-          )}
-          {invitation.created && (
-            <p style={{ fontSize: "0.9rem", color: "#999" }}>
-              Invitation oprettet:{" "}
-              {new Date(invitation.created).toLocaleDateString("da-DK")}
-            </p>
-          )}
         </InvitationCard>
       )}
 
@@ -308,6 +293,7 @@ const InvitationCard = styled.div`
   strong {
     display: block;
     border-bottom: 1px solid;
+    margin: 10px 0;
   }
 `;
 
@@ -315,7 +301,7 @@ const Wrapper = styled.div`
   max-width: 600px;
   margin: 4rem auto;
   background: #fff;
-  padding: 2rem 2.5rem;
+  padding: 40px 10px;
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
   font-family: "Segoe UI", sans-serif;
