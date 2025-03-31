@@ -45,15 +45,17 @@ const GuestForm = ({
   const onSubmit = async (formData) => {
     setIsLoading(true);
 
+    const isAttending =
+      formData.isAttending === "true"
+        ? true
+        : formData.isAttending === "false"
+        ? false
+        : undefined;
+
     const payload = {
       ...formData,
-      dateResponded: new Date(formData.dateResponded),
-      isAttending:
-        formData.isAttending === "true"
-          ? true
-          : formData.isAttending === "false"
-          ? false
-          : undefined,
+      isAttending,
+      dateResponded: isAttending !== undefined ? new Date() : undefined,
       invitationId: invitationId || guest?.invitationId,
       token: isEditMode ? guest?.token : generateToken(),
     };
