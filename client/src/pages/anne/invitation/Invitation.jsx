@@ -61,8 +61,13 @@ const Invitation = () => {
   };
 
   useEffect(() => {
-    fetchInvitationById(guest?.invitationId);
-  }, [token]);
+    const getInvitation = async () => {
+      if (!guest?.invitationId) return;
+      const data = await fetchInvitationById(guest.invitationId);
+      setInvitation(data);
+    };
+    getInvitation();
+  }, [guest]);
 
   useEffect(() => {
     fetchGuest();
@@ -166,7 +171,7 @@ const Invitation = () => {
               transition={{ duration: 0.8 }}
               style={{
                 width: "100%",
-                height: "400px", // Fast højde på alle billeder
+                height: "400px",
                 objectFit: "cover",
                 objectPosition: "center",
                 display: "block",
@@ -180,7 +185,7 @@ const Invitation = () => {
         <InvitationCard>
           <div>
             <strong>Beskrivelse</strong>{" "}
-            <p>
+            <Description>
               {invitation.description
                 ? invitation.description.split("\n").map((line, idx) => (
                     <span key={idx}>
@@ -189,7 +194,7 @@ const Invitation = () => {
                     </span>
                   ))
                 : "Ingen beskrivelse angivet."}
-            </p>
+            </Description>
           </div>
           <div>
             <strong>Dato</strong>{" "}
@@ -263,6 +268,14 @@ export default Invitation;
 //
 // --- STYLED COMPONENTS ---
 //
+
+const Description = styled.p`
+  white-space: pre-line;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color: #444;
+`;
 
 const InvitationCard = styled.div`
   background-color: #3d783916;
