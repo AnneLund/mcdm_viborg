@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import useFetchInvitations from "../hooks/useFetchInvitations";
 import { formatDateWithDay } from "../../../helpers/formatDate";
+import Loading from "../../../components/Loading/Loading";
 
 const Invitation = () => {
   const { token } = useParams();
@@ -15,6 +16,7 @@ const Invitation = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [error, setError] = useState("");
   const { fetchInvitationById } = useFetchInvitations();
+  const [isLoading, setIsLoading] = useState(true);
   const [invitation, setInvitation] = useState(null);
 
   const [currentImage, setCurrentImage] = useState(0);
@@ -65,9 +67,11 @@ const Invitation = () => {
         );
         setInvitation(updatedInvitation);
       }
+      setIsLoading(false);
     } catch (err) {
       console.error("Fejl i fetchGuest:", err);
       setError(err.message);
+      setIsLoading(false);
     }
   };
 
@@ -105,17 +109,11 @@ const Invitation = () => {
         <ErrorMessage>{error}</ErrorMessage>
       </Wrapper>
     );
-  if (!guest)
-    return (
-      <Wrapper>
-        <p>Henter invitation...</p>
-      </Wrapper>
-    );
 
-  if (!invitation) {
+  if (isLoading) {
     return (
       <Wrapper>
-        <p>Henter invitationens detaljer...</p>
+        <Loading />
       </Wrapper>
     );
   }
