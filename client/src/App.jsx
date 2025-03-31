@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useLocation, useRoutes } from "react-router-dom";
+import { Link, useLocation, useRoutes } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";

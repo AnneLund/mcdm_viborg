@@ -29,12 +29,24 @@ import { AlertProvider } from "./context/Alert.jsx";
 //   });
 // }
 
+// 🔥 Midlertidig fjernelse af alle aktive service workers (for at stoppe cache-problemer)
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (const reg of registrations) {
+    registrations.forEach((reg) => {
+      console.log("[SW Cleanup] Afregistrerer service worker:", reg.scope);
       reg.unregister();
-    }
+    });
   });
+
+  // Ryd også cachen (valgfrit – kun hvis du har statiske assets i cache)
+  if ("caches" in window) {
+    caches.keys().then((cacheNames) => {
+      cacheNames.forEach((cacheName) => {
+        console.log("[SW Cleanup] Sletter cache:", cacheName);
+        caches.delete(cacheName);
+      });
+    });
+  }
 }
 
 createRoot(document.getElementById("root")).render(
