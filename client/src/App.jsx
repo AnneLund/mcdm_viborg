@@ -177,10 +177,11 @@ function App() {
   ];
 
   const routes = useRoutes(user?.role === "host" ? hostRoutes : defaultRoutes);
+  const isInvitationRoute = location.pathname.startsWith("/invitation");
 
   return (
     <article className='app'>
-      {user?.role !== "host" && (
+      {!isInvitationRoute && user?.role !== "host" && (
         <>
           {signedIn && <UserProfile signOut={signOut} user={user} />}
           <Link to='/'>

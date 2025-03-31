@@ -11,6 +11,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import auth from "../../../middleware/auth.middleware.js";
 import { isValidObjectId } from "../../../helpers/isValidObjectId.js";
 import guestModel from "../../../db/models/anne/guest.model.mjs";
+import disableCache from "../../../helpers/disableCach.js";
 
 const invitationRouter = express.Router();
 
@@ -209,7 +210,7 @@ invitationRouter.delete("/:id", auth, async (req, res) => {
 });
 
 // GET INVITATION BY ID
-invitationRouter.get("/:id", async (req, res) => {
+invitationRouter.get("/:id", disableCache, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -245,7 +246,7 @@ invitationRouter.get("/:id", async (req, res) => {
 });
 
 // HENT EN GÆST VIA TOKEN (fx fra e-mail-link)
-invitationRouter.get("/guest/token/:token", async (req, res) => {
+invitationRouter.get("/guest/token/:token", disableCache, async (req, res) => {
   try {
     const { token } = req.params;
 

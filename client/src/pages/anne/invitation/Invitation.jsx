@@ -25,14 +25,19 @@ const Invitation = () => {
 
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % imageArray.length);
-    }, 3000); // Skift hvert 3. sekund
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [imageArray]);
 
   const fetchGuest = async () => {
     try {
-      const res = await fetch(`${apiUrl}/invitation/guest/token/${token}`);
+      const res = await fetch(`${apiUrl}/invitation/guest/token/${token}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message || "Ukendt fejl");
