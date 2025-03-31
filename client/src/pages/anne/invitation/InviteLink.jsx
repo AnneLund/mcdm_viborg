@@ -7,7 +7,8 @@ const InviteLink = ({ guest }) => {
 
   if (!guest?.token) return null;
 
-  const inviteLink = `${baseUrl}/invitation/${guest.token}?v=${Date.now()}`;
+  // Brug den nye route til Messenger-venligt link med preview
+  const inviteLink = `🎉 Invitation til Mikkels 40-års fødselsdag! 🎉 Klik her: ${baseUrl}/invitation/${guest.token}`;
 
   const handleCopy = async () => {
     try {
@@ -22,9 +23,11 @@ const InviteLink = ({ guest }) => {
   return (
     <LinkWrapper>
       <strong>Invitation:</strong>
-      <LinkBox>{inviteLink}</LinkBox>
-      <CopyButton onClick={handleCopy}>Kopiér link</CopyButton>
-      {copied && <CopiedText>Kopieret ✅</CopiedText>}
+      <LinkBox>
+        <p style={{ userSelect: "none" }}>40-års fødselsdag</p>
+        <CopyButton onClick={handleCopy}>Kopiér link</CopyButton>
+        {copied && <CopiedText>Kopieret ✅</CopiedText>}
+      </LinkBox>
     </LinkWrapper>
   );
 };
@@ -39,12 +42,16 @@ const LinkWrapper = styled.div`
   margin: 1rem 0;
 `;
 
-const LinkBox = styled.p`
+const LinkBox = styled.h3`
   font-family: monospace;
   font-size: 0.95rem;
   word-break: break-word;
-  margin-bottom: 0.5rem;
+  margin: 0.5rem;
   color: #333;
+
+  p {
+    margin: 10px 0;
+  }
 `;
 
 const CopyButton = styled.button`

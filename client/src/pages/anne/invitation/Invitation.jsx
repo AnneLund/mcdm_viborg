@@ -84,6 +84,7 @@ const Invitation = () => {
         body: JSON.stringify({
           token,
           isAttending,
+          dateResponded: Date.now(),
           numberOfGuests: isAttending ? numberOfGuests : 0,
         }),
       });

@@ -27,7 +27,7 @@ const Guests = ({ invitationId }) => {
     guests
       ?.filter((g) => g.isAttending)
       .reduce((sum, g) => sum + (g.numberOfGuests || 1), 0) || 0;
-  console.log(guests);
+
   return (
     <Wrapper>
       <Header>
@@ -80,7 +80,9 @@ const Guests = ({ invitationId }) => {
                   : guest.isAttending === false
                   ? "Deltager ikke"
                   : "Har ikke svaret endnu"}
-                {/* <i>{formatDateWithDay(guest.dateResponded)}</i> */}
+                {guest.dateResponded && (
+                  <i>{formatDateWithDay(guest.dateResponded)}</i>
+                )}
               </GuestInfo>
 
               {guest.notes && (
