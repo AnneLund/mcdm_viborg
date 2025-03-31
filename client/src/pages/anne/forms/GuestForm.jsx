@@ -18,7 +18,7 @@ const GuestForm = ({
   const { createGuest, updateGuest } = useFetchGuests();
   const { showSuccess, showError } = useAlert();
   const guestId = guest?._id;
-  console.log(invitationId);
+
   const {
     register,
     handleSubmit,
@@ -53,8 +53,8 @@ const GuestForm = ({
           : formData.isAttending === "false"
           ? false
           : undefined,
-      invitationId: invitationId || guest?.invitationId, // ✅ Brug den aktuelle invitation
-      token: isEditMode ? guest?.token : generateToken(), // ✅ Generer kun ved ny
+      invitationId: invitationId || guest?.invitationId,
+      token: isEditMode ? guest?.token : generateToken(),
     };
 
     try {

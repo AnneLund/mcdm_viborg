@@ -54,6 +54,17 @@ const Invitation = () => {
       setIsAttending(guestData.isAttending);
       setNumberOfGuests(guestData.numberOfGuests || allowedGuests);
       setMaxAllowedGuests(allowedGuests);
+
+      if (guestData.invitationId) {
+        const updatedInvitation = await fetchInvitationById(
+          guestData.invitationId
+        );
+        console.log(
+          "🎯 Invitation hentet direkte i fetchGuest:",
+          updatedInvitation
+        );
+        setInvitation(updatedInvitation);
+      }
     } catch (err) {
       console.error("Fejl i fetchGuest:", err);
       setError(err.message);
@@ -63,18 +74,6 @@ const Invitation = () => {
   useEffect(() => {
     fetchGuest();
   }, [token]);
-
-  useEffect(() => {
-    const fetchLatestInvitation = async () => {
-      if (guest?.invitationId) {
-        const updatedInvitation = await fetchInvitationById(guest.invitationId);
-        setInvitation(updatedInvitation);
-        console.log("🎯 Invitation hentet fra API:", updatedInvitation);
-      }
-    };
-
-    fetchLatestInvitation();
-  }, [guest?.invitationId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,6 +111,14 @@ const Invitation = () => {
         <p>Henter invitation...</p>
       </Wrapper>
     );
+
+  if (!invitation) {
+    return (
+      <Wrapper>
+        <p>Henter invitationens detaljer...</p>
+      </Wrapper>
+    );
+  }
 
   if (hasSubmitted) {
     return (
