@@ -162,14 +162,14 @@ const Invitation = () => {
           style={{
             position: "relative",
             width: "100%",
-            maxHeight: "400px",
+            height: "400px", // <- fast højde, ens for alle billeder
             overflow: "hidden",
             borderRadius: "1rem",
             marginBottom: "1.5rem",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#f0f0f0", // valgfrit, ser pænt ud omkring billedet
+            backgroundColor: "#f0f0f0",
           }}>
           <AnimatePresence mode='wait'>
             <motion.img
@@ -181,12 +181,10 @@ const Invitation = () => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8 }}
               style={{
-                maxWidth: "100%",
-                maxHeight: "400px",
-                height: "auto",
-                width: "auto",
+                width: "100%",
+                height: "100%",
                 objectFit: "contain",
-                objectPosition: "center",
+                objectPosition: "top",
                 display: "block",
               }}
             />
@@ -334,6 +332,10 @@ const Subheading = styled.header`
 
   h3 {
     font-size: 1.4rem;
+    margin: 20px auto;
+    border-bottom: #666 solid 1px;
+    width: fit-content;
+    text-align: center;
   }
 `;
 
