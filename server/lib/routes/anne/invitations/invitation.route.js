@@ -313,7 +313,8 @@ invitationRouter.get("/guest/:token", async (req, res) => {
 // GÆSTEN SVARER PÅ INVITATION
 invitationRouter.post("/response", async (req, res) => {
   try {
-    const { token, isAttending, numberOfGuests } = req.body;
+    const { token, isAttending, numberOfGuests, description, dateResponded } =
+      req.body;
 
     if (!token || typeof isAttending !== "boolean") {
       return res.status(400).json({ message: "Ugyldige data" });
@@ -328,6 +329,8 @@ invitationRouter.post("/response", async (req, res) => {
     guest.isAttending = isAttending;
     guest.numberOfGuests = isAttending ? numberOfGuests : 0;
     guest.hasResponded = true;
+    guest.description = description;
+    guest.dateResponded = dateResponded;
 
     await guest.save();
 

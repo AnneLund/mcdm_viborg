@@ -34,7 +34,6 @@ const Card = ({
           <strong>Sted:</strong> {invitation.location}
         </p>
       )}
-      {invitation.description && <p>{invitation.description}</p>}
 
       <ButtonRow>
         <Edit

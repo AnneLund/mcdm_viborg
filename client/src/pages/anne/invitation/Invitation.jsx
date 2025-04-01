@@ -12,13 +12,13 @@ const Invitation = () => {
   const [guest, setGuest] = useState(null);
   const [maxAllowedGuests, setMaxAllowedGuests] = useState(1);
   const [isAttending, setIsAttending] = useState(null);
+  const [description, setDescription] = useState(null);
   const [numberOfGuests, setNumberOfGuests] = useState(1);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [error, setError] = useState("");
   const { fetchInvitationById } = useFetchInvitations();
   const [isLoading, setIsLoading] = useState(true);
   const [invitation, setInvitation] = useState(null);
-
   const [currentImage, setCurrentImage] = useState(0);
   const imageArray = invitation?.images || [];
 
@@ -56,6 +56,7 @@ const Invitation = () => {
       setIsAttending(guestData.isAttending);
       setNumberOfGuests(guestData.numberOfGuests || allowedGuests);
       setMaxAllowedGuests(allowedGuests);
+      setDescription(guestData.description);
 
       if (guestData.invitationId) {
         const updatedInvitation = await fetchInvitationById(
@@ -85,6 +86,7 @@ const Invitation = () => {
           token,
           isAttending,
           dateResponded: Date.now(),
+          description: description,
           numberOfGuests: isAttending ? numberOfGuests : 0,
         }),
       });
@@ -162,7 +164,7 @@ const Invitation = () => {
           style={{
             position: "relative",
             width: "100%",
-            height: "400px", // <- fast højde, ens for alle billeder
+            height: "400px",
             overflow: "hidden",
             borderRadius: "1rem",
             marginBottom: "1.5rem",
@@ -244,14 +246,26 @@ const Invitation = () => {
         </Label>
 
         {isAttending && maxAllowedGuests > 1 && (
+          <>
+            <Label>
+              <strong>Antal personer inkl. dig:</strong>
+              <Input
+                type='number'
+                min={1}
+                max={maxAllowedGuests}
+                value={numberOfGuests}
+                onChange={(e) => setNumberOfGuests(Number(e.target.value))}
+              />
+            </Label>
+          </>
+        )}
+        {isAttending && (
           <Label>
-            <strong>Antal personer inkl. dig:</strong>
-            <Input
-              type='number'
-              min={1}
-              max={maxAllowedGuests}
-              value={numberOfGuests}
-              onChange={(e) => setNumberOfGuests(Number(e.target.value))}
+            <strong>Tilføj evt. en kommentar</strong>
+            <StyledTextarea
+              placeholder='Skriv din kommentar her'
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Label>
         )}
@@ -347,6 +361,31 @@ const StyledForm = styled.form`
 
 const Label = styled.label`
   text-align: left;
+`;
+
+const StyledTextarea = styled.textarea`
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 100px;
+  background-color: #fefefe;
+  margin-top: 10px;
+  display: block;
+  color: #333;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  }
+
+  &::placeholder {
+    color: #aaa;
+  }
 `;
 
 const Select = styled.select`

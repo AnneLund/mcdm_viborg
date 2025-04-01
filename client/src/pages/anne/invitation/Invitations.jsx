@@ -24,7 +24,7 @@ const Invitations = () => {
           const res = await deleteInvitation(invitationId);
 
           if (!res.status || res.status !== "ok") {
-            const errorText = await res.text?.(); // fallback hvis det er et response-objekt
+            const errorText = await res.text?.();
             throw new Error(errorText || "Ukendt fejl");
           }
 

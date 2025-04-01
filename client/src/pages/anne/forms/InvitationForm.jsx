@@ -73,14 +73,9 @@ const InvitationForm = ({
         formData.append("images", imageUrl);
       });
 
-      // Hvis der er en fil valgt
       const fileInput = data.image?.[0];
       if (fileInput) {
         formData.append("image", fileInput);
-      }
-
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
       }
 
       let response;

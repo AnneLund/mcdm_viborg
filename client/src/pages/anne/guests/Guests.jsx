@@ -4,7 +4,7 @@ import useFetchGuests from "../hooks/useFetchGuests";
 import GuestForm from "../forms/GuestForm";
 import InviteLink from "../invitation/InviteLink";
 import { Add, Edit, Remove } from "../../../components/icons/Icons";
-import { formatDateWithDay } from "../../../helpers/formatDate";
+import { formatDate, formatDateWithDay } from "../../../helpers/formatDate";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
@@ -23,10 +23,28 @@ const Guests = ({ invitationId }) => {
     }
   };
 
+  const estimateGuestCountFromName = (name) => {
+    if (!name) return 1;
+    const parts = name
+      .split(/,| og /i)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    return parts.length || 1;
+  };
+
+  // Beregn total antal inviterede
+  const totalInvited =
+    guests?.reduce((sum, guest) => {
+      if (guest.numberOfGuests) return sum + guest.numberOfGuests;
+      return sum + estimateGuestCountFromName(guest.name);
+    }, 0) || 0;
+
   const attendingTotal =
     guests
       ?.filter((g) => g.isAttending)
       .reduce((sum, g) => sum + (g.numberOfGuests || 1), 0) || 0;
+
+  const declines = guests?.filter((g) => g.isAttending === false).length;
 
   return (
     <Wrapper>
@@ -41,12 +59,22 @@ const Guests = ({ invitationId }) => {
       </Header>
 
       {guests?.length > 0 && (
-        <InfoBox>
-          <p>
-            <strong>{attendingTotal}</strong> personer har meldt deres ankomst
-            ✅
-          </p>
-        </InfoBox>
+        <>
+          <InfoBox $status={declines > 1 ? "not_attending" : "attending"}>
+            <p>
+              <strong>
+                {attendingTotal} ud af {totalInvited}
+              </strong>{" "}
+              personer har meldt deres ankomst ✅
+            </p>
+          </InfoBox>
+
+          <InfoBox $status={declines > 0 ? "not_attending" : "attending"}>
+            <p>
+              <strong>{declines} kommer ikke ❌</strong>
+            </p>
+          </InfoBox>
+        </>
       )}
 
       {showGuestForm && (
@@ -80,8 +108,17 @@ const Guests = ({ invitationId }) => {
                   : guest.isAttending === false
                   ? "Deltager ikke"
                   : "Har ikke svaret endnu"}
+                {guest.description && (
+                  <div className='comments'>
+                    <strong>Kommentarer fra gæst</strong>
+                    <p>{guest.description}</p>
+                  </div>
+                )}
                 {guest.dateResponded && (
-                  <i>{formatDateWithDay(guest.dateResponded)}</i>
+                  <i>
+                    {guest.name} har besvaret invitationen d.{" "}
+                    {formatDate(guest.dateResponded)}
+                  </i>
                 )}
               </GuestInfo>
 
@@ -119,7 +156,13 @@ const InfoBox = styled.div`
   margin: 1.5rem 0;
   padding: 0.8rem 1rem;
   background: #f9f9f9;
-  border-left: 4px solid #4caf50;
+  border-left: 6px solid
+    ${(props) =>
+      props.$status === "attending"
+        ? "#4caf50"
+        : props.$status === "not_attending"
+        ? "#f44336"
+        : "#ff9800"};
   border-radius: 4px;
   color: #333;
   font-size: 0.95rem;
@@ -173,6 +216,12 @@ const GuestInfo = styled.div`
 
   p {
     margin: 10px 0;
+  }
+
+  .comments {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #47a05922;
   }
 `;
 
