@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { baseUrl } from "../../../apiUrl";
+import { apiUrl, baseUrl } from "../../../apiUrl";
 
 const InviteLink = ({ guest }) => {
   const [copied, setCopied] = useState(false);

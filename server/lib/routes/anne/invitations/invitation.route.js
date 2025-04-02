@@ -283,21 +283,20 @@ invitationRouter.get("/guest/token/:token", async (req, res) => {
 invitationRouter.get("/guest/:token", async (req, res) => {
   try {
     const { token } = req.params;
-
     const guest = await guestModel.findOne({ token });
 
     if (!guest) {
       return res.status(404).send("Gæst ikke fundet");
     }
 
-    const inviteUrl = `${process.env.SERVER_HOST}/invitation/guest/${token}`;
+    const inviteUrl = `${process.env.SERVER_HOST}/invitation/${token}`;
     const imageUrl =
       "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
-
     const name = guest.name;
     const title = `Invitation til ${name}`;
     const description = `🎉 Du er inviteret til et særligt arrangement! Klik for at se din personlige invitation.`;
 
+    res.set("Content-Type", "text/html");
     res.send(`
       <!DOCTYPE html>
       <html lang="da">
