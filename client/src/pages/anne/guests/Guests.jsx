@@ -6,70 +6,31 @@ import InviteLink from "../invitation/InviteLink";
 import { Add, Edit, Remove } from "../../../components/icons/Icons";
 import { formatDate } from "../../../helpers/formatDate";
 import ModalDialog from "../components/ModalDialog";
+import useFetchOverview from "../hooks/useFetchOverview";
+import { useAlert } from "../../../context/Alert";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
+  const { overview } = useFetchOverview();
   const [showGuestForm, setShowGuestForm] = useState(false);
   const [editGuest, setEditGuest] = useState(null);
+  const { showConfirmation } = useAlert();
 
   const handleEdit = (guest) => {
     setEditGuest(guest);
     setShowGuestForm((prev) => !prev);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Er du sikker på, at du vil slette denne gæst?")) {
-      await deleteGuest(id);
-      await refetch();
-    }
-  };
-
-  const estimateGuestCountFromName = (name) => {
-    if (!name) return 1;
-    const parts = name
-      .split(/,| og /i)
-      .map((s) => s.trim())
-      .filter(Boolean);
-    return parts.length || 1;
-  };
-
-  // Beregn total antal inviterede
-  const totalInvited =
-    guests?.reduce((sum, guest) => {
-      if (guest.numberOfGuests) return sum + guest.numberOfGuests;
-      return sum + estimateGuestCountFromName(guest.name);
-    }, 0) || 0;
-
-  const attendingTotal =
-    guests
-      ?.filter((g) => g.isAttending)
-      .reduce((sum, g) => sum + (g.numberOfGuests || 1), 0) || 0;
-
-  const declines = guests?.reduce((acc, guest) => {
-    // Spring over hvis gæsten ikke har svaret
-    if (guest.isAttending === null || guest.isAttending === undefined)
-      return acc;
-
-    const invitedCount = guest.name
-      .split(/,| og /i)
-      .map((n) => n.trim())
-      .filter(Boolean).length;
-
-    const attendingCount = guest.isAttending ? guest.numberOfGuests || 0 : 0;
-
-    const notComing = Math.max(invitedCount - attendingCount, 0);
-
-    return acc + notComing;
-  }, 0);
-
-  const pending =
-    guests?.reduce((sum, guest) => {
-      if (guest.isAttending === null || guest.isAttending === undefined) {
-        const estimatedCount = estimateGuestCountFromName(guest.name);
-        return sum + estimatedCount;
+  const handleDeleteClick = async (id) => {
+    showConfirmation(
+      "Slet gæst",
+      `Er du sikker på, at du vil slette denne gæst?`,
+      async () => {
+        await deleteGuest(id);
+        await refetch();
       }
-      return sum;
-    }, 0) || 0;
+    );
+  };
 
   return (
     <Wrapper>
@@ -88,7 +49,7 @@ const Guests = ({ invitationId }) => {
           <InfoBox $status='attending'>
             <p>
               <strong>
-                {attendingTotal} ud af {totalInvited}
+                {overview?.totalComing} ud af {overview?.totalInvited}
               </strong>{" "}
               personer har meldt deres ankomst ✅
             </p>
@@ -96,13 +57,15 @@ const Guests = ({ invitationId }) => {
 
           <InfoBox $status='not_attending'>
             <p>
-              <strong>{declines} kommer ikke ❌</strong>
+              <strong>{overview?.totalDeclined} kommer ikke ❌</strong>
             </p>
           </InfoBox>
 
           <InfoBox>
             <p>
-              <strong>{pending} har endnu ikke svaret ⏳ </strong>
+              <strong>
+                {overview?.totalPending} har endnu ikke svaret ⏳{" "}
+              </strong>
             </p>
           </InfoBox>
         </>
@@ -123,12 +86,20 @@ const Guests = ({ invitationId }) => {
                   : "unknown"
               }>
               <GuestInfo>
-                <strong>{guest.name}</strong> –{" "}
-                {guest.isAttending === true
-                  ? `${guest.numberOfGuests} deltager`
-                  : guest.isAttending === false
-                  ? "Deltager ikke"
-                  : "Har ikke svaret endnu"}
+                <header>
+                  <div>
+                    {" "}
+                    <strong>{guest.name}</strong> –{" "}
+                    {guest.isAttending === true
+                      ? `${guest.numberOfGuests} deltager`
+                      : guest.isAttending === false
+                      ? "Deltager ikke"
+                      : "Har ikke svaret endnu"}
+                  </div>
+
+                  <InviteLink guest={guest} />
+                </header>
+
                 {guest.description && (
                   <div className='comments'>
                     <strong>Kommentarer fra gæst</strong>
@@ -146,17 +117,9 @@ const Guests = ({ invitationId }) => {
                 )}
               </GuestInfo>
 
-              {guest.notes && (
-                <Notes>
-                  <em>Noter:</em> {guest.notes}
-                </Notes>
-              )}
-
-              <InviteLink guest={guest} />
-
               <ButtonGroup>
                 <Edit onClick={() => handleEdit(guest)} />
-                <Remove onClick={() => handleDelete(guest._id)} />
+                <Remove onClick={() => handleDeleteClick(guest._id)} />
               </ButtonGroup>
             </GuestCard>
           ))
@@ -238,14 +201,23 @@ const GuestCard = styled.div`
         : props.$status === "not_attending"
         ? "#f44336"
         : "#ff9800"};
-  padding: 1rem 1.5rem;
+  padding: 10px 20px;
   border-radius: 8px;
   margin-bottom: 1.2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 `;
 
 const GuestInfo = styled.div`
-  margin: 0;
+  header {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+
+    @media (max-width: 400px) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
   font-size: 1rem;
   color: #333;
 
@@ -268,14 +240,7 @@ const GuestInfo = styled.div`
   }
 `;
 
-const Notes = styled.p`
-  font-size: 0.9rem;
-  color: #555;
-  margin-top: 0.4rem;
-`;
-
 const ButtonGroup = styled.div`
-  margin-top: 0.7rem;
   display: flex;
   gap: 0.5rem;
 `;

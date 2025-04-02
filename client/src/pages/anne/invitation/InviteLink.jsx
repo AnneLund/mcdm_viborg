@@ -21,37 +21,20 @@ const InviteLink = ({ guest }) => {
   };
 
   return (
-    <LinkWrapper>
-      <strong>Invitation:</strong>
-      <LinkBox>
-        <p style={{ userSelect: "none" }}>40-års fødselsdag</p>
-        <CopyButton onClick={handleCopy}>Kopiér link</CopyButton>
-        {copied && <CopiedText>Kopieret ✅</CopiedText>}
-      </LinkBox>
-    </LinkWrapper>
+    <LinkBox>
+      <CopyButton onClick={handleCopy}>Kopiér invitations-link</CopyButton>
+      {copied && <CopiedText>Kopieret ✅</CopiedText>}
+    </LinkBox>
   );
 };
 
 export default InviteLink;
 
-const LinkWrapper = styled.div`
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-`;
-
 const LinkBox = styled.h3`
   font-family: monospace;
   font-size: 0.95rem;
   word-break: break-word;
-  margin: 0.5rem;
   color: #333;
-
-  p {
-    margin: 10px 0;
-  }
 `;
 
 const CopyButton = styled.button`
@@ -62,6 +45,7 @@ const CopyButton = styled.button`
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  margin: 10px 0;
 
   &:hover {
     background-color: #45a047;

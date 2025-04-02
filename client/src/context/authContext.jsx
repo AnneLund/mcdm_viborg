@@ -13,58 +13,62 @@ export const AuthContextProvider = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const checkUser = async () => {
+    if (
+      location.pathname.includes("backoffice") &&
+      !location.pathname.includes("login")
+    ) {
+      try {
+        let response = await fetch(`${apiUrl}/auth/token`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: auth.token }),
+        });
+
+        let result = await response.json();
+
+        if (response.status === 401) {
+          saveAuth({});
+          setUser({});
+          navigate("/login");
+        } else if (response.ok) {
+          setUser(result.data);
+        }
+      } catch (error) {
+        console.error("Netværksfejl ved token-check:", error);
+        navigate("/login");
+      }
+    }
+  };
+
   useEffect(() => {
     if (!auth.token) return;
 
-    // Decode token to check expiration
     const decodedToken = jwtDecode(auth.token);
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp < currentTime) {
-      console.log("Token er udløbet. Logger brugeren ud...");
-      saveAuth({});
-      setUser({});
-      navigate("/login");
+      console.log("Token er udløbet");
+      signOut();
       return;
     }
+    if (user && user.email) return;
 
-    const checkUser = async () => {
-      if (
-        location.pathname.includes("backoffice") &&
-        !location.pathname.includes("login")
-      ) {
-        try {
-          let response = await fetch(`${apiUrl}/auth/token`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token: auth.token }),
-          });
-
-          let result = await response.json();
-
-          if (response.status === 401) {
-            saveAuth({});
-            setUser({});
-            navigate("/login");
-          } else if (response.ok) {
-            setUser(result.data);
-          }
-        } catch (error) {
-          console.error("Netværksfejl ved token-check:", error);
-          navigate("/login");
-        }
-      }
-    };
-
-    checkUser();
-  }, [auth.token, location.pathname, navigate]);
+    if (
+      location.pathname.includes("backoffice") &&
+      !location.pathname.includes("login")
+    ) {
+      checkUser();
+    }
+  }, [auth.token, location.pathname]);
 
   const token = auth.token ? auth.token : "";
 
   const signedIn = Boolean(auth.token);
+
   const loggedInUser = auth.user ? auth.user : "";
 
   const signIn = async (email, password) => {

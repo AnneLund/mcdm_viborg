@@ -125,7 +125,7 @@ const GuestForm = ({
 
   return (
     <FormWrapper onSubmit={handleSubmit(onSubmit)} id='form'>
-      <Title>{isEditMode ? "Rediger Gæst" : "Tilføj Gæst"}</Title>
+      <Title>{isEditMode ? "Rediger gæst" : "Tilføj gæst"}</Title>
 
       <Label>
         <input
@@ -145,19 +145,21 @@ const GuestForm = ({
         </select>
       </Label>
 
-      <Label>
-        <h3>Antal personer</h3>
-        <input
-          type='number'
-          min={1}
-          {...register("numberOfGuests", {
-            required: "Antal personer er påkrævet",
-            valueAsNumber: true,
-            min: { value: 1, message: "Mindst 1 person skal angives" },
-          })}
-        />
-        {errors.numberOfGuests && <p>{errors.numberOfGuests.message}</p>}
-      </Label>
+      {isEditMode && (
+        <Label>
+          <h3>Antal personer</h3>
+          <input
+            type='number'
+            min={1}
+            {...register("numberOfGuests", {
+              required: "Antal personer er påkrævet",
+              valueAsNumber: true,
+              min: { value: 1, message: "Mindst 1 person skal angives" },
+            })}
+          />
+          {errors.numberOfGuests && <p>{errors.numberOfGuests.message}</p>}
+        </Label>
+      )}
 
       <Label>
         <textarea

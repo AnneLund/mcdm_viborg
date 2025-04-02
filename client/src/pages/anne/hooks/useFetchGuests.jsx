@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { apiUrlInvites } from "../../../apiUrl";
 import { useAlert } from "../../../context/Alert";
 import { useAuthContext } from "../../../context/useAuthContext";
@@ -9,8 +8,7 @@ const useFetchGuests = (invitationId) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
-  const navigate = useNavigate();
-  const { showSuccess, showError, showConfirmation } = useAlert();
+  const { showSuccess, showError } = useAlert();
 
   const fetchGuests = useCallback(async () => {
     setError(null);
@@ -20,7 +18,13 @@ const useFetchGuests = (invitationId) => {
         `${apiUrlInvites}/guests/by-invitation/${invitationId}`
       );
       const data = await response.json();
-      setGuests(data.guests);
+
+      // Sorter gæster nyeste først (baseret på _id som ObjectId)
+      const sortedGuests = [...data.guests].sort(
+        (a, b) => new Date(b.created) - new Date(a.created)
+      );
+
+      setGuests(sortedGuests);
     } catch (error) {
       setError(error.message);
       console.error("Error fetching guests:", error);
