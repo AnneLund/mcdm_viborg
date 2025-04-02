@@ -283,41 +283,52 @@ invitationRouter.get("/guest/token/:token", async (req, res) => {
 invitationRouter.get("/guest/:token", async (req, res) => {
   try {
     const { token } = req.params;
+
     const guest = await guestModel.findOne({ token });
 
     if (!guest) {
       return res.status(404).send("Gæst ikke fundet");
     }
 
-    const inviteUrl = `${process.env.VITE_API_URL}/invitation/guest/${token}`;
+    const inviteUrl = `${process.env.SERVER_HOST}/invitation/${token}`;
     const imageUrl =
       "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
     const name = guest.name;
     const title = `Invitation til ${name}`;
     const description = `🎉 Du er inviteret til et særligt arrangement! Klik for at se din personlige invitation.`;
 
-    res.set("Content-Type", "text/html");
-    res.send(`
-      <!DOCTYPE html>
-      <html lang="da">
-        <head>
-          <meta charset="UTF-8" />
-          <title>${title}</title>
-          <meta property="og:title" content="${title}" />
-          <meta property="og:description" content="${description}" />
-          <meta property="og:image" content="${imageUrl}" />
-          <meta property="og:url" content="${inviteUrl}" />
-          <meta property="og:type" content="website" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        </head>
-        <body>
-          <script>
-            window.location.href = "${inviteUrl}";
-          </script>
-        </body>
-      </html>
-    `);
+    const userAgent = req.headers["user-agent"] || "";
+
+    const isBot =
+      /facebookexternalhit|twitterbot|linkedinbot|slackbot|discordbot|TelegramBot|WhatsApp/i.test(
+        userAgent
+      );
+
+    if (isBot) {
+      // Viser preview til bots (uden redirect)
+      return res.send(`
+        <!DOCTYPE html>
+        <html lang="da">
+          <head>
+            <meta charset="UTF-8" />
+            <title>${title}</title>
+            <meta property="og:title" content="${title}" />
+            <meta property="og:description" content="${description}" />
+            <meta property="og:image" content="${imageUrl}" />
+            <meta property="og:url" content="${inviteUrl}" />
+            <meta property="og:type" content="website" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          </head>
+          <body>
+            <p>Forhåndsvisning til sociale medier. Du bliver ikke redirected fordi du er en bot 🤖</p>
+          </body>
+        </html>
+      `);
+    }
+
+    // Redirect for almindelige brugere
+    return res.redirect(inviteUrl);
   } catch (err) {
     console.error("Fejl ved rendering af preview-side:", err);
     res.status(500).send("Noget gik galt.");

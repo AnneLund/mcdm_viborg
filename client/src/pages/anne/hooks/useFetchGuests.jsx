@@ -108,10 +108,10 @@ const useFetchGuests = (invitationId) => {
       const result = await response.json();
 
       if (response.ok) {
-        showSuccess("Guest slettet!");
+        showSuccess("Gæst slettet!");
         return result;
       } else {
-        throw new Error(result.message || "Fejl ved sletning af guest");
+        throw new Error(result.message || "Fejl ved sletning af gæst");
       }
     } catch (error) {
       showError("Fejl:", error.message);
