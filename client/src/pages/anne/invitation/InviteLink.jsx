@@ -8,7 +8,7 @@ const InviteLink = ({ guest }) => {
   if (!guest?.token) return null;
 
   // Brug den nye route til Messenger-venligt link med preview
-  const inviteLink = `🎉 Invitation til Mikkels 40-års fødselsdag! 🎉 Klik her: ${baseUrl}/guest/${guest.token}`;
+  const inviteLink = `${baseUrl}/invitation/guest/${guest.token}`;
 
   const handleCopy = async () => {
     try {

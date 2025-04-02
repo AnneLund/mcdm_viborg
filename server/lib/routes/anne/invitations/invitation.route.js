@@ -290,9 +290,9 @@ invitationRouter.get("/guest/:token", async (req, res) => {
       return res.status(404).send("Gæst ikke fundet");
     }
 
-    const inviteUrl = `${process.env.SERVER_HOST}/invitation/${token}`;
+    const inviteUrl = `${process.env.SERVER_HOST}/invitation/guest/${token}`;
     const imageUrl =
-      "  https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
+      "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
 
     const name = guest.name;
     const title = `Invitation til ${name}`;
