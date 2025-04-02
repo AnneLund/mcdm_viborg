@@ -280,33 +280,39 @@ invitationRouter.get("/guest/token/:token", async (req, res) => {
   }
 });
 
-invitationRouter.get("/guest/:token", async (req, res) => {
-  try {
-    const { token } = req.params;
+invitationRouter.get(
+  "/guest/:token",
+  (req, res, next) => {
+    res.set("x-no-compression", true);
+    next();
+  },
+  async (req, res) => {
+    try {
+      const { token } = req.params;
 
-    const guest = await guestModel.findOne({ token });
+      const guest = await guestModel.findOne({ token });
 
-    if (!guest) {
-      return res.status(404).send("Gæst ikke fundet");
-    }
+      if (!guest) {
+        return res.status(404).send("Gæst ikke fundet");
+      }
 
-    const inviteUrl = `${process.env.SERVER_HOST}/invitation/${token}`;
-    const imageUrl =
-      "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
-    const name = guest.name;
-    const title = `Invitation til ${name}`;
-    const description = `🎉 Du er inviteret til et særligt arrangement! Klik for at se din personlige invitation.`;
+      const inviteUrl = `${process.env.SERVER_HOST}/invitation/${token}`;
+      const imageUrl =
+        "https://keeperzone.nyc3.cdn.digitaloceanspaces.com/40th.jpg";
+      const name = guest.name;
+      const title = `Invitation til ${name}`;
+      const description = `🎉 Du er inviteret til et særligt arrangement! Klik for at se din personlige invitation.`;
 
-    const userAgent = req.headers["user-agent"] || "";
+      const userAgent = req.headers["user-agent"] || "";
 
-    const isBot =
-      /facebookexternalhit|twitterbot|linkedinbot|slackbot|discordbot|TelegramBot|WhatsApp/i.test(
-        userAgent
-      );
+      const isBot =
+        /facebookexternalhit|twitterbot|linkedinbot|slackbot|discordbot|TelegramBot|WhatsApp/i.test(
+          userAgent
+        );
 
-    if (isBot) {
-      // Viser preview til bots (uden redirect)
-      return res.send(`
+      if (isBot) {
+        // Viser preview til bots (uden redirect)
+        return res.send(`
         <!DOCTYPE html>
         <html lang="da">
           <head>
@@ -325,15 +331,16 @@ invitationRouter.get("/guest/:token", async (req, res) => {
           </body>
         </html>
       `);
-    }
+      }
 
-    // Redirect for almindelige brugere
-    return res.redirect(inviteUrl);
-  } catch (err) {
-    console.error("Fejl ved rendering af preview-side:", err);
-    res.status(500).send("Noget gik galt.");
+      // Redirect for almindelige brugere
+      return res.redirect(inviteUrl);
+    } catch (err) {
+      console.error("Fejl ved rendering af preview-side:", err);
+      res.status(500).send("Noget gik galt.");
+    }
   }
-});
+);
 
 // GÆSTEN SVARER PÅ INVITATION
 invitationRouter.post("/response", async (req, res) => {
