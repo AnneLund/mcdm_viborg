@@ -11,7 +11,7 @@ import { useAlert } from "../../../context/Alert";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
-  const { overview } = useFetchOverview();
+  const { overview } = useFetchOverview(invitationId);
   const [showGuestForm, setShowGuestForm] = useState(false);
   const [editGuest, setEditGuest] = useState(null);
   const { showConfirmation } = useAlert();

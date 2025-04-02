@@ -1,39 +1,46 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiUrlInvites } from "../../../apiUrl";
 
-const useFetchOverview = () => {
-  const [overview, setOverview] = useState([]);
+const useFetchOverview = (invitationId) => {
+  const [overview, setOverview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const fetchOverview = useCallback(async () => {
+    if (!invitationId) return;
+
     setError(null);
     setIsLoading(true);
     try {
-      const response = await fetch(`${apiUrlInvites}/overview`);
+      const response = await fetch(`${apiUrlInvites}/overview/${invitationId}`);
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Uventet fejl ved hentning af statistik"
+        );
+      }
+
       setOverview(data.data);
     } catch (error) {
       setError(error.message);
-      console.error("Error fetching overview:", error);
+      console.error("Fejl ved hentning af overview:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [setOverview]);
-
-  const refetch = useCallback(async () => {
-    await fetchOverview();
-  }, [fetchOverview]);
+  }, [invitationId]);
 
   useEffect(() => {
     fetchOverview();
-  }, []);
+  }, [fetchOverview]);
+
+  const refetch = fetchOverview;
 
   return {
     overview,
     isLoading,
+    error,
     refetch,
-    fetchOverview,
   };
 };
 

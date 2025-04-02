@@ -13,8 +13,7 @@ const estimateFromName = (name) => {
   );
 };
 
-// GET /api/admin/overview
-overviewRouter.get("/", async (req, res) => {
+overviewRouter.get("/:invitationId", async (req, res) => {
   try {
     const guests = await guestModel.find().sort({ name: 1 });
 
