@@ -8,10 +8,9 @@ import {
 
 import multer from "multer";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import auth from "../../../middleware/auth.middleware.js";
 import { isValidObjectId } from "../../../helpers/isValidObjectId.js";
 import guestModel from "../../../db/models/anne/guest.model.mjs";
-import disableCache from "../../../helpers/disableCach.js";
+import invitationModel from "../../../db/models/anne/invitation.model.mjs";
 
 const invitationRouter = express.Router();
 
@@ -113,11 +112,20 @@ invitationRouter.post("/", upload.single("image"), async (req, res) => {
   }
 });
 
-// Opdater eksisterende projekt
+// Opdater eksisterende invitation
 invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
   try {
-    const { title, description, file, location, type, date, time, images } =
-      req.body;
+    const {
+      title,
+      description,
+      file,
+      location,
+      type,
+      date,
+      time,
+      images,
+      $inc,
+    } = req.body;
     const { id } = req.params;
 
     if (images) {
@@ -151,6 +159,14 @@ invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
       time,
     };
 
+    // Hvis der kommer en $inc med fra frontend
+    if ($inc && typeof $inc === "object") {
+      updateData = {
+        ...updateData,
+        $inc,
+      };
+    }
+
     if (fileUrl) updateData.file = fileUrl;
 
     const result = await updateInvitation(id, updateData);
@@ -174,38 +190,38 @@ invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
 });
 
 // DELETE INVITATION
-invitationRouter.delete("/:id", async (req, res) => {
+invitationRouter.delete("/guest/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).send({
-        status: "error",
-        message: "No ID provided",
-        data: {},
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ status: "error", message: "Ugyldigt ID" });
+    }
+
+    const guest = await guestModel.findById(id);
+
+    if (!guest) {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Gæst ikke fundet" });
+    }
+
+    const { invitationId, isAttending, numberOfGuests } = guest;
+
+    await guestModel.findByIdAndDelete(id);
+
+    if (isAttending && numberOfGuests > 0 && invitationId) {
+      await invitationModel.findByIdAndUpdate(invitationId, {
+        $inc: { numberOfGuests: -numberOfGuests },
       });
     }
 
-    if (!isValidObjectId(id)) return;
-
-    const result = await deleteInvitation(id);
-
-    if (result.status === "not_found") {
-      return res.status(404).send(result);
-    }
-
-    if (result.status === "error") {
-      return res.status(500).send(result);
-    }
-
-    return res.status(200).send(result);
+    return res.status(200).json({ status: "ok", message: "Gæst slettet" });
   } catch (error) {
-    console.error("Error deleting invitation:", error);
-    return res.status(500).send({
-      status: "error",
-      message: "Internal server error",
-      error: error.message,
-    });
+    console.error("Fejl ved sletning af gæst:", error);
+    res
+      .status(500)
+      .json({ status: "error", message: "Serverfejl", error: error.message });
   }
 });
 
@@ -326,13 +342,43 @@ invitationRouter.post("/response", async (req, res) => {
       return res.status(404).json({ message: "Gæst ikke fundet" });
     }
 
+    const previousAttending = guest.isAttending;
+    const previousCount = guest.numberOfGuests || 0;
+    const invitationId = guest.invitationId;
+
     guest.isAttending = isAttending;
-    guest.numberOfGuests = isAttending ? numberOfGuests : 0;
+    guest.numberOfGuests = numberOfGuests;
     guest.hasResponded = true;
     guest.description = description;
     guest.dateResponded = dateResponded;
 
     await guest.save();
+
+    // 💥 Justér antal gæster i invitation
+    if (invitationId) {
+      let delta = 0;
+
+      if (previousAttending && !isAttending) {
+        // Går fra at deltage til ikke at deltage
+        delta = -previousCount;
+      } else if (!previousAttending && isAttending) {
+        // Går fra ikke at deltage til at deltage
+        delta = numberOfGuests;
+      } else if (
+        previousAttending &&
+        isAttending &&
+        previousCount !== numberOfGuests
+      ) {
+        // Deltager stadig, men antal er ændret
+        delta = numberOfGuests - previousCount;
+      }
+
+      if (delta !== 0) {
+        await invitationModel.findByIdAndUpdate(invitationId, {
+          $inc: { numberOfGuests: delta },
+        });
+      }
+    }
 
     res.status(200).json({ message: "Svar registreret", guest });
   } catch (error) {

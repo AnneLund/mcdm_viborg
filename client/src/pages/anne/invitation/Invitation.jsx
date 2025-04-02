@@ -78,6 +78,15 @@ const Invitation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      isAttending &&
+      (numberOfGuests < 1 || numberOfGuests > maxAllowedGuests)
+    ) {
+      setError(`Vælg venligst et antal mellem 1 og ${maxAllowedGuests}.`);
+      return;
+    }
+
     try {
       const res = await fetch(`${apiUrl}/invitation/response`, {
         method: "POST",
@@ -87,7 +96,7 @@ const Invitation = () => {
           isAttending,
           dateResponded: Date.now(),
           description: description,
-          numberOfGuests: isAttending ? numberOfGuests : 0,
+          numberOfGuests,
         }),
       });
 
@@ -132,7 +141,11 @@ const Invitation = () => {
         <p>
           Du kan lukke siden – eller <strong>ændre dit svar</strong> nedenfor.
         </p>
-        <SubmitButton onClick={() => setHasSubmitted(false)}>
+        <SubmitButton
+          onClick={() => {
+            setHasSubmitted(false);
+            fetchGuest();
+          }}>
           Ændr svar
         </SubmitButton>
       </Wrapper>
@@ -259,16 +272,15 @@ const Invitation = () => {
             </Label>
           </>
         )}
-        {isAttending && (
-          <Label>
-            <strong>Tilføj evt. en kommentar</strong>
-            <StyledTextarea
-              placeholder='Skriv din kommentar her'
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </Label>
-        )}
+
+        <Label>
+          <strong>Tilføj evt. en kommentar</strong>
+          <StyledTextarea
+            placeholder='Skriv din kommentar her'
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </Label>
 
         <SubmitButton type='submit' disabled={isAttending === null}>
           Send svar
@@ -357,6 +369,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 0 1em;
 `;
 
 const Label = styled.label`
@@ -365,6 +378,7 @@ const Label = styled.label`
 
 const StyledTextarea = styled.textarea`
   padding: 0.8rem 1rem;
+  width: 100%;
   font-size: 0.95rem;
   line-height: 1.4;
   border: 1px solid #ccc;

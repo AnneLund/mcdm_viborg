@@ -66,7 +66,6 @@ export default Card;
 
 const InvitationCard = styled.div`
   background: white;
-  padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   display: flex;

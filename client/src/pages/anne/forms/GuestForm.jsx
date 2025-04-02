@@ -6,6 +6,7 @@ import Loading from "../../../components/Loading/Loading";
 import ActionButton from "../../../components/button/ActionButton";
 import { useAlert } from "../../../context/Alert";
 import styled from "styled-components";
+import useFetchInvitations from "../hooks/useFetchInvitations";
 
 const GuestForm = ({
   isEditMode,
@@ -16,6 +17,8 @@ const GuestForm = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { createGuest, updateGuest } = useFetchGuests();
+  const { updateInvitation } = useFetchInvitations();
+
   const { showSuccess, showError } = useAlert();
   const guestId = guest?._id;
 
@@ -66,11 +69,19 @@ const GuestForm = ({
         : await createGuest(payload);
 
       if (response.status === "ok") {
+        // Hvis gæsten deltager, opdater invitationens antal gæster
+        if (!isEditMode && isAttending === true) {
+          try {
+            await updateInvitation(payload.invitationId, {
+              $inc: { numberOfGuests: 1 },
+            });
+          } catch (err) {
+            console.error("Fejl ved opdatering af invitation:", err);
+          }
+        }
+
         await refetch?.();
         showSuccess(isEditMode ? "Gæst opdateret!" : "Gæst tilføjet!");
-      } else {
-        showError("Fejl ved behandling af gæst");
-        console.error("Error:", response.error);
       }
     } catch (error) {
       console.error("Fejl ved oprettelse/opdatering:", error);

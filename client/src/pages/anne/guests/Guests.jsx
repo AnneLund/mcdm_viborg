@@ -4,7 +4,7 @@ import useFetchGuests from "../hooks/useFetchGuests";
 import GuestForm from "../forms/GuestForm";
 import InviteLink from "../invitation/InviteLink";
 import { Add, Edit, Remove } from "../../../components/icons/Icons";
-import { formatDate, formatDateWithDay } from "../../../helpers/formatDate";
+import { formatDate } from "../../../helpers/formatDate";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
@@ -44,7 +44,22 @@ const Guests = ({ invitationId }) => {
       ?.filter((g) => g.isAttending)
       .reduce((sum, g) => sum + (g.numberOfGuests || 1), 0) || 0;
 
-  const declines = guests?.filter((g) => g.isAttending === false).length;
+  const declines = guests?.reduce((acc, guest) => {
+    // Spring over hvis gæsten ikke har svaret
+    if (guest.isAttending === null || guest.isAttending === undefined)
+      return acc;
+
+    const invitedCount = guest.name
+      .split(/,| og /i)
+      .map((n) => n.trim())
+      .filter(Boolean).length;
+
+    const attendingCount = guest.isAttending ? guest.numberOfGuests || 0 : 0;
+
+    const notComing = Math.max(invitedCount - attendingCount, 0);
+
+    return acc + notComing;
+  }, 0);
 
   return (
     <Wrapper>
@@ -60,7 +75,7 @@ const Guests = ({ invitationId }) => {
 
       {guests?.length > 0 && (
         <>
-          <InfoBox $status={declines > 1 ? "not_attending" : "attending"}>
+          <InfoBox $status='attending'>
             <p>
               <strong>
                 {attendingTotal} ud af {totalInvited}
@@ -69,7 +84,7 @@ const Guests = ({ invitationId }) => {
             </p>
           </InfoBox>
 
-          <InfoBox $status={declines > 0 ? "not_attending" : "attending"}>
+          <InfoBox $status='not_attending'>
             <p>
               <strong>{declines} kommer ikke ❌</strong>
             </p>
@@ -115,10 +130,13 @@ const Guests = ({ invitationId }) => {
                   </div>
                 )}
                 {guest.dateResponded && (
-                  <i>
-                    {guest.name} har besvaret invitationen d.{" "}
-                    {formatDate(guest.dateResponded)}
-                  </i>
+                  <p>
+                    {" "}
+                    <i>
+                      {guest.name} har besvaret invitationen d.{" "}
+                      {formatDate(guest.dateResponded)}
+                    </i>
+                  </p>
                 )}
               </GuestInfo>
 
@@ -178,6 +196,10 @@ const Wrapper = styled.section`
     flex-direction: column;
     align-items: left;
     justify-content: space-between;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0;
   }
 `;
 

@@ -27,6 +27,7 @@ const InvitationForm = ({
   } = useForm({
     defaultValues: {
       title: invitation?.title || "",
+      numberOfGuests: invitation?.numberOfGuests || 0,
       description: invitation?.description || "",
       date: invitation?.date?.substring(0, 10) || "",
       time: invitation?.time || "",
