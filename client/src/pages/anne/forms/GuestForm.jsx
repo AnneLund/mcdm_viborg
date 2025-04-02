@@ -32,7 +32,7 @@ const GuestForm = ({
       name: guest?.name || "",
       description: guest?.description || "",
       isAttending: guest?.isAttending ?? "",
-      notes: guest?.notes || "",
+      numberOfGuests: guest?.numberOfGuests || 1,
     },
   });
 
@@ -41,7 +41,7 @@ const GuestForm = ({
       setValue("name", guest.name);
       setValue("description", guest.description);
       setValue("isAttending", guest.isAttending?.toString());
-      setValue("notes", guest.notes);
+      setValue("numberOfGuests", guest.numberOfGuests || 1);
     }
   }, [guest, setValue]);
 
@@ -70,6 +70,35 @@ const GuestForm = ({
 
       if (response.status === "ok") {
         // Hvis gæsten deltager, opdater invitationens antal gæster
+
+        if (isEditMode) {
+          const previousCount = guest?.numberOfGuests || 0;
+          const newCount = formData.numberOfGuests;
+
+          const previousAttending = guest?.isAttending;
+          const newAttending = isAttending;
+
+          let delta = 0;
+
+          if (previousAttending && !newAttending) {
+            delta = -previousCount;
+          } else if (!previousAttending && newAttending) {
+            delta = newCount;
+          } else if (
+            previousAttending &&
+            newAttending &&
+            previousCount !== newCount
+          ) {
+            delta = newCount - previousCount;
+          }
+
+          if (delta !== 0) {
+            await updateInvitation(payload.invitationId, {
+              $inc: { numberOfGuests: delta },
+            });
+          }
+        }
+
         if (!isEditMode && isAttending === true) {
           try {
             await updateInvitation(payload.invitationId, {
@@ -117,9 +146,23 @@ const GuestForm = ({
       </Label>
 
       <Label>
+        <h3>Antal personer</h3>
+        <input
+          type='number'
+          min={1}
+          {...register("numberOfGuests", {
+            required: "Antal personer er påkrævet",
+            valueAsNumber: true,
+            min: { value: 1, message: "Mindst 1 person skal angives" },
+          })}
+        />
+        {errors.numberOfGuests && <p>{errors.numberOfGuests.message}</p>}
+      </Label>
+
+      <Label>
         <textarea
           placeholder='Noter (valgfrit)'
-          {...register("notes")}
+          {...register("description")}
           rows={4}
         />
       </Label>

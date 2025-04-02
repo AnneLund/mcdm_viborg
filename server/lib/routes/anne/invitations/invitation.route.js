@@ -126,7 +126,19 @@ invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
       images,
       $inc,
     } = req.body;
+
     const { id } = req.params;
+
+    let updateData = {};
+
+    if (title) updateData.title = title;
+    if (description) updateData.description = description;
+    if (location) updateData.location = location;
+    if (type) updateData.type = type;
+    if (date) updateData.date = date;
+    if (time) updateData.time = time;
+
+    let parsedImages = [];
 
     if (images) {
       if (typeof images === "string") {
@@ -135,39 +147,21 @@ invitationRouter.put("/:id", upload.single("image"), async (req, res) => {
         } catch {
           parsedImages = [images];
         }
+        updateData.images = parsedImages;
       } else if (Array.isArray(images)) {
-        parsedImages = images;
+        updateData.images = images;
       }
     }
 
-    if (!title) {
-      return res.status(400).json({
-        status: "error",
-        message: "Title is required",
-      });
+    if (file) {
+      const fileUrl = await uploadFileToS3(file, "mediacollege");
+      if (fileUrl) updateData.file = fileUrl;
     }
-    const fileUrl = file ? await uploadFileToS3(fileUrl, "mediacollege") : null;
 
-    const updateData = {
-      title,
-      description,
-      file,
-      images: parsedImages,
-      location,
-      type,
-      date,
-      time,
-    };
-
-    // Hvis der kommer en $inc med fra frontend
+    // Håndter $inc (f.eks. { $inc: { numberOfGuests: 1 } })
     if ($inc && typeof $inc === "object") {
-      updateData = {
-        ...updateData,
-        $inc,
-      };
+      updateData = { ...updateData, $inc };
     }
-
-    if (fileUrl) updateData.file = fileUrl;
 
     const result = await updateInvitation(id, updateData);
 

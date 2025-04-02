@@ -47,11 +47,7 @@ const useFetchInvitations = () => {
   };
 
   /* Edit Invitation */
-  const updateInvitation = async (
-    invitationId,
-    formData,
-    isMultipart = false
-  ) => {
+  const updateInvitation = async (invitationId, data, isMultipart = false) => {
     try {
       setIsLoading(true);
 
@@ -59,20 +55,22 @@ const useFetchInvitations = () => {
         `${apiUrlInvites}/invitation/${invitationId}`,
         {
           method: "PUT",
-          body: formData,
           headers: isMultipart
             ? undefined
             : { "Content-Type": "application/json" },
+          body: isMultipart ? data : JSON.stringify(data),
         }
       );
 
       if (!response.ok) {
         const errorText = await response.text();
         showError("Fejl fra server:", errorText);
-        throw new Error("Fejl ved opdatering af gæst");
+        throw new Error("Fejl ved opdatering af invitation");
       }
 
       const result = await response.json();
+
+      console.log(result);
       return result;
     } catch (error) {
       showError("Der skete en fejl:", error.message);

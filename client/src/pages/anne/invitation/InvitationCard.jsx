@@ -87,4 +87,10 @@ const GuestSection = styled.div`
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #ddd;
+
+  h4 {
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 20px;
+  }
 `;

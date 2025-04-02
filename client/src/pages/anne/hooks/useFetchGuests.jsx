@@ -70,7 +70,6 @@ const useFetchGuests = (invitationId) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: data.token ? `Bearer ${data.token}` : undefined,
         },
         body: JSON.stringify(data),
       });

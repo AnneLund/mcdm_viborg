@@ -5,6 +5,7 @@ import GuestForm from "../forms/GuestForm";
 import InviteLink from "../invitation/InviteLink";
 import { Add, Edit, Remove } from "../../../components/icons/Icons";
 import { formatDate } from "../../../helpers/formatDate";
+import ModalDialog from "../components/ModalDialog";
 
 const Guests = ({ invitationId }) => {
   const { guests, deleteGuest, refetch } = useFetchGuests(invitationId);
@@ -13,7 +14,7 @@ const Guests = ({ invitationId }) => {
 
   const handleEdit = (guest) => {
     setEditGuest(guest);
-    setShowGuestForm(true);
+    setShowGuestForm((prev) => !prev);
   };
 
   const handleDelete = async (id) => {
@@ -61,16 +62,25 @@ const Guests = ({ invitationId }) => {
     return acc + notComing;
   }, 0);
 
+  const pending =
+    guests?.reduce((sum, guest) => {
+      if (guest.isAttending === null || guest.isAttending === undefined) {
+        const estimatedCount = estimateGuestCountFromName(guest.name);
+        return sum + estimatedCount;
+      }
+      return sum;
+    }, 0) || 0;
+
   return (
     <Wrapper>
       <Header>
-        <p>Tilføj gæst</p>
         <Add
           onClick={() => {
             setEditGuest(null);
             setShowGuestForm(true);
           }}
         />
+        <p>Tilføj gæst</p>
       </Header>
 
       {guests?.length > 0 && (
@@ -89,17 +99,13 @@ const Guests = ({ invitationId }) => {
               <strong>{declines} kommer ikke ❌</strong>
             </p>
           </InfoBox>
-        </>
-      )}
 
-      {showGuestForm && (
-        <GuestForm
-          isEditMode={!!editGuest}
-          guest={editGuest}
-          setShowGuestForm={setShowGuestForm}
-          refetch={refetch}
-          invitationId={invitationId}
-        />
+          <InfoBox>
+            <p>
+              <strong>{pending} har endnu ikke svaret ⏳ </strong>
+            </p>
+          </InfoBox>
+        </>
       )}
 
       <GuestList>
@@ -155,6 +161,17 @@ const Guests = ({ invitationId }) => {
             </GuestCard>
           ))
         )}
+        <ModalDialog
+          isOpen={showGuestForm}
+          onClose={() => setShowGuestForm(false)}>
+          <GuestForm
+            isEditMode={!!editGuest}
+            guest={editGuest}
+            setShowGuestForm={setShowGuestForm}
+            refetch={refetch}
+            invitationId={invitationId}
+          />
+        </ModalDialog>
       </GuestList>
     </Wrapper>
   );
@@ -167,7 +184,11 @@ export default Guests;
 const Header = styled.div`
   display: flex;
   align-items: center;
+  width: fit-content;
   justify-content: space-between;
+  p {
+    margin-left: 10px;
+  }
 `;
 
 const InfoBox = styled.div`
