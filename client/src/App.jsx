@@ -134,7 +134,7 @@ function App() {
       element: <Login />,
     },
     {
-      path: "/guest/:token",
+      path: "/invitation/guest/:token",
       element: <Invitation />,
     },
     {
