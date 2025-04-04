@@ -127,26 +127,16 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
 
       <label>
         <h5>Projekt</h5>
-        <textarea
-          {...register("projectComments")}
-          placeholder='Skriv skriftlig feedback her...'
-          ref={(el) => {
-            textareaRef.current = el;
-          }}
-          onInput={handleInput}
-          style={{ overflow: "hidden", resize: "none" }}
-        />
+        <textarea {...register("projectComments")} onInput={handleInput} />
       </label>
 
       {/* Mundtlig feedback */}
       <label>
         <h5>Præsentation</h5>
         <textarea
-          name='presentationComments'
-          placeholder='Skriv noter til projektet her...'
-          // ref={textareaRef}
-          // onInput={handleInput}
           {...register("presentationComments")}
+          placeholder='Skriv noter til præsentationen...'
+          onInput={handleInput}
         />
       </label>
 
@@ -154,7 +144,6 @@ const FeedbackForm = ({ isEditMode, setShowForm, existingFeedback }) => {
         <h5>Fokusområder</h5>
         <input
           type='text'
-          name='focusPoints'
           placeholder='Skriv fokuspunkter, adskilt med komma'
           {...register("focusPoints")}
         />

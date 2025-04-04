@@ -241,19 +241,20 @@ userRouter.post("/:id/feedback/new", async (req, res) => {
       project,
       exercise,
       projectComments,
-      comments,
+      comments, // <- må gerne være undefined
       focusPoints,
       isVisible,
     } = req.body;
 
-    // Feedback skal som minimum have comments eller focusPoints
-    if (
-      !comments &&
-      (!focusPoints || !Array.isArray(focusPoints) || focusPoints.length === 0)
-    ) {
+    // Valider at mindst én af følgende findes: projectComments eller focusPoints
+    const hasProjectComments =
+      Array.isArray(projectComments) && projectComments.length > 0;
+    const hasFocusPoints = Array.isArray(focusPoints) && focusPoints.length > 0;
+
+    if (!hasProjectComments && !hasFocusPoints) {
       return res.status(400).json({
         message:
-          "Feedback skal indeholde enten 'comments' eller mindst ét 'focusPoint'.",
+          "Feedback skal indeholde enten projektkommentar(er) eller mindst ét fokusemne.",
       });
     }
 
@@ -262,11 +263,13 @@ userRouter.post("/:id/feedback/new", async (req, res) => {
       project: project || null,
       exercise: exercise || null,
       projectComments: projectComments || [],
-      comments: comments || "",
+      comments: comments || "", // valgfri – sættes til tom streng hvis ikke sendt
       focusPoints: focusPoints || [],
       isVisible: isVisible ?? false,
       date: new Date(),
     };
+
+    console.log("Feedback der gemmes:", newFeedback);
 
     const updatedUser = await userModel.findByIdAndUpdate(
       id,
