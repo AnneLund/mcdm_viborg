@@ -43,7 +43,7 @@ export const signInUser = async (credentials) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || "1h" } // Standard til 1 time, hvis ikke sat
+      { expiresIn: process.env.JWT_EXPIRES_IN || "24h" } // Standard til 1 time, hvis ikke sat
     );
 
     result = {
